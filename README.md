@@ -41,8 +41,8 @@ Cette application très simple comporte quelques éléments qui peuvent aider po
 Ce dépôt contient un fichier `.vscode/settings.xml` qui définit des paramètres pour ce projet. Par exemple :
 
 - **Black formatter** permet de mettre en forme automatiquement un fichier python
-  - `editor.formatOnSave` : à chaque savegarde de fichier, le code est automatiquement mis en forme
-- **Flake** est un Linter
+  - `editor.formatOnSave` : à chaque sauvegarde de fichier, le code est automatiquement mis en forme
+- **Flake8** est un Linter
   - il vérifie que le code est propre et affiche un message si ce n'est pas le cas
 - **Path** : indique les dossiers dans lesquels sont les modules python 
   - `"PYTHONPATH": "${workspaceFolder}/src"` : src est le dossier racine des imports
@@ -50,7 +50,7 @@ Ce dépôt contient un fichier `.vscode/settings.xml` qui définit des paramètr
 
 ### Fichiers de configuration
 
-Ce dépôt contient de nombreux fichiers de configuration pour paramètrer les différents outils utilisés.
+Ce dépôt contient de nombreux fichiers de configuration pour paramétrer les différents outils utilisés.
 
 Normalement dans le cadre de votre projet, vous n'aurez pas besoin de modifier ces fichiers, exceptés `.env` et `requirements.txt`. Vous trouverez des explications plus détaillées par la suite.
 
@@ -82,7 +82,7 @@ pip list
 
 ## :arrow_forward: Variables d'environnement
 
-Vous allez maintenant définir des variables d'environnement pour déclarer la base de données et le webservice auquels vous allez connecter votre application python.
+Vous allez maintenant définir des variables d'environnement pour déclarer la base de données et le webservice auxquels vous allez connecter votre application python.
 
 À la racine du projet le fichier :
 
@@ -174,7 +174,7 @@ Cette application permet également de créer un webservice.
 
 ## :arrow_forward: Les logs
 
-L'initalisation se fait dans le module `src/utils/log_init.py` :
+L'initialisation se fait dans le module `src/utils/log_init.py` :
 
 - Celui-ci est appelé au démarrage de l'application ou du webservice
 - Il utilise le fichier `logging_config.yml` pour la configuration
@@ -184,7 +184,7 @@ Un décorateur a été créé dans `src/utils/log_decorator.py`.
 
 Appliqué à une méthode, il permettra d'afficher dans les logs :
 
-- les paramétres d'entrée
+- les paramètres d'entrée
 - la sortie
 
 Les logs sont consultables dans le dossier `logs`.
@@ -208,7 +208,7 @@ Exemple de logs :
 
 Le dépôt contient un fichier `.github/workflow/main.yml`.
 
-Lorsque vous faîtes un *push* sur GitHub, cela déclanche un pipeline qui va effectuer les les étapes suivantes :
+Lorsque vous faîtes un *push* sur GitHub, cela déclenche un pipeline qui va effectuer les les étapes suivantes :
 
 - Création d'un conteneur à partir d'une image Ubuntu (Linux)
   - Autrement dit, cela crée une machine virtuelle avec simplement un noyau Linux
