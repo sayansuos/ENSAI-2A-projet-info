@@ -2,27 +2,80 @@
 ' à coller ici pour visualiser : https://www.plantuml.com/plantuml/uml/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000
 ' doc : https://plantuml.com/fr/use-case-diagram
 
-
 left to right direction
 
-actor "Utilisateur"      as user
-actor "Administrateur"   as admin
-actor "Joueur"           as joueur
+actor "Utilisateur" as user #Pink
+actor "Administrateur" as admin #LightBlue
 
-rectangle {
-  usecase "S'inscrire"        as inscription
-  usecase "S'authentifier"    as authentification
-  usecase "Quitter"           as quitter
-  usecase "Lister joueurs"    as lister_joueurs
-}
+rectangle #LightYellow {
+  usecase "Créer un compte" as creat_compte 
+  usecase "S'authentifier en tant qu'utilisateur" as authentification_user #Pink
+  usecase "S'authentifier en tant qu'administrateur" as authentification_admin #LightBlue
 
-joueur --> quitter
 
-user --> inscription
-user --> authentification
-user --> quitter
+  usecase "Consulter les recettes favorites" as voir_recette_fav #Pink
+  usecase "Supprimer une recette des favoris" as suppr_recette_fav #Pink
+  usecase "Ajouter une recette aux favoris" as ajouter_recette_fav #Pink
+  usecase "Consulter des recettes" as voir_recette #Pink
+  usecase "Noter une recette" as noter_recette #Pink
+  usecase "Commenter une recette" as commenter_recette #Pink
+  
+  usecase "Consulter le panier" as voir_panier #Pink
+  usecase "Ajouter des ingrédients au panier" as ajouter_panier #Pink
+  usecase "Retirer des ingrédients au panier" as retirer_panier #Pink
 
-admin --> quitter
-admin --> lister_joueurs
+  usecase "Consulter ses préférences alimentaires" as voir_pref #Pink
+  usecase "Ajouter un ingrédient aux favoris" as ajouter_pref #Pink
+  usecase "Ajouter un ingrédient non désiré" as ajouter_non_pref #Pink
+
+  usecase "Quitter l'application" as quitter #Orange
+
+  usecase "Consulter les comptes" as voir_compte #LightBlue
+  usecase "Supprimer un compte" as suppr_compte #LightBlue
+  usecase "Modifier un compte" as modif_compte #LightBlue
+  usecase "Ajouter un compte" as ajouter_compte #LightBlue
+  usecase "Supprimer une recette" as suppr_recette  #LightBlue
+
+  usecase "Quitter l'application" as quitter
+
+} 
+
+user -- creat_compte
+user -- voir_recette
+user -- quitter
+user -- voir_recette_fav
+user -- voir_pref
+user -- voir_panier
+
+voir_recette_fav ..> suppr_recette_fav : <<extend>>
+
+voir_recette ..> noter_recette : <<extend>>
+voir_recette ..> commenter_recette : <<extend>>
+voir_recette ..> ajouter_recette_fav : <<extend>>
+voir_recette ..> ajouter_panier : <<extend>>
+
+voir_panier ..> retirer_panier : <<extend>>
+
+voir_pref ..> ajouter_pref : <<extend>>
+voir_pref ..> ajouter_non_pref : <<extend>>
+
+authentification_user <~~ voir_panier : <<include>>
+authentification_user <~~ voir_recette_fav : <<include>>
+authentification_user <~~ voir_pref : <<include>>
+authentification_user <~~ ajouter_recette_fav : <<include>>
+authentification_user <~~ ajouter_panier : <<include>>
+authentification_user <~~ noter_recette : <<include>>
+
+admin -- quitter
+admin -- creat_compte
+admin -- voir_compte
+admin -- suppr_recette
+
+voir_compte ..> suppr_compte : <<extend>>
+voir_compte ..> ajouter_compte : <<extend>>
+voir_compte ..> modif_compte : <<extend>>
+
+authentification_admin <~~ suppr_recette : <<include>>
+authentification_admin <~~ voir_compte : <<include>>
 
 @enduml
