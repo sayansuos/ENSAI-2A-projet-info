@@ -1,9 +1,6 @@
 from InquirerPy import inquirer
 
-from utils.reset_database import ResetDatabase
-
 from view.vue_abstraite import VueAbstraite
-from view.session import Session
 
 
 class AccueilVue(VueAbstraite):
@@ -23,10 +20,10 @@ class AccueilVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Se connecter",
+                "Se connecter en tant qu'utilisateur",
+                "Se connecter en tant qu'administrateur",
                 "Créer un compte",
-                "Ré-initialiser la base de données",
-                "Infos de session",
+                "Continuer en tant qu'invité",
                 "Quitter",
             ],
         ).execute()
@@ -35,8 +32,8 @@ class AccueilVue(VueAbstraite):
             case "Quitter":
                 pass
 
-            case "Se connecter":
-                from view.accueil.connexion_vue import ConnexionVue
+            case "Se connecter en tant qu'utilisateur":
+                from view.accueil.connexion_user_vue import ConnexionVue
 
                 return ConnexionVue("Connexion à l'application")
 
@@ -45,12 +42,5 @@ class AccueilVue(VueAbstraite):
 
                 return InscriptionVue("Création de compte joueur")
 
-            case "Infos de session":
-                return AccueilVue(Session().afficher())
-
-            case "Ré-initialiser la base de données":
-                succes = ResetDatabase().lancer()
-                message = (
-                    f"Ré-initilisation de la base de données - {'SUCCES' if succes else 'ECHEC'}"
-                )
-                return AccueilVue(message)
+            case "Voir les recettes":
+                pass
