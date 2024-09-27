@@ -11,22 +11,6 @@ classDiagram
         +liste_de_course: list[Ingredient]
     }
 
-    class UtilisateurDAO {
-        +creer(str...): bool
-        +supprimer(Utilisateur): bool
-        +connecter(str, str): Utilisateur
-
-        +voir_suggestions(): list[Recette]
-
-        +voir_favoris(): recette_favorite
-
-        +voir_liste_course(): liste_de_course
-
-        +voir_ingredients_favoris(): ingredient_favori
-
-        +voir_ingredients_non_desires(): ingredient_non_desire
-    }
-
     class UtilisateurService {
         +creer(str...): Utilisateur
         +supprimer(Utilisateur): bool
@@ -71,12 +55,6 @@ classDiagram
         +lister_toutes_recettes(): list[Recette]
     }
 
-    class RecetteDAO {
-        +trouver_recette_par_nom(str): Recette
-        +trouver_recette_par_ingredient(str): list[Recette]
-        +lister_toutes_recettes(): list[Recette]
-    }
-
 
     class Ingredient {
         +id_ingredient: int
@@ -84,15 +62,11 @@ classDiagram
     }
 
 
-    UtilisateurService ..> UtilisateurDAO : appelle
     Utilisateur <.. UtilisateurService: utilise
-    Utilisateur <.. UtilisateurDAO: utilise
     Utilisateur <.. ListeFavorisService: utilise
 
-    RecetteService ..> RecetteDAO : appelle
     Recette <.. RecetteService: utilise
 
-    IngredientService ..> IngredientDAO : appelle
     Ingredient <.. IngredientService: utilise
 
     Recette <.. Utilisateur: utilise
