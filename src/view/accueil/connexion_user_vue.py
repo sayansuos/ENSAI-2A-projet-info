@@ -22,9 +22,9 @@ class ConnexionVue(VueAbstraite):
             message = f"Vous êtes connecté sous le pseudo {joueur.pseudo}"
             Session().connexion(joueur)
 
-            from view.menu_joueur_vue import MenuJoueurVue
+            from view.menu_user_vue import MenuUserVue
 
-            return MenuJoueurVue(message)
+            return MenuUserVue(message)
 
         message = "Erreur de connexion (pseudo ou mot de passe invalide)"
         from view.accueil.accueil_vue import AccueilVue

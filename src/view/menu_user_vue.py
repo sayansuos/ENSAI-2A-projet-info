@@ -6,8 +6,8 @@ from view.session import Session
 from service.joueur_service import JoueurService
 
 
-class MenuJoueurVue(VueAbstraite):
-    """Vue du menu du joueur
+class MenuUserVue(VueAbstraite):
+    """Vue du menu de l'utilisateur
 
     Attributes
     ----------
@@ -29,14 +29,16 @@ class MenuJoueurVue(VueAbstraite):
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
 
-        print("\n" + "-" * 50 + "\nMenu Joueur\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 50 + "\nMenu Utilisateur\n" + "-" * 50 + "\n")
 
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Afficher les joueurs de la base de données",
-                "Afficher des pokemons (par appel à un Webservice)",
-                "Infos de session",
+                "Consulter les recettes",
+                "Consulter les suggestions",
+                "Consulter les favoris",
+                "Consulter les ingrédients",
+                "Consulter le panier",
                 "Se déconnecter",
             ],
         ).execute()
@@ -48,14 +50,3 @@ class MenuJoueurVue(VueAbstraite):
 
                 return AccueilVue()
 
-            case "Infos de session":
-                return MenuJoueurVue(Session().afficher())
-
-            case "Afficher les joueurs de la base de données":
-                joueurs_str = JoueurService().afficher_tous()
-                return MenuJoueurVue(joueurs_str)
-
-            case "Afficher des pokemons (par appel à un Webservice)":
-                from view.pokemon_vue import PokemonVue
-
-                return PokemonVue()

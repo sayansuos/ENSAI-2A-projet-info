@@ -42,5 +42,12 @@ class AccueilVue(VueAbstraite):
 
                 return InscriptionVue("Création de compte joueur")
 
-            case "Voir les recettes":
-                pass
+            case "Continuer en tant qu'invité":
+                from view.menu_inv_vue import MenuInvVue
+
+                return MenuInvVue
+            
+            case "Se connecter en tant qu'administrateur":
+                from view.accueil.connexion_admin_vue import ConnexionVue
+
+                return ConnexionVue("Connexion à l'application")
