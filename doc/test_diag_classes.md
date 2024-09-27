@@ -67,7 +67,6 @@ classDiagram
 
     Recette <.. RecetteService: utilise
 
-    Ingredient <.. IngredientService: utilise
 
     Recette <.. Utilisateur: utilise
     Ingredient <.. Utilisateur: utilise
