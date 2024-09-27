@@ -1,7 +1,7 @@
 ```mermaid
 classDiagram
     class Utilisateur {
-        +id_joueur: int
+        +id_utilisateur: int
         +pseudo: string
         +mdp: string
         +mail: string
@@ -13,59 +13,36 @@ classDiagram
 
     class UtilisateurDAO {
         +creer(str...): bool
+        +supprimer(Utilisateur): bool
         +connecter(str, str): Utilisateur
-        +trouver_recette_par_nom(str): Recette
-        +trouver_recette_par_ingredient(str): list[Recette]
-        +lister_toutes_recettes(): list[Recette]
+
         +voir_suggestions(): list[Recette]
 
         +voir_favoris(): recette_favorite
-        +ajouter_favoris(ingredient): bool
-        +enlever_favoris(ingredient): bool
 
         +voir_liste_course(): liste_de_course
-        +ajouter_ingredient_course(ingredient): bool
-        +enlever_ingredient_course(ingredient): bool
 
         +voir_ingredients_favoris(): ingredient_favori
-        +ajouter_ingredient_favori(ingredient): bool
-        +enlever_ingredient_favori(ingredient): bool
 
         +voir_ingredients_non_desires(): ingredient_non_desire
-        +ajouter_ingredient_non_desire(ingredient): bool
-        +enlever_ingredient_non_desirek(ingredient): bool
-
-        +supprimer(Utilisateur): bool
-        +se_connecter(str,str): Utilisateur
     }
 
     class UtilisateurService {
         +creer(str...): Utilisateur
+        +supprimer(Utilisateur): bool
         +connecter(str, str): Utilisateur
-        +trouver_recette_par_nom(str): Recette
-        +trouver_recette_par_ingredient(str): list[Recette]
-        +lister_toutes_recettes(): list[Recette]
+
         +voir_suggestions(): list[Recette]
 
         +voir_favoris(): recette_favorite
-        +ajouter_favoris(ingredient):
-        +enlever_favoris(ingredient):
 
         +voir_liste_course(): liste_de_course
-        +ajouter_ingredient_course(ingredient):
-        +enlever_ingredient_course(ingredient):
 
         +voir_ingredients_favoris(): ingredient_favori
-        +ajouter_ingredient_favori(ingredient):
-        +enlever_ingredient_favori(ingredient):
 
         +voir_ingredients_non_desires(): ingredient_non_desire
-        +ajouter_ingredient_non_desire(ingredient):
-        +enlever_ingredient_non_desirek(ingredient):
-
-        +supprimer(Utilisateur): bool
-        +se_connecter(str,str): Utilisateur
     }
+
 
     class Recette {
         +id_recette: int
@@ -73,27 +50,65 @@ classDiagram
         +liste_ingredient: list[list[ingredient, str]]
     }
 
+    class RecetteService {
+        +trouver_recette_par_nom(str): Recette
+        +trouver_recette_par_ingredient(str): list[Recette]
+        +lister_toutes_recettes(): list[Recette]
+
+        +ajouter_favoris(Recette): bool
+        +enlever_favoris(Recette): bool
+    }
+
+    class RecetteDAO {
+        +trouver_recette_par_nom(str): Recette
+        +trouver_recette_par_ingredient(str): list[Recette]
+        +lister_toutes_recettes(): list[Recette]
+
+        +ajouter_favoris(Recette): bool
+        +enlever_favoris(Recette): bool
+    }
+
+
     class Ingredient {
         +id_ingredient: int
         +nom_ingredient: str
     }
 
-    class MenuUtilisateurVue {
+    class IngredientService {
+        +ajouter_ingredient_course(ingredient): bool
+        +enlever_ingredient_course(ingredient): bool
+
+        +ajouter_ingredient_favori(ingredient):
+        +enlever_ingredient_favori(ingredient):
+
+        +ajouter_ingredient_non_desire(ingredient):
+        +enlever_ingredient_non_desire(ingredient):
     }
 
-    class VueAbstraite{
-      +afficher()
-      +choisir_menu()
+    class IngredientDAO {
+        +ajouter_ingredient_course(ingredient): bool
+        +enlever_ingredient_course(ingredient): bool
+
+        +ajouter_ingredient_favori(ingredient):
+        +enlever_ingredient_favori(ingredient):
+
+        +ajouter_ingredient_non_desire(ingredient):
+        +enlever_ingredient_non_desire(ingredient):
     }
 
-    VueAbstraite <|-- AccueilVue
-    VueAbstraite <|-- ConnexionVue
-    VueAbstraite <|-- MenuUtilisateurVue
-    MenuUtilisateurVue ..> UtilisateurService : appelle
-    ConnexionVue ..> UtilisateurService : appelle
+
     UtilisateurService ..> UtilisateurDAO : appelle
     Utilisateur <.. UtilisateurService: utilise
     Utilisateur <.. UtilisateurDAO: utilise
+
+    RecetteService ..> RecetteDAO : appelle
+    Recette <.. RecetteService: utilise
+    Recette <.. RecetteDAO: utilise
+
+    IngredientService ..> IngredientDAO : appelle
+    Ingredient <.. IngredientService: utilise
+    Ingredient <.. IngredientDAO: utilise
+
     Recette <.. Utilisateur: utilise
     Ingredient <.. Utilisateur: utilise
 ```
