@@ -3,8 +3,8 @@ classDiagram
     class Utilisateur {
         +id_utilisateur: int
         +pseudo: str
-        +mdp: str
-        +mail: str
+        -mdp: str
+        -mail: str
         +recette_favorite: list[Recette]
         +ingredient_favori: list[Ingredient]
         +ingredient_non_desire: list[Ingredient]
