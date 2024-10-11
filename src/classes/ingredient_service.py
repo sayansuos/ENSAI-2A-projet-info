@@ -1,8 +1,8 @@
 from src.classes.ingredient import Ingredient
-from src.dao.db_connection import DBConnection
+from src.classes.utilisateur import Utilisateur
 
 
-class IngredientService(Ingredient):
+class IngredientService(Utilisateur):
     """
     Définis les méthodes de la classe Ingredient
     """
