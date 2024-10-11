@@ -52,10 +52,18 @@ class UtilisateurService(Utilisateur):
         if "." not in domaine_mail:
             raise ValueError("Il doit y avoir un '.' dans votre nom de domaine."
                              "Format attendu : 'blabla@domaine.truc'")
+        if ("'" in pseudo) or ("&" in pseudo) or ("|" in pseudo) or ("-" in pseudo):
+            raise ValueError("Le pseudo ne doit pas contenir de caractères spéciaux."
+                             "Caractères interdits : &, |, ', -")
+        if ("'" in mdp) or ("&" in mdp) or ("|" in mdp) or ("-" in mdp):
+            raise ValueError("Le mot de passe ne doit pas contenir de caractères spéciaux."
+                             "Caractères interdits : &, |, ', -")
         if pseudo == "Déjà attribué":
             return "Le pseudo a déjà été attribué."
 
         # Pour finir la fonction :
+        # - Définir des méthodes de sécurité (échappement des caractères spéciaux)
+        #   (commencé un peu mais à voir si c'est suffisant)
         # - Définir un id non attribué (prendre le dernier id de la table
         #   Utilisateur et ajouter 1)
         # - Hacher le mot de passe (et utiliser l'id, le pseudo ou le mail comme sel)
@@ -73,7 +81,13 @@ class UtilisateurService(Utilisateur):
         Returns:
             Utilisateur: Renvoie l'utilisateur correspondant aux paramètres entrés.
         """
-        pass
+        if not isinstance(pseudo, str):
+            raise TypeError("Le pseudo doit être une chaîne de caractères alphanumériques.")
+        if not isinstance(mdp, str):
+            raise TypeError("Le mot de passe doit être une chaîne de caractères alphanumériques.")
+        # Le code suivant doit vérifier si le pseudo et le mot de passe correspondent à
+        # un compte existant dans la base de données.
+        # Il faudrait aussi faire attention aux caractères spéciaux
 
     def supprimer(self, user: Utilisateur) -> bool:
         """
@@ -85,6 +99,11 @@ class UtilisateurService(Utilisateur):
         Returns:
             bool: True si l'utilisateur a bien été supprimé. False sinon.
         """
+        if not isinstance(user, Utilisateur):
+            raise TypeError("L'utilisateur n'est pas renseigné correctement.")
+        # Vérifier si l'utilisateur existe bien dans la base de données
+        # Proposer à l'utilisateur de confirmer son choix (Oui ou Non)
+        # Renvoie True si l'utilisateur a bien été supprimé, False sinon
         pass
 
     def voir_suggestions(self) -> list[Recette]:
