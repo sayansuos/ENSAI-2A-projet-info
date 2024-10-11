@@ -20,8 +20,7 @@ class AccueilVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Se connecter en tant qu'utilisateur",
-                "Se connecter en tant qu'administrateur",
+                "Se connecter"
                 "Créer un compte",
                 "Continuer en tant qu'invité",
                 "Quitter",
@@ -32,8 +31,8 @@ class AccueilVue(VueAbstraite):
             case "Quitter":
                 pass
 
-            case "Se connecter en tant qu'utilisateur":
-                from view.accueil.connexion_user_vue import ConnexionVue
+            case "Se connecter":
+                from view.accueil.connexion_vue import ConnexionVue
 
                 return ConnexionVue("Connexion à l'application")
 
@@ -46,8 +45,3 @@ class AccueilVue(VueAbstraite):
                 from view.menu_inv_vue import MenuInvVue
 
                 return MenuInvVue
-            
-            case "Se connecter en tant qu'administrateur":
-                from view.accueil.connexion_admin_vue import ConnexionVue
-
-                return ConnexionVue("Connexion à l'application")
