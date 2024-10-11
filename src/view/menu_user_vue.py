@@ -49,4 +49,7 @@ class MenuUserVue(VueAbstraite):
                 from view.accueil.accueil_vue import AccueilVue
 
                 return AccueilVue()
+            
+            case "Consulter les recettes":
+                pass
 
