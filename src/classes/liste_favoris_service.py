@@ -19,6 +19,8 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si la recette a été ajoutée à la liste, False sinon
         """
+        if not isinstance(recette, Recette):
+            raise TypeError("recette doit être une instance de Recette")
 
         if recette not in super.recette_favorite:
             super.recette_favorite.append(recette)
@@ -35,6 +37,9 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si la recette a été enlevée de la liste, False sinon
         """
+        if not isinstance(recette, Recette):
+            raise TypeError("recette doit être une instance de Recette")
+
         if recette in super.recette_favorite:
             super.recette_favorite.remove(recette)
             return True
@@ -50,6 +55,8 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si l'ingrédient a été ajoutée à la liste, False sinon
         """
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance d'Ingredient")
 
         if ingredient not in super.liste_de_course:
             super.liste_de_course.append(ingredient)
@@ -66,6 +73,8 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si l'ingrédient a été enlevée de la liste, False sinon
         """
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance d'Ingredient")
 
         if ingredient in super.liste_de_course:
             super.liste_de_course.remove(ingredient)
@@ -82,6 +91,8 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si l'ingrédient a été ajoutée à la liste, False sinon
         """
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance d'Ingredient")
 
         if ingredient not in super.ingredient_favori:
             super.ingredient_favori.append(ingredient)
@@ -98,6 +109,8 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si l'ingrédient a été enlevée de la liste, False sinon
         """
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance d'Ingredient")
 
         if ingredient in super.ingredient_favori:
             super.ingredient_favori.remove(ingredient)
@@ -114,6 +127,8 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si l'ingrédient a été ajoutée à la liste, False sinon
         """
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance d'Ingredient")
 
         if ingredient not in super.ingredient_non_desire:
             super.ingredient_non_desire.append(ingredient)
@@ -130,6 +145,8 @@ class ListeFavorisService(Utilisateur):
         Returns:
             bool: True si l'ingrédient a été enlevée de la liste, False sinon
         """
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance d'Ingredient")
 
         if ingredient in super.ingredient_non_desire:
             super.ingredient_non_desire.remove(ingredient)
