@@ -52,3 +52,5 @@ class MenuAdminVue(VueAbstraite):
 
                 return AccueilVue()
 
+                
+
