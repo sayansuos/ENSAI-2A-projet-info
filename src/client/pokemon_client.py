@@ -44,3 +44,7 @@ class PokemonClient:
                 pokemons.append(p["pokemon"]["name"])
 
         return pokemons
+
+
+if __name__ == "__main__":
+    print(PokemonClient().get_pokemon_types())
