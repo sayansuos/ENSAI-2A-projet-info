@@ -19,13 +19,12 @@ class RecetteService(Recette):
             Optional[Recette]: Renvoie la recette si le nom correspond à une
                                recette existante. Renvoie None sinon
         """
+        if not isinstance(nom, str):
+            raise TypeError("nom doit être une instance de str")
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "SELECT *      "
-                    "FROM Recette  "
-                    "WHERE nom_recette = %(nom)s",
-                    {"nom": nom}
+                    "SELECT *      " "FROM Recette  " "WHERE nom_recette = %(nom)s", {"nom": nom}
                 )
 
                 res = cursor.fetchone()
@@ -35,9 +34,7 @@ class RecetteService(Recette):
             nom = res["nom"]
             liste_ingredient = res["liste_ingredient"]
 
-            res = Recette(id_recette=id,
-                          nom_recette=nom,
-                          liste_ingredient=liste_ingredient)
+            res = Recette(id_recette=id, nom_recette=nom, liste_ingredient=liste_ingredient)
 
         return res
 
@@ -52,15 +49,12 @@ class RecetteService(Recette):
         Returns:
             list[Recette]: Renvoie la liste des recettes contenant cet ingrédient
         """
-
+        if not isinstance(ingredient, str):
+            raise TypeError("ingredient doit être une instance de str")
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
                 # La requête SQL est à trouver
-                cursor.execute(
-                    "SELECT *      "
-                    "FROM Recette  "
-                    "WHERE "
-                )
+                cursor.execute("SELECT *      " "FROM Recette  " "WHERE ")
 
                 res = cursor.fetchall()
 
@@ -72,9 +66,7 @@ class RecetteService(Recette):
                 nom = row["nom"]
                 liste_ingredient = row["liste_ingredient"]
 
-                recette = Recette(id_recette=id,
-                                  nom_recette=nom,
-                                  liste_ingredient=liste_ingredient)
+                recette = Recette(id_recette=id, nom_recette=nom, liste_ingredient=liste_ingredient)
 
                 Liste_recettes.append(recette)
 
@@ -90,10 +82,7 @@ class RecetteService(Recette):
 
         with DBConnection().connection as connection:
             with connection.cursor() as cursor:
-                cursor.execute(
-                    "SELECT *      "
-                    "FROM Recette  "
-                )
+                cursor.execute("SELECT *      " "FROM Recette  ")
 
                 res = cursor.fetchall()
 
@@ -104,9 +93,7 @@ class RecetteService(Recette):
                 nom = row["nom"]
                 liste_ingredient = row["liste_ingredient"]
 
-                recette = Recette(id_recette=id,
-                                  nom_recette=nom,
-                                  liste_ingredient=liste_ingredient)
+                recette = Recette(id_recette=id, nom_recette=nom, liste_ingredient=liste_ingredient)
 
                 Liste_recettes.append(recette)
 

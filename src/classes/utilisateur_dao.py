@@ -35,23 +35,31 @@ class UtilisateurDAO(Utilisateur):
         if not isinstance(mdp, str):
             raise TypeError("Le mot de passe doit être une chaîne de caractères alphanumériques.")
         if not isinstance(mail, str):
-            raise TypeError("L'adresse mail doit être une chaîne de caractères sous la"
-                            " forme : 'blabla@domaine.truc'")
+            raise TypeError(
+                "L'adresse mail doit être une chaîne de caractères sous la"
+                " forme : 'blabla@domaine.truc'"
+            )
         if len(mdp) < 6:
             raise ValueError("Le mot de passe doit contenir au moins 6 caractères.")
         if "@" not in mail:
-            raise ValueError("Il n'y a pas de @ dans l'adresse mail renseignée."
-                             "Format attendu : 'blabla@domaine.truc'")
+            raise ValueError(
+                "Il n'y a pas de @ dans l'adresse mail renseignée."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
         for i in range(len(mail)):
             if mail[i] == "@":
-                domaine_mail = mail[i:len(mail)]
+                domaine_mail = mail[i : len(mail)]
                 break
         if "@" in domaine_mail:
-            raise ValueError("Il ne doit y avoir qu'un seul @ dans votre adresse mail."
-                             "Format attendu : 'blabla@domaine.truc'")
+            raise ValueError(
+                "Il ne doit y avoir qu'un seul @ dans votre adresse mail."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
         if "." not in domaine_mail:
-            raise ValueError("Il doit y avoir un '.' dans votre nom de domaine."
-                             "Format attendu : 'blabla@domaine.truc'")
+            raise ValueError(
+                "Il doit y avoir un '.' dans votre nom de domaine."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
         if pseudo == "Déjà attribué":
             return "Le pseudo a déjà été attribué."
 
@@ -73,6 +81,10 @@ class UtilisateurDAO(Utilisateur):
         Returns:
             bool: True si l'utilisateur se connecte. False sinon
         """
+        if not isinstance(pseudo, str):
+            raise TypeError("pseudo doit être une instance de str")
+        if not isinstance(mdp, str):
+            raise TypeError("mdp doit être une instance de str")
         pass
 
     def supprimer(self, user: Utilisateur) -> bool:
@@ -85,6 +97,8 @@ class UtilisateurDAO(Utilisateur):
         Returns:
             bool: True si l'utilisateur a bien été supprimé. False sinon.
         """
+        if not isinstance(user, Utilisateur):
+            raise TypeError("user doit être une instance de Utilisateur")
         pass
 
     def voir_suggestions(self) -> list[Recette]:
