@@ -1,9 +1,7 @@
 from unittest.mock import MagicMock
-
+import pytest
 from src.classes.utilisateur_service import UtilisateurService
-
 from src.dao.utilisateur_dao import UtilisateurDAO
-
 from src.classes.utilisateur import Utilisateur
 
 
@@ -29,18 +27,77 @@ def test_creer_ok():
 
 
 def test_creer_echec():
-    """Création de Joueur échouée
-    (car la méthode JoueurDao().creer retourne False)"""
+    """Création de Utilisateur échouée
+    (car la méthode UtilisateurDAO().creer retourne False)"""
 
     # GIVEN
     pseudo, mdp, mail = "jp", "1234" "z@mail.oo"
     UtilisateurDAO().creer = MagicMock(return_value=False)
 
     # WHEN
-    utilisateur = UtilisateurService().creer(pseudo, mdp, age, mail, fan_pokemon)
+    utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
 
     # THEN
     assert utilisateur is None
+
+
+def test_creer_mauvais_pseudo():
+    """Création de Utilisateur échoué car le pseudo n'est pas une chaine de
+    caractère"""
+
+    # GIVEN
+    pseudo, mdp, mail = 123, "azerty", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="Le pseudo doit être une chaîne de caractères alphanumériques."
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mauvais_mdp():
+    """Création de Utilisateur échoué car le mot de passe n'est pas une chaine
+    de caractère"""
+
+    # GIVEN
+    pseudo, mdp, mail = "michel", 123, "michel@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="Le mot de passe doit être une chaîne de caractères alphanumériques."
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mauvais_mail_str():
+    """Création de Utilisateur échoué car le mail n'est pas une chaine de
+    caractère"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azerty", ["az@gmail.fr"]
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError,
+        match="L'adresse mail doit être une chaîne de caractères sous la"
+        " forme : 'blabla@domaine.truc'",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mauvais_mdp_longueur():
+    """Création de Utilisateur échoué car le mot de passe possède moins
+    de 6 caractères"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azer", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le mot de passe doit contenir au moins 6 caractères.",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
 
 
 def test_lister_tous_inclure_mdp_true():
@@ -102,6 +159,5 @@ def test_pseudo_deja_utilise_non():
 
 
 if __name__ == "__main__":
-    import pytest
 
     pytest.main([__file__])
