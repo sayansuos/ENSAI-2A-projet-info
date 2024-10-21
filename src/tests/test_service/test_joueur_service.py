@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 from src.classes.utilisateur_service import UtilisateurService
 
-# from src.dao.utilisateur_dao import UtilisateurDAO
+from src.dao.utilisateur_dao import UtilisateurDAO
 
 from src.classes.utilisateur import Utilisateur
 
@@ -18,84 +18,84 @@ def test_creer_ok():
     """ "Création de Utilisateur réussie"""
 
     # GIVEN
-    pseudo, mdp, age, mail, fan_pokemon = "jp", "1234", 15, "z@mail.oo", True
-    JoueurDao().creer = MagicMock(return_value=True)
+    pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
+    UtilsateurDAO().creer = MagicMock(return_value=True)
 
     # WHEN
-    joueur = JoueurService().creer(pseudo, mdp, age, mail, fan_pokemon)
+    utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
 
     # THEN
-    assert joueur.pseudo == pseudo
+    assert utilisateur.pseudo == pseudo
 
 
 def test_creer_echec():
-    """Création de Joueur échouée
-    (car la méthode JoueurDao().creer retourne False)"""
+    """Création de Utilisateur échouée
+    (car la méthode UtilisateurDAO().creer retourne False)"""
 
     # GIVEN
-    pseudo, mdp, age, mail, fan_pokemon = "jp", "1234", 15, "z@mail.oo", True
-    JoueurDao().creer = MagicMock(return_value=False)
+    pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
+    UtilisateurDAO().creer = MagicMock(return_value=False)
 
     # WHEN
-    joueur = JoueurService().creer(pseudo, mdp, age, mail, fan_pokemon)
+    utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
 
     # THEN
-    assert joueur is None
+    assert utilisateur is None
 
 
 def test_lister_tous_inclure_mdp_true():
     """Lister les Joueurs en incluant les mots de passe"""
 
     # GIVEN
-    JoueurDao().lister_tous = MagicMock(return_value=liste_joueurs)
+    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
 
     # WHEN
-    res = JoueurService().lister_tous(inclure_mdp=True)
+    res = UtilisateurService().lister_tous(inclure_mdp=True)
 
     # THEN
     assert len(res) == 3
-    for joueur in res:
-        assert joueur.mdp is not None
+    for utilisateur in res:
+        assert utilisateur.mdp is not None
 
 
 def test_lister_tous_inclure_mdp_false():
-    """Lister les Joueurs en excluant les mots de passe"""
+    """Lister les Utilisateurs en excluant les mots de passe"""
 
     # GIVEN
-    JoueurDao().lister_tous = MagicMock(return_value=liste_joueurs)
+    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
 
     # WHEN
-    res = JoueurService().lister_tous()
+    res = UtilisateurService().lister_tous()
 
     # THEN
     assert len(res) == 3
-    for joueur in res:
-        assert not joueur.mdp
+    for utilisateur in res:
+        assert not utilisateur.mdp
 
 
 def test_pseudo_deja_utilise_oui():
-    """Le pseudo est déjà utilisé dans liste_joueurs"""
+    """Le pseudo est déjà utilisé dans liste_utilisateurs"""
 
     # GIVEN
     pseudo = "lea"
 
     # WHEN
-    JoueurDao().lister_tous = MagicMock(return_value=liste_joueurs)
-    res = JoueurService().pseudo_deja_utilise(pseudo)
+    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
+    res = UtilisateurService().pseudo_deja_utilise(pseudo)
 
     # THEN
     assert res
 
 
 def test_pseudo_deja_utilise_non():
-    """Le pseudo n'est pas utilisé dans liste_joueurs"""
+    """Le pseudo n'est pas utilisé dans liste_utilisateurs"""
 
     # GIVEN
     pseudo = "chaton"
 
     # WHEN
-    JoueurDao().lister_tous = MagicMock(return_value=liste_joueurs)
-    res = JoueurService().pseudo_deja_utilise(pseudo)
+    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
+    res = UtilisateurService().pseudo_deja_utilise(pseudo)
 
     # THEN
     assert not res
