@@ -3,8 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-from service.utilisateur_service import UtilisateurService  # Remplace JoueurService par UtilisateurService
-
+from service.utilisateur_service import UtilisateurService
 
 class ConnexionVue(VueAbstraite):
     """Vue de Connexion (saisie de pseudo et mdp)"""
@@ -15,7 +14,7 @@ class ConnexionVue(VueAbstraite):
         mdp = inquirer.secret(message="Entrez votre mot de passe :").execute()
 
         # Appel du service pour trouver l'utilisateur
-        utilisateur, role = UtilisateurService().se_connecter(pseudo, mdp)
+        utilisateur, role = UtilisateurService().connecter(pseudo, mdp)
 
         # Si l'utilisateur a été trouvé à partir des ses identifiants de connexion
         if utilisateur:
