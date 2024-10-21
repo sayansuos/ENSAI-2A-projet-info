@@ -51,9 +51,9 @@ class MenuUserVue(VueAbstraite):
                 return AccueilVue()
             
             case "Consulter les recettes":
-                from src.classes.recettes_service import RecetteService
+                from src.view.recettes.recettes_vue_user import RecettesVue
 
-                return lister_toutes_recettes
+                return RecettesVue()
 
             case "Consulter les suggestions":
                 from src.classes.utilisateur_service import UtilisateurService
