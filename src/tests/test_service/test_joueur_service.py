@@ -1,21 +1,21 @@
 from unittest.mock import MagicMock
 
-from service.joueur_service import JoueurService
+from src.classes.utilisateur_service import UtilisateurService
 
-from dao.joueur_dao import JoueurDao
+# from src.dao.utilisateur_dao import UtilisateurDAO
 
-from business_object.joueur import Joueur
+from src.classes.utilisateur import Utilisateur
 
 
-liste_joueurs = [
-    Joueur(pseudo="jp", age="10", mail="jp@mail.fr", mdp="1234"),
-    Joueur(pseudo="lea", age="10", mail="lea@mail.fr", mdp="0000"),
-    Joueur(pseudo="gg", age="10", mail="gg@mail.fr", mdp="abcd"),
+liste_utilisateurs = [
+    Utilisateur(pseudo="jp", mail="jp@mail.fr", mdp="1234"),
+    Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="0000"),
+    Utilisateur(pseudo="gg", mail="gg@mail.fr", mdp="abcd"),
 ]
 
 
 def test_creer_ok():
-    """ "Création de Joueur réussie"""
+    """ "Création de Utilisateur réussie"""
 
     # GIVEN
     pseudo, mdp, age, mail, fan_pokemon = "jp", "1234", 15, "z@mail.oo", True
