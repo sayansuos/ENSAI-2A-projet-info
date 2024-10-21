@@ -1,8 +1,8 @@
 -----------------------------------------------------
 -- Utilisateur
 -----------------------------------------------------
-DROP TABLE IF EXISTS utilisateur CASCADE ;
-CREATE TABLE utilisateur(
+DROP TABLE IF EXISTS projet.utilisateur CASCADE ;
+CREATE TABLE projet.utilisateur(
     id_utilisateur    SERIAL PRIMARY KEY,
     mdp               VARCHAR(256),
     est_admin         BOOLEAN
@@ -11,8 +11,8 @@ CREATE TABLE utilisateur(
 -----------------------------------------------------
 -- Ingrédient
 -----------------------------------------------------
-DROP TABLE IF EXISTS ingredient CASCADE ;
-CREATE TABLE ingredient(
+DROP TABLE IF EXISTS projet.ingredient CASCADE ;
+CREATE TABLE projet.ingredient(
     id_ingredient    SERIAL PRIMARY KEY,
     nom_ingredient   VARCHAR(30) UNIQUE
 );
@@ -20,42 +20,48 @@ CREATE TABLE ingredient(
 -----------------------------------------------------
 -- Recette
 -----------------------------------------------------
-DROP TABLE IF EXISTS recette CASCADE ;
-CREATE TABLE recette(
-    id_recette    SERIAL PRIMARY KEY,
-    nom_recette   VARCHAR(30) UNIQUE,
+DROP TABLE IF EXISTS projet.recette CASCADE;
+CREATE TABLE projet.recette(
+    id_recette               SERIAL PRIMARY KEY,
+    nom_recette              VARCHAR(30) UNIQUE,
+    description_recette      VARCHAR(250) UNIQUE,
+    avis                     VARCHAR(250) UNIQUE,
+    note                     FLOAT
 );
 
 -----------------------------------------------------
 -- RecetteIngredient
 -----------------------------------------------------
-DROP TABLE IF EXISTS recetteingredient CASCADE ;
-CREATE TABLE recetteingredient(
-    id_recette       SERIAL PRIMARY KEY,
-    id_ingredient    SERIAL PRIMARY KEY,
-    FOREIGN KEY (id_recette) REFERENCES recette(id_recette),
-    FOREIGN KEY (id_ingredient) REFERENCES ingredient(id_ingredient),
+DROP TABLE IF EXISTS projet.recette_ingredient CASCADE;
+CREATE TABLE projet.recette_ingredient(
+    id_ingredient INTEGER,
+    id_recette INTEGER,
     quantite VARCHAR(30),
+    PRIMARY KEY (id_ingredient, id_recette),
+    FOREIGN KEY (id_ingredient) REFERENCES projet.ingredient(id_ingredient),
+    FOREIGN KEY (id_recette) REFERENCES projet.recette(id_recette)
 );
 
 -----------------------------------------------------
 -- RecetteFavorite
 -----------------------------------------------------
-DROP TABLE IF EXISTS recettefavorite CASCADE ;
-CREATE TABLE recettefavorite(
-    id_utilisateur    SERIAL PRIMARY KEY,
-    id_recette        SERIAL PRIMARY KEY,
+DROP TABLE IF EXISTS recette_favorite CASCADE ;
+CREATE TABLE recette_favorite(
+    id_utilisateur    INTEGER,
+    id_recette       INTEGER,
+    PRIMARY KEY (id_utilisateur, id_recette),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-    FOREIGN KEY (id_recette) REFERENCES recette(id_recette),
+    FOREIGN KEY (id_recette) REFERENCES recette(id_recette)
 );
 
 -----------------------------------------------------
 -- PréférenceIngrédient
 -----------------------------------------------------
-DROP TABLE IF EXISTS preferenceingredient CASCADE ;
-CREATE TABLE preferenceingredient(
-    id_utilisateur    SERIAL PRIMARY KEY,
-    id_ingredient     SERIAL PRIMARY KEY,
+DROP TABLE IF EXISTS preference_ingredient CASCADE ;
+CREATE TABLE preference_ingredient(
+    id_utilisateur    INTEGER,
+    id_ingredient     INTEGER,
+    PRIMARY KEY (id_utilisateur, id_ingredient),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur),
     FOREIGN KEY (id_ingredient) REFERENCES ingredient(id_ingredient),
     non_desire  BOOLEAN,
@@ -65,10 +71,12 @@ CREATE TABLE preferenceingredient(
 -----------------------------------------------------
 -- ListeCourse
 -----------------------------------------------------
-DROP TABLE IF EXISTS listecourse CASCADE ;
-CREATE TABLE listecourse(
-    id_utilisateur    SERIAL PRIMARY KEY,
-    id_ingredient     SERIAL PRIMARY KEY,
+DROP TABLE IF EXISTS liste_course CASCADE ;
+CREATE TABLE liste_course(
+    id_utilisateur    INTEGER,
+    id_ingredient     INTEGER,
+    id_recette        INTEGER,
+    PRIMARY KEY (id_utilisateur, id_ingredient, id_recette),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-    FOREIGN KEY (id_ingredient) REFERENCES recetteingredient(id_ingredient),
+    FOREIGN KEY (id_ingredient, id_recette) REFERENCES recette_ingredient(id_ingredient, id_recette)
 );
