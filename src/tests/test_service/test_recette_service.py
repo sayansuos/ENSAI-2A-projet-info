@@ -1,25 +1,13 @@
 from unittest.mock import MagicMock
 
-from src.classes.utilisateur_service import UtilisateurService
-
-from src.dao.utilisateur_dao import UtilisateurDAO
-
-from src.classes.utilisateur import Utilisateur
+from src.classes.recette import Recette
 
 
-liste_utilisateurs = [
-    Utilisateur(pseudo="jp", mail="jp@mail.fr", mdp="1234"),
-    Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="0000"),
-    Utilisateur(pseudo="gg", mail="gg@mail.fr", mdp="abcd"),
-]
-
-
-def test_creer_ok():
-    """ "Création de Utilisateur réussie"""
+def test_recette_ok():
+    """ Création de Utilisateur réussie"""
 
     # GIVEN
-    pseudo, mdp, mail = "jp", "1234" "z@mail.oo"
-    UtilisateurDAO().creer = MagicMock(return_value=True)
+    id_recette, nom_recette, liste_ingredient = 1, "riz au curry", [["riz", "100"], ["curry", "50"]]
 
     # WHEN
     utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
