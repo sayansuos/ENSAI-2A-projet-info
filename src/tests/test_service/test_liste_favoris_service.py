@@ -134,6 +134,94 @@ def test_enlever_ingredient_non_desire(mock_utilisateur):
     assert ingredient not in mock_utilisateur.ingredient_non_desire
 
 
+# Test ajouter_favoris with invalid input
+def test_ajouter_favoris_invalid_input():
+    # GIVEN
+    invalid_recette = "NotARecette"  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="recette doit être une instance de Recette"):
+        liste_favoris_service.ajouter_favoris(invalid_recette)
+
+
+# Test enlever_favoris with invalid input
+def test_enlever_favoris_invalid_input():
+    # GIVEN
+    invalid_recette = 123  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="recette doit être une instance de Recette"):
+        liste_favoris_service.enlever_favoris(invalid_recette)
+
+
+# Test ajouter_ingredient_course with invalid input
+def test_ajouter_ingredient_course_invalid_input():
+    # GIVEN
+    invalid_ingredient = {"name": "Tomato"}  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
+        liste_favoris_service.ajouter_ingredient_course(invalid_ingredient)
+
+
+# Test enlever_ingredient_course with invalid input
+def test_enlever_ingredient_course_invalid_input():
+    # GIVEN
+    invalid_ingredient = 456  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
+        liste_favoris_service.enlever_ingredient_course(invalid_ingredient)
+
+
+# Test ajouter_ingredient_favori with invalid input
+def test_ajouter_ingredient_favori_invalid_input():
+    # GIVEN
+    invalid_ingredient = None  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
+        liste_favoris_service.ajouter_ingredient_favori(invalid_ingredient)
+
+
+# Test enlever_ingredient_favori with invalid input
+def test_enlever_ingredient_favori_invalid_input():
+    # GIVEN
+    invalid_ingredient = []  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
+        liste_favoris_service.enlever_ingredient_favori(invalid_ingredient)
+
+
+# Test ajouter_ingredient_non_desire with invalid input
+def test_ajouter_ingredient_non_desire_invalid_input():
+    # GIVEN
+    invalid_ingredient = 789  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
+        liste_favoris_service.ajouter_ingredient_non_desire(invalid_ingredient)
+
+
+# Test enlever_ingredient_non_desire with invalid input
+def test_enlever_ingredient_non_desire_invalid_input():
+    # GIVEN
+    invalid_ingredient = False  # Invalid type
+    liste_favoris_service = ListeFavorisService()
+
+    # WHEN/THEN
+    with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
+        liste_favoris_service.enlever_ingredient_non_desire(invalid_ingredient)
+
+
 if __name__ == "__main__":
     import pytest
 
