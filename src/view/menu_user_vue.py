@@ -51,5 +51,12 @@ class MenuUserVue(VueAbstraite):
                 return AccueilVue()
             
             case "Consulter les recettes":
-                pass
+                from src.classes.recettes_service import RecetteService
+
+                return lister_toutes_recettes
+
+            case "Consulter les suggestions":
+                from src.classes.utilisateur_service import UtilisateurService
+
+                return voir_suggestions()
 

@@ -48,4 +48,4 @@ class MenuInvVue(VueAbstraite):
             case "Consulter les recettes":
                 from src.classes.recettes_service import RecetteService
 
-                return lister_toutes_recettes
+                return lister_toutes_recettes()
