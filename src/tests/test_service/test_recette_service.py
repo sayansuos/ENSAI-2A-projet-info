@@ -94,6 +94,12 @@ def test_lister_toutes_recettes(mock_db_connection):
     mock_cursor.execute.assert_called_once_with("SELECT * FROM Recette")
 
 
+# def test_trouver_recette_par_nom_invalid_input():
+#     # GIVEN
+#     # invalid_nom = 176
+#     # à finir
+
+
 if __name__ == "__main__":
     import pytest
 
