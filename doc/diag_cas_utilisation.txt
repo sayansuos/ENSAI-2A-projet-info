@@ -3,7 +3,7 @@
 ' doc : https://plantuml.com/fr/use-case-diagram
 
 skinparam linetype ortho
-skinparam nodesep 100
+skinparam nodesep 130
 skinparam ranksep 100
 
 left to right direction
@@ -32,15 +32,17 @@ rectangle "Application My Kitchen" #Beige {
   usecase "Retirer des ingrédients au panier" as retirer_panier #PeachPuff
 
   usecase "Consulter ses préférences alimentaires" as voir_pref #LightSalmon
-  usecase "Ajouter un ingrédient aux favoris" as ajouter_pref #PeachPuff
-  usecase "Ajouter un ingrédient non désiré" as ajouter_non_pref #PeachPuff
+  usecase "Ajouter/Supprimer un ingrédient des favoris" as ajouter_pref #PeachPuff
+  usecase "Ajouter/Supprimer un ingrédient des non-désirés" as ajouter_non_pref #PeachPuff
 
   usecase "Consulter les comptes" as voir_compte #LightBlue
   usecase "Supprimer un compte" as suppr_compte #LightCyan
   usecase "Modifier un compte" as modif_compte #LightCyan
   usecase "Ajouter un compte" as ajouter_compte #LightCyan
 
-  usecase "Supprimer une recette" as suppr_recette  #LightBlue
+  usecase "Consulter des recettes" as consulter_recette  #LightBlue
+  usecase "Ajouter une recette" as ajouter_recette  #LightCyan
+  usecase "Supprimer une recette" as suppr_recette  #LightCyan
 
 } 
 
@@ -83,8 +85,10 @@ voir_compte ..> ajouter_compte : <<extend>>
 voir_compte ..> modif_compte : <<extend>>
 authentification_admin <~~ voir_compte : <<include>>
 
-admin -- suppr_recette
-authentification_admin <~~ suppr_recette : <<include>>
+admin -- consulter_recette
+authentification_admin <~~ consulter_recette : <<include>>
+consulter_recette ..> ajouter_recette : <<extend>>
+consulter_recette ..> suppr_recette : <<extend>>
 
 admin -- quitter
 
