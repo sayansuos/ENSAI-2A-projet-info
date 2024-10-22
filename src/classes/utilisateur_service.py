@@ -88,7 +88,10 @@ class UtilisateurService(Utilisateur):
         #   Utilisateur et ajouter 1)
         # - Hacher le mot de passe (et utiliser l'id, le pseudo ou le mail comme sel)
 
-        return Utilisateur(id_utilisateur=100000, pseudo=pseudo, mdp=mdp, mail=mail)
+        # Ligne à modifier quand on aura écrit la classe UtilisateurDAO
+        # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
+
+        pass
 
     @log
     def connecter(self, pseudo: str, mdp: str) -> Utilisateur:
