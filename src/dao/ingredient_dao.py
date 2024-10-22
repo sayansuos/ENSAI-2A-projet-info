@@ -9,11 +9,14 @@ from business_object.ingredient import Ingredient
 
 
 class IngredientDao(metaclass=Singleton):
-    """Classe contenant les méthodes pour accéder aux Ingrédients de la base de données"""
+    """
+    Classe contenant les méthodes pour accéder aux ingrédients de la base de données.
+    """
 
     @log
     def creer(self, ingredient) -> bool:
-        """Creation d'un ingrédient dans la base de données
+        """
+        Création d'un ingrédient dans la base de données.
 
         Parameters
         ----------
@@ -32,9 +35,9 @@ class IngredientDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO ingredient(id_ingredient, nom_ingredient) VALUES        "
-                        "(%(id_ingredient)s, %(nom_ingredient)s)             "
-                        "  RETURNING id_ingredient;                                                ",
+                        "INSERT INTO ingredient(id_ingredient, nom_ingredient) VALUES "
+                        "(%(id_ingredient)s, %(nom_ingredient)s)                      "
+                        "  RETURNING id_ingredient;                                   ",
                         {
                             "id_ingredient": ingredient.id_ingredient,
                             "nom_ingredient": ingredient.nom_ingredient,
@@ -53,7 +56,8 @@ class IngredientDao(metaclass=Singleton):
 
     @log
     def trouver_par_id(self, id_ingredient) -> Ingredient:
-        """trouver un ingrédient grace à son id
+        """
+        Trouver un ingrédient grace à son identifiant.
 
         Parameters
         ----------
@@ -69,9 +73,9 @@ class IngredientDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT *                                   "
-                        "  FROM ingredient                          "
-                        " WHERE id_ingredient = %(id_ingredient)s;  ",
+                        " SELECT *                                   "
+                        "   FROM ingredient                          "
+                        "  WHERE id_ingredient = %(id_ingredient)s;  ",
                         {"id_ingredient": id_ingredient},
                     )
                     res = cursor.fetchone()
@@ -90,7 +94,8 @@ class IngredientDao(metaclass=Singleton):
 
     @log
     def lister_tous(self) -> list[Ingredient]:
-        """lister tous les ingrédients
+        """
+        Lister tous les ingrédients
 
         Parameters
         ----------

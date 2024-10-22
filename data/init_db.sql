@@ -25,7 +25,7 @@ CREATE TABLE projet.recette(
     id_recette               SERIAL PRIMARY KEY,
     nom_recette              VARCHAR(30) UNIQUE,
     description_recette      VARCHAR(250) UNIQUE,
-    avis                     VARCHAR(250) UNIQUE,
+    avis                     VARCHAR UNIQUE,
     note                     FLOAT
 );
 

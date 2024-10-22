@@ -90,12 +90,185 @@ def test_creer_mauvais_mdp_longueur():
     de 6 caractères"""
 
     # GIVEN
-    pseudo, mdp, mail = "Michel", "azer", "az@gmail.fr"
+    pseudo, mdp, mail = "Michel", "azerty", "az@gmail.fr"
 
     # WHEN-THEN:
     with pytest.raises(
         ValueError,
         match="Le mot de passe doit contenir au moins 6 caractères.",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mail_missing_arobase():
+    """Création de Utilisateur échoué car il n'y a pas d'arobase dans le mail"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azerty", "azgmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Il n'y a pas de @ dans l'adresse mail renseignée."
+        "Format attendu : 'blabla@domaine.truc'",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mail_trop_arobase():
+    """Création de Utilisateur échoué car il y a trop d'arobase dans le mail"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azerty", "az@gm@il.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Il ne doit y avoir qu'un seul @ dans votre adresse mail."
+        "Format attendu : 'blabla@domaine.truc'",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mail_pas_point():
+    """Création de Utilisateur échoué car il n'y a pas de point dans le mail"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azerty", "az@gmailfr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Il doit y avoir un '.' dans votre nom de domaine."
+        "Format attendu : 'blabla@domaine.truc'",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_pseudo_inv_ap():
+    """Création de Utilisateur échoué car le pseudo contient un élément
+    interdit : '"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Mi'chel", "azerty", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le pseudo ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_pseudo_inv_esp():
+    """Création de Utilisateur échoué car le pseudo contient un élément
+    interdit : &"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Mi&chel", "azerty", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le pseudo ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_pseudo_inv_ba():
+    """Création de Utilisateur échoué car le pseudo contient un élément
+    interdit : |"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Miche|", "azerty", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le pseudo ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_pseudo_inv_tir():
+    """Création de Utilisateur échoué car le pseudo contient un élément
+    interdit : -"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Mi-chel", "azerty", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le pseudo ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mdp_inv_ap():
+    """Création de Utilisateur échoué car le mot de passe contient un élément
+    interdit : '"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azer'ty", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le mot de passe ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mdp_inv_esp():
+    """Création de Utilisateur échoué car le mot de passe contient un élément
+    interdit : &"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "az&rty", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le mot de passe ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mdp_inv_ba():
+    """Création de Utilisateur échoué car le mot de passe contient un élément
+    interdit : |"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azert|y", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le mot de passe ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
+    ):
+        UtilisateurService().creer(pseudo, mdp, mail)
+
+
+def test_creer_mdp_inv_ti():
+    """Création de Utilisateur échoué car le mot de passe contient un élément
+    interdit : -"""
+
+    # GIVEN
+    pseudo, mdp, mail = "Michel", "azert-y", "az@gmail.fr"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        ValueError,
+        match="Le mot de passe ne doit pas contenir de caractères spéciaux."
+        "Caractères interdits : &, |, ', -",
     ):
         UtilisateurService().creer(pseudo, mdp, mail)
 
