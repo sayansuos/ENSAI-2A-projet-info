@@ -40,18 +40,16 @@ class FillDataBase(metaclass=Singleton):
         Si test_dao = True : réinitialisation des données de test
         """
         liste_recette = RecetteClient().get_all_recipes()
-        for rec in liste_recette[0:1]:
+        for rec in liste_recette:
             recette = Recette(
                 id_recette=rec[0],
                 nom_recette=rec[1],
                 liste_ingredient=rec[2],
                 description_recette=rec[3],
-                note=1,
-                avis=["nul"],
+                note=None,
+                avis=[],
             )
-            res = RecetteDao().creer(recette)
-            res
-            print(res)
+            RecetteDao().creer(recette)
         return True
 
 
