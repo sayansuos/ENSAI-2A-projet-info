@@ -3,7 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-from service.joueur_service import JoueurService
+from service.utilisateur_service import UtilisateurService
 
 
 class MenuAdminVue(VueAbstraite):
@@ -34,14 +34,14 @@ class MenuAdminVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter les comptes",
+                "Consulter les comptes",#done
                 "Consulter les recettes",
                 "Ajouter un compte",
-                "Supprimer un compte",
+                "Supprimer un compte", #done
                 "Modifier un compte",
                 "Ajouter une recette",
                 "Supprimer une recette",
-                "Se déconnecter",
+                "Se déconnecter", #done
             ],
         ).execute()
 
@@ -51,6 +51,18 @@ class MenuAdminVue(VueAbstraite):
                 from view.accueil.accueil_vue import AccueilVue
 
                 return AccueilVue()
+            
+            case "Consulter les comptes":
 
-                
+                return lister_tous()
+            
+            case "Supprimer un compte":
+                from src.view.suppression_vue import SuppressionVue
+
+                return SuppressionVue()
+            
+            case "Supprimer une recette":
+                from src.view.suppression_recette_vue import SuppressionRecetteVue
+
+                return SuppressionRecetteVue()
 
