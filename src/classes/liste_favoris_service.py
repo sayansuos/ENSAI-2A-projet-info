@@ -22,6 +22,8 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette")
 
+
+        # Adapter le code suivant pour une éventuelle classe DAO
         if recette not in super.recette_favorite:
             super.recette_favorite.append(recette)
             return True
@@ -40,6 +42,7 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette")
 
+        # Adapter le code suivant pour une éventuelle classe DAO
         if recette in super.recette_favorite:
             super.recette_favorite.remove(recette)
             return True
@@ -58,6 +61,7 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance d'Ingredient")
 
+        # Adapter le code suivant pour une éventuelle classe DAO
         if ingredient not in super.liste_de_course:
             super.liste_de_course.append(ingredient)
             return True
@@ -76,6 +80,7 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance d'Ingredient")
 
+        # Adapter le code suivant pour une éventuelle classe DAO
         if ingredient in super.liste_de_course:
             super.liste_de_course.remove(ingredient)
             return True
@@ -94,6 +99,7 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance d'Ingredient")
 
+        # Adapter le code suivant pour une éventuelle classe DAO
         if ingredient not in super.ingredient_favori:
             super.ingredient_favori.append(ingredient)
             return True
@@ -112,6 +118,7 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance d'Ingredient")
 
+        # Adapter le code suivant pour une éventuelle classe DAO
         if ingredient in super.ingredient_favori:
             super.ingredient_favori.remove(ingredient)
             return True
@@ -130,6 +137,7 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance d'Ingredient")
 
+        # Adapter le code suivant pour une éventuelle classe DAO
         if ingredient not in super.ingredient_non_desire:
             super.ingredient_non_desire.append(ingredient)
             return True
@@ -148,6 +156,7 @@ class ListeFavorisService(Utilisateur):
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance d'Ingredient")
 
+        # Adapter le code suivant pour une éventuelle classe DAO
         if ingredient in super.ingredient_non_desire:
             super.ingredient_non_desire.remove(ingredient)
             return True
