@@ -37,7 +37,7 @@ class MenuUserVue(VueAbstraite):
                 "Consulter les recettes", #done
                 "Consulter les suggestions", #done
                 "Consulter les favoris", #done
-                "Consulter les ingrédients",
+                "Consulter les ingrédients",#done
                 "Consulter le panier",#done
                 "Se déconnecter", #done
             ],
@@ -68,5 +68,7 @@ class MenuUserVue(VueAbstraite):
                 return voir_liste_course()
             
             case "Voir les ingrédients":
+                from src.view.ingredients.ingredients_vue import IngredientsVue
 
-                pass
+                return IngredientsVue()
+                

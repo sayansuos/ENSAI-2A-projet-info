@@ -34,8 +34,8 @@ class MenuInvVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter les recettes",
-                "Retour",
+                "Consulter les recettes", #done
+                "Retour", #done
             ],
         ).execute()
 
