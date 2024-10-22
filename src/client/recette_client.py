@@ -50,4 +50,4 @@ class RecetteClient:
 
 if __name__ == "__main__":
     load_dotenv()
-    print(RecetteClient().get_all_recipes()[0])
+    print(RecetteClient().get_all_recipes()[0:3])

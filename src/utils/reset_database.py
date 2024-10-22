@@ -9,13 +9,15 @@ from dao.db_connection import DBConnection
 
 class ResetDatabase(metaclass=Singleton):
     """
-    Reinitialisation de la base de données
+    Réinitialisation de la base de données
     """
 
     @log
     def lancer(self, test_dao=False):
-        """Lancement de la réinitialisation des données
-        Si test_dao = True : réinitialisation des données de test"""
+        """
+        Lancement de la réinitialisation des données
+        Si test_dao = True : réinitialisation des données de test
+        """
 
         dotenv.load_dotenv()
 
