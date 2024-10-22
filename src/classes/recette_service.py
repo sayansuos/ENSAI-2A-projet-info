@@ -21,7 +21,9 @@ class RecetteService(Recette):
         """
         if not isinstance(nom, str):
             raise TypeError("nom doit être une instance de str")
+
         pass
+        # return RecetteDao.trouver_par_nom(nom)
 
     def trouver_recette_par_ingredient(self, ingredient: str) -> List[Recette]:
         """
@@ -37,7 +39,9 @@ class RecetteService(Recette):
 
         if not isinstance(ingredient, str):
             raise TypeError("ingredient doit être une instance de str")
+
         pass
+        # return RecetteDao.trouver_par_ingredient(ingredient)
 
     def lister_toutes_recettes(self) -> List[Recette]:
         """
