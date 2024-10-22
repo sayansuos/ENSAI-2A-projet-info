@@ -66,6 +66,8 @@ class RecetteService(Recette):
         if note < 0 or note > 5:
             raise ValueError("La note doit être comprise entre 0 et 5.")
 
+        # super.note = super.note * (nb_notes / (nb_notes + 1)) + note / (nb_notes + 1)
+        # nb_notes += 1
         pass
 
     def commenter_recette(self, commentaire: str):
