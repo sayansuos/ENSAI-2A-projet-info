@@ -5,6 +5,7 @@ from utils.log_decorator import log
 
 from dao.db_connection import DBConnection
 
+from dao.ingredient_dao import IngredientDao
 from business_object.recette import Recette
 
 
@@ -35,18 +36,37 @@ class RecetteDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO recette                                                                       "
-                        "VALUES (%(id_recette)s, %(nom_recette)s, %(description_recette)s, %(avis)s, %(note)s)     "
-                        "RETURNING id_recette;                                                                     ",
+                        "INSERT INTO projet.recette VALUES                                                     "
+                        "(%(id_recette)s, %(nom_recette)s, %(description_recette)s, %(avis)s, %(note)s) "
+                        "RETURNING id_recette;                                                          ",
                         {
-                            "id_recette": int(recette.id_recette),
-                            "nom_recette": str(recette.nom_recette),
-                            "description_recette": str(recette.description_recette),
-                            "avis": str(recette.avis),
-                            "note": float(recette.note),
+                            "id_recette": recette.id_recette,
+                            "nom_recette": recette.nom_recette,
+                            "description_recette": recette.description_recette,
+                            "avis": "".join(recette.avis),
+                            "note": recette.note,
                         },
                     )
                     res = cursor.fetchone()
+                    """
+                    tous_les_ingredients = IngredientDao().lister_tous()
+                    print(tous_les_ingredients)
+                    for ingredient in recette.liste_ingredient:
+                        for ingredient in tous_les_ingredients:
+                            if ingredient.nom_ingredient == ingredient[0]:
+                                id_ingredient = ingredient.id_ingredient
+                        print(id_ingredient)
+                        cursor.execute(
+                            "INSERT INTO projet.recette_ingredient VALUES        "
+                            "(%(id_ingredient)s, %(id_recette)s, %(quantite)s);  ",
+                            {
+                                "id_ingredient": id_ingredient,
+                                "id_recette": recette.id_recette,
+                                "quantite": ingredient[1],
+                            },
+                        )
+                    """
+
         except Exception as e:
             logging.info(e)
 
