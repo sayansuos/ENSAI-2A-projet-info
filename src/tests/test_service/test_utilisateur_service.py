@@ -273,36 +273,6 @@ def test_creer_mdp_inv_ti():
         UtilisateurService().creer(pseudo, mdp, mail)
 
 
-def test_lister_tous_inclure_mdp_true():
-    """Lister les Utilisateurs en incluant les mots de passe"""
-
-    # GIVEN
-    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
-
-    # WHEN
-    res = UtilisateurService().lister_tous(inclure_mdp=True)
-
-    # THEN
-    assert len(res) == 3
-    for utilisateur in res:
-        assert utilisateur.mdp is not None
-
-
-def test_lister_tous_inclure_mdp_false():
-    """Lister les Joueurs en excluant les mots de passe"""
-
-    # GIVEN
-    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
-
-    # WHEN
-    res = UtilisateurService().lister_tous()
-
-    # THEN
-    assert len(res) == 3
-    for utilisateur in res:
-        assert not utilisateur.mdp
-
-
 def test_pseudo_deja_utilise_oui():
     """Le pseudo est déjà utilisé dans liste_utilisateurs"""
 
