@@ -3,6 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from src.service.ingredient_service import IngredientService
 from src.service.liste_favoris_service import ListeFavorisService
+lfs = ListeFavorisService()
 
 
 class MenuIngredient(VueAbstraite):
@@ -40,19 +41,19 @@ class MenuIngredient(VueAbstraite):
             match choix_bis:
                 case "Ajouter l'ingrédient aux favoris":
 
-                    return ajouter_ingredient_favori(choix)
+                    return lfs.ajouter_ingredient_favori(choix)
 
                 case "Retirer l'ingrédient des favoris":
 
-                    return enlever_ingredient_favori(choix)
+                    return lfs.enlever_ingredient_favori(choix)
 
                 case "Ajouter l'ingredient aux non-désirés":
 
-                    return ajouter_ingredient_non_desire(choix)
+                    return lfs.ajouter_ingredient_non_desire(choix)
 
                 case "Retirer l'ingredient des non-désirés":
 
-                    return enlever_ingredient_non_desire(choix)
+                    return lfs.enlever_ingredient_non_desire(choix)
                    
         
         from src.view.ingredients.ingredients_vue import IngredientsVue
