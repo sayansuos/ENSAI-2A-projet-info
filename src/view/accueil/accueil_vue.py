@@ -20,10 +20,10 @@ class AccueilVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Se connecter"
-                "Créer un compte",
-                "Continuer en tant qu'invité",
-                "Quitter",
+                "Se connecter" #done
+                "Créer un compte", #done
+                "Continuer en tant qu'invité", #done
+                "Quitter", #done
             ],
         ).execute()
 

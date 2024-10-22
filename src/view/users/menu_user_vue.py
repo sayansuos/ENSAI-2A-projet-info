@@ -3,7 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-from service.joueur_service import JoueurService
+from src.service.utilisateur_service import UtilisateurService
 
 
 class MenuUserVue(VueAbstraite):
@@ -34,12 +34,12 @@ class MenuUserVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter les recettes",
-                "Consulter les suggestions",
-                "Consulter les favoris",
+                "Consulter les recettes", #done
+                "Consulter les suggestions", #done
+                "Consulter les favoris", #done
                 "Consulter les ingrédients",
-                "Consulter le panier",
-                "Se déconnecter",
+                "Consulter le panier",#done
+                "Se déconnecter", #done
             ],
         ).execute()
 
@@ -56,7 +56,17 @@ class MenuUserVue(VueAbstraite):
                 return RecettesVue()
 
             case "Consulter les suggestions":
-                from src.classes.utilisateur_service import UtilisateurService
 
                 return voir_suggestions()
+            
+            case "Consulter les favoris":
 
+                return voir_favoris()
+
+            case "Consulter le panier":
+
+                return voir_liste_course()
+            
+            case "Voir les ingrédients":
+
+                pass

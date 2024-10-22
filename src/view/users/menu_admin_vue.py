@@ -35,12 +35,12 @@ class MenuAdminVue(VueAbstraite):
             message="Faites votre choix : ",
             choices=[
                 "Consulter les comptes",#done
-                "Consulter les recettes",
+                "Consulter les recettes",#done
                 "Ajouter un compte",
                 "Supprimer un compte", #done
                 "Modifier un compte",
                 "Ajouter une recette",
-                "Supprimer une recette",
+                "Supprimer une recette",#done
                 "Se déconnecter", #done
             ],
         ).execute()
@@ -57,12 +57,19 @@ class MenuAdminVue(VueAbstraite):
                 return lister_tous()
             
             case "Supprimer un compte":
-                from src.view.suppression_vue import SuppressionVue
+                from src.view.vues_suppression.suppression_vue import SuppressionVue
 
                 return SuppressionVue()
             
             case "Supprimer une recette":
-                from src.view.suppression_recette_vue import SuppressionRecetteVue
+                from src.view.vues_suppression.suppression_recette_vue import SuppressionRecetteVue
 
                 return SuppressionRecetteVue()
 
+            case "Consulter les recettes":
+                from src.service.recette_service import RecetteService
+
+                return lister_toutes_recettes()
+            
+            case "Ajouter un compte":
+                pass
