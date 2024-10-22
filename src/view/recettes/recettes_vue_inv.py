@@ -28,7 +28,9 @@ class RecettesVue(VueAbstraite):
 
         match choix:
             case "Consulter toutes les recettes":
-                pass
+                from src.view.recette.menu_recette_inv_sf import MenuRecetteSf
+
+                return MenuRecetteSf()
 
             case "Consulter les recettes par ingrédient":
                 pass
