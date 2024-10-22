@@ -16,7 +16,7 @@ def test_creer_ok():
     """ "Création de Utilisateur réussie"""
 
     # GIVEN
-    pseudo, mdp, mail = "jp", "1234" "z@mail.oo"
+    pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
     UtilisateurDAO().creer = MagicMock(return_value=True)
 
     # WHEN
@@ -31,7 +31,7 @@ def test_creer_echec():
     (car la méthode UtilisateurDAO().creer retourne False)"""
 
     # GIVEN
-    pseudo, mdp, mail = "jp", "1234" "z@mail.oo"
+    pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
     UtilisateurDAO().creer = MagicMock(return_value=False)
 
     # WHEN
@@ -334,13 +334,15 @@ def test_connecter_ok():
 
     # GIVEN
     pseudo, mdp = "lea", "0000"
-    UtilisateurDAO().creer = MagicMock(return_value=True)
+    utilisateur_mock = Utilisateur(pseudo=pseudo, mail="lea@mail.fr", mdp=mdp)
+    UtilisateurDAO().connecter = MagicMock(return_value=utilisateur_mock)
 
     # WHEN
     utilisateur = UtilisateurService().connecter(pseudo, mdp)
 
     # THEN
-    assert utilisateur
+    assert utilisateur.pseudo == pseudo
+    assert utilisateur.mail == "lea@mail.fr"
 
 
 if __name__ == "__main__":
