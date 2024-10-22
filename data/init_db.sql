@@ -23,9 +23,9 @@ CREATE TABLE projet.ingredient(
 DROP TABLE IF EXISTS projet.recette CASCADE;
 CREATE TABLE projet.recette(
     id_recette               SERIAL PRIMARY KEY,
-    nom_recette              VARCHAR(30) UNIQUE,
-    description_recette      VARCHAR(250) UNIQUE,
-    avis                     VARCHAR UNIQUE,
+    nom_recette              VARCHAR UNIQUE,
+    description_recette      VARCHAR,
+    avis                     VARCHAR,
     note                     FLOAT
 );
 
@@ -34,9 +34,9 @@ CREATE TABLE projet.recette(
 -----------------------------------------------------
 DROP TABLE IF EXISTS projet.recette_ingredient CASCADE;
 CREATE TABLE projet.recette_ingredient(
-    id_ingredient INTEGER,
-    id_recette INTEGER,
-    quantite VARCHAR(30),
+    id_ingredient  INTEGER,
+    id_recette     INTEGER,
+    quantite       VARCHAR,
     PRIMARY KEY (id_ingredient, id_recette),
     FOREIGN KEY (id_ingredient) REFERENCES projet.ingredient(id_ingredient),
     FOREIGN KEY (id_recette) REFERENCES projet.recette(id_recette)

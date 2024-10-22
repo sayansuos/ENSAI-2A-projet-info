@@ -13,11 +13,13 @@ class RecetteService(Recette):
         Permet de trouver une recette en indiquant le nom de celle-ci
 
         Args:
-            nom (str): Nom de la recette recherchée
+            nom (str):
+                Nom de la recette recherchée
 
         Returns:
-            Optional[Recette]: Renvoie la recette si le nom correspond à une
-                               recette existante. Renvoie None sinon
+            Optional[Recette]:
+                Renvoie la recette si le nom correspond à une recette existante.
+                Renvoie None sinon
         """
         if not isinstance(nom, str):
             raise TypeError("nom doit être une instance de str")
@@ -31,10 +33,12 @@ class RecetteService(Recette):
         en paramètre
 
         Args:
-            ingredient (str): Nom de l'ingrédient recherché
+            ingredient (str):
+                Nom de l'ingrédient recherché
 
         Returns:
-            list[Recette]: Renvoie la liste des recettes contenant cet ingrédient
+            list[Recette]:
+                Renvoie la liste des recettes contenant cet ingrédient
         """
 
         if not isinstance(ingredient, str):
@@ -48,7 +52,8 @@ class RecetteService(Recette):
         Renvoie une liste de toutes les recettes existantes.
 
         Returns:
-            list[Recette]: Liste de toutes les recettes existantes
+            list[Recette]:
+                Liste de toutes les recettes existantes
         """
 
         return RecetteDao.lister_tous()
@@ -58,7 +63,8 @@ class RecetteService(Recette):
         Permet de noter une recette de 0 à 5.
 
         Args:
-            note (float): Note donnée à la recette. Les notes vont de 0 à 5, avec un pas de 0.5
+            note (float):
+                Note donnée à la recette. Les notes vont de 0 à 5, avec un pas de 0.5
         """
 
         if not (isinstance(note, float) or isinstance(note, int)):
@@ -75,7 +81,8 @@ class RecetteService(Recette):
         Permet de commenter une recette
 
         Args:
-            commentaire (str): Avis de l'utilisateur sur la recette
+            commentaire (str):
+                Avis de l'utilisateur sur la recette
         """
 
         if not isinstance(commentaire, str):
@@ -88,7 +95,8 @@ class RecetteService(Recette):
         Permet d'ajouter une recette dans la base de données.
 
         Args:
-            recette (Recette): Informations de la recette à ajouter
+            recette (Recette):
+                Informations de la recette à ajouter
 
         Returns:
             Optional[Recette]:
@@ -103,11 +111,13 @@ class RecetteService(Recette):
         Permet de supprimer une recette de la base de données
 
         Args:
-            recette (Recette): Recette à supprimer
+            recette (Recette):
+                Recette à supprimer
 
         Returns:
             bool:
-                True si la recette a été correctement supprimée. False sinon
+                True si la recette a été correctement supprimée.
+                False sinon.
         """
 
         return RecetteDao.supprimer(recette)
@@ -117,11 +127,68 @@ class RecetteService(Recette):
         Permet de trouver une recette par identifiant
 
         Args:
-            id (int): Identifiant de la recette recherchée
+            id (int):
+                Identifiant de la recette recherchée
 
         Returns:
-            Optional[Recette]: Retourne la recette correspondant à l'identifiant.
-                                Retourne None sinon
+            Optional[Recette]:
+                Retourne la recette correspondant à l'identifiant.
+                Retourne None sinon
         """
 
         return RecetteDao.trouver_par_id(id)
+
+    def voir_avis(self, recette: Recette) -> [List[str]]:
+        """
+        Permet de voir les avis d'une recette
+
+        Args:
+            recette (Recette):
+                Recette dont on veut voir les avis
+
+        Returns:
+            [List[str]]:
+                Liste des avis des utilisateurs sur la recette
+        """
+
+        if not isinstance(recette, Recette):
+            raise TypeError("recette doit être une instance de Recette.")
+
+        return RecetteDao.voir_avis(recette)
+
+    def voir_note(self, recette: Recette) -> Optional[float]:
+        """
+        Permet de voir la note d'une recette
+
+        Args:
+            recette (Recette): Recette dont on veut voir la note
+
+        Returns:
+            Optional[float]:
+                Note de la recette si la recette a été notée au moins une fois.
+                None sinon.
+        """
+
+        if not isinstance(recette, Recette):
+            raise TypeError("recette doit être une instance de Recette.")
+
+        return RecetteDao.voir_note(recette)
+
+    def voir_description(self, recette: Recette) -> str:
+        """
+        Renvoie la description d'une recette
+
+        Args:
+            recette (Recette):
+                Recette dont on veut voir la description
+
+        Returns:
+            str:
+                Description de la recette
+        """
+
+        if not isinstance(recette, Recette):
+            raise TypeError("recette doit être une instance de Recette.")
+
+        # Voir si ça marche bien comme ça. Sinon on passe par la DAO comme d'habitude.
+        return super.description
