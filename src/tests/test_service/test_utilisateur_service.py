@@ -345,6 +345,35 @@ def test_connecter_ok():
     assert utilisateur.mail == "lea@mail.fr"
 
 
+def test_supprimer_ok():
+    """La suppression de l'utilisateur a été correctement effectuée"""
+
+    # GIVEN
+    user = Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="0000")
+    UtilisateurDAO().supprimer = MagicMock(return_value=True)
+
+    # WHEN
+    result = UtilisateurService().supprimer(user)
+
+    # THEN
+    assert result
+
+
+def test_supprimer_echec():
+    """La suppression de l'utilisateur n'a pas été effectué car user n'est pas
+    une instance de Utilisateur"""
+
+    # GIVEN
+    user = "lea"
+
+    # WHEN - THEN
+    with pytest.raises(
+        TypeError,
+        match="L'utilisateur n'est pas renseigné correctement.",
+    ):
+        UtilisateurService().creer(user)
+
+
 if __name__ == "__main__":
 
     pytest.main([__file__])
