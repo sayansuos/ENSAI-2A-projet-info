@@ -64,6 +64,6 @@ class MenuRecetteSf(VueAbstraite):
                 case "Ajouter les ingredients au panier":
                     ingr = recette_service.ingredients_recette(choix)
 
-                    return lfs.ajouter_liste_course(ingr)
+                    return lfs.ajouter_ingredient_course(ingr)
 
         return MenuRecetteSf()
