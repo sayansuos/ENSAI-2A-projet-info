@@ -301,6 +301,48 @@ def test_pseudo_deja_utilise_non():
     assert not res
 
 
+def test_connecter_pseudo_inv():
+    """Connection échouée car le pseudo n'est pas une chaine de caractère"""
+
+    # GIVEN
+    pseudo, mdp = 123, "azerty"
+
+    # WHEN - THEN
+    with pytest.raises(
+        TypeError,
+        match="Le pseudo doit être une chaîne de caractères alphanumériques.",
+    ):
+        UtilisateurService().connecter(pseudo, mdp)
+
+
+def test_connecter_mdp_inv():
+    """Connection échoué car le mot de passe n'est pas une chaine de caractère"""
+
+    # GIVEN
+    pseudo, mdp = "Benjamin", ["azerty"]
+
+    # WHEN - THEN
+    with pytest.raises(
+        TypeError,
+        match="Le mot de passe doit être une chaîne de caractères alphanumériques.",
+    ):
+        UtilisateurService().connecter(pseudo, mdp)
+
+
+def test_connecter_ok():
+    """Connection de l'utilisateur réussie"""
+
+    # GIVEN
+    pseudo, mdp = "lea", "0000"
+    UtilisateurDAO().creer = MagicMock(return_value=True)
+
+    # WHEN
+    utilisateur = UtilisateurService().connecter(pseudo, mdp)
+
+    # THEN
+    assert utilisateur
+
+
 if __name__ == "__main__":
 
     pytest.main([__file__])
