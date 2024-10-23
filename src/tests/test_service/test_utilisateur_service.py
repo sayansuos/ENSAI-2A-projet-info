@@ -6,9 +6,9 @@ from src.business_object.utilisateur import Utilisateur
 
 
 liste_utilisateurs = [
-    Utilisateur(pseudo="jp", mail="jp@mail.fr", mdp="1234"),
-    Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="0000"),
-    Utilisateur(pseudo="gg", mail="gg@mail.fr", mdp="abcd"),
+    Utilisateur(pseudo="jp", mail="jp@mail.fr", mdp="123456"),
+    Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="000000"),
+    Utilisateur(pseudo="gg", mail="gg@mail.fr", mdp="abcdef"),
 ]
 
 
@@ -16,7 +16,7 @@ def test_creer_ok():
     """ "Création de Utilisateur réussie"""
 
     # GIVEN
-    pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
+    pseudo, mdp, mail = "jp", "123456", "z@mail.oo"
     UtilisateurDao().creer = MagicMock(return_value=True)
 
     # WHEN
@@ -31,7 +31,7 @@ def test_creer_echec():
     (car la méthode UtilisateurDAO().creer retourne False)"""
 
     # GIVEN
-    pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
+    pseudo, mdp, mail = "jp", "123456", "z@mail.oo"
     UtilisateurDao().creer = MagicMock(return_value=False)
 
     # WHEN
@@ -333,7 +333,7 @@ def test_connecter_ok():
     """Connection de l'utilisateur réussie"""
 
     # GIVEN
-    pseudo, mdp = "lea", "0000"
+    pseudo, mdp = "lea", "000000"
     utilisateur_mock = Utilisateur(pseudo=pseudo, mail="lea@mail.fr", mdp=mdp)
     UtilisateurDao().connecter = MagicMock(return_value=utilisateur_mock)
 
@@ -349,7 +349,7 @@ def test_supprimer_ok():
     """La suppression de l'utilisateur a été correctement effectuée"""
 
     # GIVEN
-    user = Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="0000")
+    user = Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="000000")
     UtilisateurDao().supprimer = MagicMock(return_value=True)
 
     # WHEN
