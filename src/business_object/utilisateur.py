@@ -1,5 +1,5 @@
-from src.business_object.recette import Recette
-from src.business_object.ingredient import Ingredient
+from business_object.recette import Recette
+from business_object.ingredient import Ingredient
 
 
 class Utilisateur:
