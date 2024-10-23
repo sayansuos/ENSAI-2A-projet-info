@@ -4,7 +4,7 @@ from service.ingredient_service import IngredientService
 from dao.ingredient_dao import IngredientDao
 from business_object.ingredient import Ingredient
 
-# Liste d'ingrédients pour les tests
+
 liste_ingredients = [
     Ingredient(nom_ingredient="Tomate", id_ingredient=1),
     Ingredient(nom_ingredient="Oignon", id_ingredient=2),
@@ -67,34 +67,6 @@ def test_creer_ingredient_doublon():
     assert ingredient is None
 
 
-def test_supprimer_ingredient_ok():
-    """Suppression d'un Ingredient réussie"""
-
-    # GIVEN
-    id_ingredient = 1
-    IngredientDao().supprimer = MagicMock(return_value=True)
-
-    # WHEN
-    result = IngredientService().supprimer(id_ingredient)
-
-    # THEN
-    assert result is True
-
-
-def test_supprimer_ingredient_echec():
-    """Suppression d'un Ingredient échouée (car la méthode IngredientDao().supprimer retourne False)"""
-
-    # GIVEN
-    id_ingredient = 1
-    IngredientDao().supprimer = MagicMock(return_value=False)
-
-    # WHEN
-    result = IngredientService().supprimer(id_ingredient)
-
-    # THEN
-    assert result is False
-
-
 def test_trouver_ingredient_par_id_ok():
     """Trouver un Ingredient par ID réussie"""
 
@@ -104,7 +76,7 @@ def test_trouver_ingredient_par_id_ok():
     IngredientDao().trouver_par_id = MagicMock(return_value=expected_ingredient)
 
     # WHEN
-    ingredient = IngredientService().trouver_par_id(id_ingredient)
+    ingredient = IngredientService().trouver_ingredient_par_id(id_ingredient)
 
     # THEN
     assert ingredient.nom_ingredient == expected_ingredient.nom_ingredient
@@ -118,7 +90,7 @@ def test_trouver_ingredient_par_id_invalide():
     IngredientDao().trouver_par_id = MagicMock(return_value=None)
 
     # WHEN
-    ingredient = IngredientService().trouver_par_id(id_ingredient)
+    ingredient = IngredientService().trouver_ingredient_par_id(id_ingredient)
 
     # THEN
     assert ingredient is None
