@@ -6,7 +6,7 @@ from utils.log_decorator import log
 from dao.db_connection import DBConnection
 
 from dao.ingredient_dao import IngredientDao
-from src.business_object.ingredient import Ingredient
+from business_object.ingredient import Ingredient
 from business_object.recette import Recette
 
 
