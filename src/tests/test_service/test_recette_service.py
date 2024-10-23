@@ -1,3 +1,4 @@
+import pytest
 from unittest.mock import patch, MagicMock
 from src.service.recette_service import RecetteService
 from src.business_object.recette import Recette
@@ -7,9 +8,13 @@ from src.business_object.ingredient import Ingredient
 # Test for trouver_recette_par_nom
 def test_trouver_recette_par_nom_ok(mock_db_connection):
     # GIVEN
+    ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
+    ingredient_2 = Ingredient(nom_ingredient="Meat", id_ingredient=2)
+
     nom_recette = "Spaghetti Bolognese"
     expected_recette = Recette(
-        id_recette=1, nom_recette=nom_recette, liste_ingredient=[["Pasta", "100"], ["Meat", "100"]]
+        id_recette=1, nom_recette=nom_recette,
+        liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]]
     )
 
     # Mock the DB response
@@ -17,7 +22,7 @@ def test_trouver_recette_par_nom_ok(mock_db_connection):
     mock_cursor.fetchone.return_value = {
         "id": 1,
         "nom": nom_recette,
-        "liste_ingredient": [["Pasta", "100"], ["Meat", "100"]],
+        "liste_ingredient": [[ingredient_1, "100"], [ingredient_2, "100"]],
     }
     mock_db_connection().connection.cursor.return_value.__enter__.return_value = mock_cursor
 
@@ -47,17 +52,22 @@ def test_trouver_recette_par_nom_invalid_input():
 # Test for trouver_recette_par_ingredient
 def test_trouver_recette_par_ingredient_ok(mock_db_connection):
     # GIVEN
+    ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
+    ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
+    ingredient_3 = Ingredient(nom_ingredient="Dough", id_ingredient=3)
+    ingredient_4 = Ingredient(nom_ingredient="Cheese", id_ingredient=4)
+
     ingredient = "Tomato"
     expected_recettes = [
         Recette(
             id_recette=1,
             nom_recette="Spaghetti Bolognese",
-            liste_ingredient=[["Pasta", "100"], ["Tomato", "100"]],
+            liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
         ),
         Recette(
             id_recette=2,
             nom_recette="Pizza Margherita",
-            liste_ingredient=[["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+            liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
         ),
     ]
 
@@ -67,12 +77,12 @@ def test_trouver_recette_par_ingredient_ok(mock_db_connection):
         {
             "id": 1,
             "nom": "Spaghetti Bolognese",
-            "liste_ingredient": [["Pasta", "100"], ["Tomato", "100"]],
+            "liste_ingredient": [[ingredient_1, "100"], [ingredient_2, "100"]],
         },
         {
             "id": 2,
             "nom": "Pizza Margherita",
-            "liste_ingredient": [["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+            "liste_ingredient": [[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
         },
     ]
     mock_db_connection().connection.cursor.return_value.__enter__.return_value = mock_cursor
@@ -108,16 +118,21 @@ def test_trouver_recette_par_ingredient_invalid_input():
 # Test for lister_toutes_recettes
 def test_lister_toutes_recettes(mock_db_connection):
     # GIVEN
+    ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
+    ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
+    ingredient_3 = Ingredient(nom_ingredient="Dough", id_ingredient=3)
+    ingredient_4 = Ingredient(nom_ingredient="Cheese", id_ingredient=4)
+
     expected_recettes = [
         Recette(
             id_recette=1,
             nom_recette="Spaghetti Bolognese",
-            liste_ingredient=[["Pasta", "100"], ["Tomato", "100"]],
+            liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
         ),
         Recette(
             id_recette=2,
             nom_recette="Pizza Margherita",
-            liste_ingredient=[["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+            liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
         ),
     ]
 
@@ -127,12 +142,12 @@ def test_lister_toutes_recettes(mock_db_connection):
         {
             "id": 1,
             "nom": "Spaghetti Bolognese",
-            "liste_ingredient": [["Pasta", "100"], ["Tomato", "100"]],
+            "liste_ingredient": [[ingredient_1, "100"], [ingredient_2, "100"]],
         },
         {
             "id": 2,
             "nom": "Pizza Margherita",
-            "liste_ingredient": [["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+            "liste_ingredient": [[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
         },
     ]
     mock_db_connection().connection.cursor.return_value.__enter__.return_value = mock_cursor
@@ -183,7 +198,7 @@ def test_noter_recette_invalid_input_value():
 
     # WHEN-THEN:
     with pytest.raises(
-        TypeError, match="La note doit être comprise entre 0 et 5."
+        ValueError, match="La note doit être comprise entre 0 et 5."
     ):
         RecetteService().noter_recette(note)
 
@@ -211,10 +226,8 @@ def test_commenter_recette_invalid_input_type():
     with pytest.raises(
         TypeError, match="Le commentaire doit être une chaîne de caractères"
     ):
-        RecetteService().noter_recette(avis)
+        RecetteService().commenter_recette(avis)
 
 
 if __name__ == "__main__":
-    import pytest
-
     pytest.main([__file__])
