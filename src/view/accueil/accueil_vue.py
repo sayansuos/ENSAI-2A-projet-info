@@ -20,7 +20,7 @@ class AccueilVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Se connecter" #done
+                "Se connecter", #done
                 "Créer un compte", #done
                 "Continuer en tant qu'invité", #done
                 "Quitter", #done
@@ -32,16 +32,16 @@ class AccueilVue(VueAbstraite):
                 pass
 
             case "Se connecter":
-                from view.accueil.connexion_vue import ConnexionVue
+                from src.view.accueil.connexion_vue import ConnexionVue
 
                 return ConnexionVue("Connexion à l'application")
 
             case "Créer un compte":
-                from view.accueil.inscription_vue import InscriptionVue
+                from src.view.accueil.inscription_vue import InscriptionVue
 
                 return InscriptionVue("Création de compte joueur")
 
             case "Continuer en tant qu'invité":
-                from view.menu_inv_vue import MenuInvVue
+                from src.view.users.menu_inv_vue import MenuInvVue
 
                 return MenuInvVue
