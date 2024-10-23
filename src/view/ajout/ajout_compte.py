@@ -5,15 +5,15 @@ from InquirerPy.validator import PasswordValidator, EmptyInputValidator
 
 from prompt_toolkit.validation import ValidationError, Validator
 
-
+from src.business_object.utilisateur import Utilisateur
 from view.vue_abstraite import VueAbstraite
 from service.utilisateur_service import UtilisateurService
 
 
-class InscriptionVue(VueAbstraite):
+class AjoutVue(VueAbstraite):
     def choisir_menu(self):
-        # Demande à l'utilisateur de saisir pseudo, mot de passe...
-        pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()
+        # Demande à l'administrateur de saisir pseudo, mot de passe...
+        pseudo = inquirer.text(message="Entrez le pseudo : ").execute()
 
         if UtilisateurService().pseudo_deja_utilise(pseudo):
             from view.accueil.accueil_vue import AccueilVue
@@ -21,7 +21,7 @@ class InscriptionVue(VueAbstraite):
             return AccueilVue(f"Le pseudo {pseudo} est déjà utilisé.")
 
         mdp = inquirer.secret(
-            message="Entrez votre mot de passe : ",
+            message="Entrez le mot de passe : ",
             validate=PasswordValidator(
                 length=8,
                 cap=True,
@@ -30,22 +30,23 @@ class InscriptionVue(VueAbstraite):
             ),
         ).execute()
 
-        mail = inquirer.text(message="Entrez votre mail : ", validate=MailValidator()).execute()
+        mail = inquirer.text(message="Entrez le mail : ", validate=MailValidator()).execute()
 
         # Appel du service pour créer le joueur
-        user = UtilisateurService().creer(pseudo, mdp, mail)
+        utilisateur = Utilisateur(pseudo, mdp, mail)
+        user = UtilisateurService().creer(utilisateur)
 
         # Si le joueur a été créé
         if user:
             message = (
-                f"Votre compte {user.pseudo} a été créé. Vous pouvez maintenant vous connecter."
+                f"Le compte {user.pseudo} a été créé."
             )
         else:
             message = "Erreur de connexion (pseudo ou mot de passe invalide)"
 
-        from view.accueil.accueil_vue import AccueilVue
+        from src.view.users.menu_admin_vue import MenuAdminVue
 
-        return AccueilVue(message)
+        return MenuAdminVue(message)
 
 
 class MailValidator(Validator):

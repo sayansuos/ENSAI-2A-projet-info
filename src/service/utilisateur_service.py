@@ -103,7 +103,8 @@ class UtilisateurService:
         # Ligne à modifier quand on aura écrit la classe UtilisateurDAO
         # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
-        pass
+        mdp = hash_password(mdp, sel=pseudo)
+        return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
     @log
     def connecter(self, pseudo: str, mdp: str) -> Utilisateur:
@@ -170,16 +171,20 @@ class UtilisateurService:
         return UtilisateurDao().trouver_par_id(id_user)
 
     @log
-    def modifier(self, user: Utilisateur) -> Optional[Utilisateur]:
+    def modifier(self, user: Utilisateur, new_user: Utilisateur) -> Optional[Utilisateur]:
         """
         Permet de modifier les informations d'un utilisateur
 
         Args:
-            user (Utilisateur): Nouvelles informations de l'utilisateur
+            user (Utilisateur):
+                Utilisateur dont on veut modifier les données
+            new_user (Utilisateur):
+                Nouvelles informations de l'utilisateur concerné
 
         Returns:
-            Optional[Utilisateur]: Informations de l'utilisateur modifiées.
-                                    None si la modification a échoué.
+            Optional[Utilisateur]:
+                Informations de l'utilisateur modifiées.
+                None si la modification a échoué.
         """
 
         user.mdp = hash_password(user.mdp, user.pseudo)
