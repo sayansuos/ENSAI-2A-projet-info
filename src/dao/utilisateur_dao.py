@@ -5,9 +5,9 @@ from utils.log_decorator import log
 
 from dao.db_connection import DBConnection
 
-from business_object.utilisateur import Utilisateur
-from business_object.recette import Recette
-from business_object.ingredient import Ingredient
+from src.business_object.utilisateur import Utilisateur
+from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
 
 
 class UtilisateurDao(metaclass=Singleton):
