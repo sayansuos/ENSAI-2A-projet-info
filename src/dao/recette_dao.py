@@ -6,6 +6,7 @@ from utils.log_decorator import log
 from dao.db_connection import DBConnection
 
 from dao.ingredient_dao import IngredientDao
+from business_object.ingredient import Ingredient
 from business_object.recette import Recette
 
 
@@ -48,12 +49,16 @@ class RecetteDao(metaclass=Singleton):
                         },
                     )
                     res = cursor.fetchone()
+
                     for raw_ingredient in recette.liste_ingredient:
                         nom_ingredient = raw_ingredient[0]
                         quantite_ingredient = raw_ingredient[1]
-                        id_ingredient = IngredientDao.trouver_par_nom(
-                            nom=nom_ingredient
-                        ).id_ingredient
+                        id_ingredient = (
+                            IngredientDao()
+                            .trouver_par_nom(nom_ingredient=nom_ingredient, cursor=cursor)
+                            .id_ingredient
+                        )
+
                         cursor.execute(
                             "INSERT INTO projet.recette_ingredient VALUES        "
                             "(%(id_ingredient)s, %(id_recette)s, %(quantite)s);  ",
@@ -121,6 +126,36 @@ class RecetteDao(metaclass=Singleton):
             )
 
         return recette
+
+    @log
+    def trouver_par_ingredient(self, ingredient:Ingredient):
+        """
+        Donne une liste de recette contenant un ingredient
+
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingredient par lequel on veut filtrer
+
+        Returns
+        -------
+        liste_recettes : list[Recette]
+            Renvoie une liste de recette filtrée par l'ingrédient voulu
+        """
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT *                                   "
+                        " FROM recette                              "
+                        " JOIN recette_ingredient USING (id_recette)"
+                        " WHERE id_ingredient = %(id_ingredient)s;  ",
+                        {"id_ingredient": ingredient.id_ingredient},
+                    )
+                    res = cursor.fetchall()
+        except Exception as e:
+            logging.info(e)
+            raise
 
     @log
     def lister_tous(self) -> list[Recette]:

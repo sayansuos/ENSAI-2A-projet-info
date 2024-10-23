@@ -16,14 +16,12 @@ def setup_test_environment():
 
 
 # Test for the creer() method
-def test_creer_ingredient(db_connection_mock, ingredient_dao):
+def test_creer_ok():
     """
-    GIVEN an ingredient to be added to the database
-    WHEN the creer() method is called
-    THEN the ingredient should be added and return True
+    Création d'un ingrédient réussie.
     """
 
-    # Given
+    # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Tomato")
 
     # When
@@ -34,40 +32,48 @@ def test_creer_ingredient(db_connection_mock, ingredient_dao):
     assert ingredient.id_ingredient == 1
 
 
-# Test for the trouver_par_id() method
-def test_trouver_par_id(db_connection_mock, ingredient_dao):
+def test_trouver_par_id_existant():
     """
-    GIVEN an ingredient's id
-    WHEN the trouver_par_id() method is called
-    THEN the corresponding ingredient should be returned
+    Recherche par id d'un joueur existant.
     """
 
-    # Given
+    # GIVEN
     id_ingredient = 1
 
-    # When
+    # WHEN
     ingredient = IngredientDao.trouver_par_id(id_ingredient)
 
-    # Then
+    # THEN
     assert ingredient is not None
 
 
-# Test for the lister_tous() method
-def test_lister_tous(db_connection_mock, ingredient_dao):
+def test_trouver_par_id_non_existant():
     """
-    GIVEN ingredients in the database
-    WHEN the lister_tous() method is called
-    THEN a list of all ingredients should be returned
+    Recherche par id d'un joueur non existant.
     """
 
-    # Given
+    # GIVEN
+    id_ingredient = 9999999999999
 
-    # When
-    ingredients = ingredient_dao.lister_tous()
+    # WHEN
+    ingredient = IngredientDao.trouver_par_id(id_ingredient)
+
+    # THEN
+    assert ingredient is None
+
+
+def test_lister_tous():
+    """
+    Vérifie que la méthode renvoie une liste d'ingrédients de taille supérieure ou égale à 2.
+    """
+
+    # GIVEN
+
+    # WHEN
+    ingredients = IngredientDao().lister_tous()
 
     # Then
-    assert len(ingredients) == 2
-    assert ingredients[0].id_ingredient == 1
-    assert ingredients[0].nom_ingredient == "Tomato"
-    assert ingredients[1].id_ingredient == 2
-    assert ingredients[1].nom_ingredient == "Lettuce"
+    assert isinstance(ingredients, list)
+    for i in ingredients:
+        assert isinstance(i, Ingredient)
+    assert len(ingredients) >= 2

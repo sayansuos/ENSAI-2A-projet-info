@@ -1,5 +1,7 @@
 import logging
 
+# from dotenv import load_dotenv
+
 from utils.singleton import Singleton
 from utils.log_decorator import log
 
@@ -45,8 +47,7 @@ class IngredientDao(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
         except Exception as e:
-            logging.info(e)
-
+            print(e)
         created = False
         if res:
             ingredient.id_ingredient = res["id_ingredient"]
@@ -74,7 +75,7 @@ class IngredientDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         " SELECT *                                   "
-                        "   FROM ingredient                          "
+                        "   FROM projet.ingredient                          "
                         "  WHERE id_ingredient = %(id_ingredient)s;  ",
                         {"id_ingredient": id_ingredient},
                     )
@@ -93,7 +94,7 @@ class IngredientDao(metaclass=Singleton):
         return ingredient
 
     @log
-    def trouver_par_nom(self, nom_ingredient) -> Ingredient:
+    def trouver_par_nom(self, nom_ingredient, cursor=None) -> Ingredient:
         """
         Trouver un ingrédient grace à son nom.
 
@@ -107,19 +108,29 @@ class IngredientDao(metaclass=Singleton):
         ingredient : Ingredient
             renvoie l'ingrédient que l'on cherche par id
         """
-        try:
-            with DBConnection().connection as connection:
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        " SELECT *                                   "
-                        "   FROM ingredient                          "
-                        "  WHERE nom_ingredient = %(nom_ingredient)s;  ",
-                        {"nom_ingredient": nom_ingredient},
-                    )
-                    res = cursor.fetchone()
-        except Exception as e:
-            logging.info(e)
-            raise
+        if cursor is None:
+            try:
+                with DBConnection().connection as connection:
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            " SELECT *                                   "
+                            "   FROM projet.ingredient                          "
+                            "  WHERE nom_ingredient = %(nom_ingredient)s;  ",
+                            {"nom_ingredient": nom_ingredient},
+                        )
+                        res = cursor.fetchone()
+            except Exception as e:
+                logging.info(e)
+                raise
+
+        else:
+            cursor.execute(
+                " SELECT *                                    "
+                "   FROM projet.ingredient                     "
+                "  WHERE nom_ingredient = %(nom_ingredient)s;  ",
+                {"nom_ingredient": nom_ingredient},
+            )
+            res = cursor.fetchone()
 
         ingredient = None
         if res:
@@ -150,7 +161,7 @@ class IngredientDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "SELECT *                              "
-                        "  FROM ingredient;                    "
+                        "  FROM projet.ingredient;                    "
                     )
                     res = cursor.fetchall()
         except Exception as e:
