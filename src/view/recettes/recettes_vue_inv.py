@@ -33,7 +33,9 @@ class RecettesVue(VueAbstraite):
                 return MenuRecetteSf()
 
             case "Consulter les recettes par ingrédient":
-                pass
+                from src.view.recette.menu_recette_inv_af import MenuRecetteAf
+
+                return MenuRecetteAf()
             
             case "Retour":
                 from src.view.users.menu_inv_vue import MenuInvVue
