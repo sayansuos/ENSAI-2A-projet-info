@@ -1,11 +1,11 @@
 from unittest.mock import patch, MagicMock
-from src.services.liste_favoris_service import ListeFavorisService
-from src.business_object.recette import Recette
-from src.business_object.ingredient import Ingredient
+from services.liste_favoris_service import ListeFavorisService
+from business_object.recette import Recette
+from business_object.ingredient import Ingredient
 
 
 # Test for ajouter_favoris
-@patch("src.services.liste_favoris_service.Utilisateur")
+@patch("services.liste_favoris_service.Utilisateur")
 def test_ajouter_favoris(mock_utilisateur):
     # GIVEN
     recette = Recette(
@@ -25,7 +25,7 @@ def test_ajouter_favoris(mock_utilisateur):
 
 
 # Test for enlever_favoris
-@patch("src.services.liste_favoris_service.Utilisateur")
+@patch("services.liste_favoris_service.Utilisateur")
 def test_enlever_favoris(mock_utilisateur):
     # GIVEN
     recette = Recette(
@@ -45,7 +45,7 @@ def test_enlever_favoris(mock_utilisateur):
 
 
 # Test for ajouter_ingredient_course
-@patch("src.classes.Utilisateur")
+@patch("classes.Utilisateur")
 def test_ajouter_ingredient_course(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Tomato")
@@ -61,7 +61,7 @@ def test_ajouter_ingredient_course(mock_utilisateur):
 
 
 # Test for enlever_ingredient_course
-@patch("src.classes.Utilisateur")
+@patch("classes.Utilisateur")
 def test_enlever_ingredient_course(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Tomato")
@@ -77,7 +77,7 @@ def test_enlever_ingredient_course(mock_utilisateur):
 
 
 # Test for ajouter_ingredient_favori
-@patch("src.classes.Utilisateur")
+@patch("classes.Utilisateur")
 def test_ajouter_ingredient_favori(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Cheese")
@@ -93,7 +93,7 @@ def test_ajouter_ingredient_favori(mock_utilisateur):
 
 
 # Test for enlever_ingredient_favori
-@patch("src.classes.Utilisateur")
+@patch("classes.Utilisateur")
 def test_enlever_ingredient_favori(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Cheese")
@@ -109,7 +109,7 @@ def test_enlever_ingredient_favori(mock_utilisateur):
 
 
 # Test for ajouter_ingredient_non_desire
-@patch("src.classes.Utilisateur")
+@patch("classes.Utilisateur")
 def test_ajouter_ingredient_non_desire(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Broccoli")
@@ -125,7 +125,7 @@ def test_ajouter_ingredient_non_desire(mock_utilisateur):
 
 
 # Test for enlever_ingredient_non_desire
-@patch("src.classes.Utilisateur")
+@patch("classes.Utilisateur")
 def test_enlever_ingredient_non_desire(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Broccoli")

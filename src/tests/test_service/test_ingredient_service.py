@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
 import pytest
-from src.service.ingredient_service import IngredientService
-from src.dao.ingredient_dao import IngredientDao
-from src.business_object.ingredient import Ingredient
+from service.ingredient_service import IngredientService
+from dao.ingredient_dao import IngredientDao
+from business_object.ingredient import Ingredient
 
 # Liste d'ingrédients de test
 liste_ingredients = [

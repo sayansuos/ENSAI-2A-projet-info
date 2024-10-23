@@ -1,7 +1,7 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.utilisateur_service import UtilisateurService
+from service.utilisateur_service import UtilisateurService
 
 
 class IngredientsVue(VueAbstraite):
@@ -30,7 +30,7 @@ class IngredientsVue(VueAbstraite):
 
         match choix:
             case "Consulter tous les ingrédients":
-                from src.view.ingredient.menu_ingredient import MenuIngredient
+                from view.ingredient.menu_ingredient import MenuIngredient
 
                 return MenuIngredient()
 
@@ -43,6 +43,6 @@ class IngredientsVue(VueAbstraite):
                 return voir_ingredients_non_desires()
 
             case "Retour":
-                from src.view.users.menu_user_vue import MenuUserVue
+                from view.users.menu_user_vue import MenuUserVue
 
                 return MenuUserVue()

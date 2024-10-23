@@ -1,8 +1,8 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.ingredient_service import IngredientService
-from src.service.recette_service import RecetteService
+from service.ingredient_service import IngredientService
+from service.recette_service import RecetteService
 
 
 class MenuRecetteAf(VueAbstraite):
@@ -30,7 +30,7 @@ class MenuRecetteAf(VueAbstraite):
         ).execute()
 
         if choix_deux == "Retour":
-            from src.view.recettes.recettes_vue_inv import RecettesVue
+            from view.recettes.recettes_vue_inv import RecettesVue
 
             return RecettesVue()
         else:

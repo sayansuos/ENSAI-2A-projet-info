@@ -1,7 +1,7 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.recette_service import RecetteService
+from service.recette_service import RecetteService
 
 
 class SuppressionRecetteVue(VueAbstraite):
@@ -22,11 +22,11 @@ class SuppressionRecetteVue(VueAbstraite):
         ).execute()
 
         if choix == "Retour au Menu Administrateur":
-            from src.view.users.menu_admin_vue import MenuAdminVue
+            from view.users.menu_admin_vue import MenuAdminVue
 
             return MenuAdminVue()
         else :
-            from src.view.users.menu_admin_vue import MenuAdminVue
+            from view.users.menu_admin_vue import MenuAdminVue
 
             recette_service.supprimer(choix)
             message = f"La recette {choix} a été supprimée.\n\n"

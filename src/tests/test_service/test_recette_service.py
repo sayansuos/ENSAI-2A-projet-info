@@ -1,11 +1,11 @@
 from unittest.mock import patch, MagicMock
-from src.services.recette_service import RecetteService
-from src.business_object.recette import Recette
-from src.business_object.ingredient import Ingredient
+from services.recette_service import RecetteService
+from business_object.recette import Recette
+from business_object.ingredient import Ingredient
 
 
 # Test for trouver_recette_par_nom
-@patch("src.services.recette_service.DBConnection")
+@patch("services.recette_service.DBConnection")
 def test_trouver_recette_par_nom_ok(mock_db_connection):
     # GIVEN
     nom_recette = "Spaghetti Bolognese"
@@ -46,7 +46,7 @@ def test_trouver_recette_par_nom_invalid_input():
 
 
 # Test for trouver_recette_par_ingredient
-@patch("src.services.recette_service.DBConnection")
+@patch("services.recette_service.DBConnection")
 def test_trouver_recette_par_ingredient(mock_db_connection):
     # GIVEN
     ingredient = "Tomato"
@@ -108,7 +108,7 @@ def test_trouver_recette_par_ingredient_invalid_input():
 
 
 # Test for lister_toutes_recettes
-@patch("src.services.recette_service.DBConnection")
+@patch("services.recette_service.DBConnection")
 def test_lister_toutes_recettes(mock_db_connection):
     # GIVEN
     expected_recettes = [

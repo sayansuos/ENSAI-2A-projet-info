@@ -1,7 +1,7 @@
 from typing import List, Optional
-from src.business_object.recette import Recette
-from src.dao.recette_dao import RecetteDao
-from src.business_object.ingredient import Ingredient
+from business_object.recette import Recette
+from dao.recette_dao import RecetteDao
+from business_object.ingredient import Ingredient
 
 
 class RecetteService(Recette):

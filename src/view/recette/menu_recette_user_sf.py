@@ -1,8 +1,8 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.recette_service import RecetteService
-from src.service.liste_favoris_service import ListeFavorisService
+from service.recette_service import RecetteService
+from service.liste_favoris_service import ListeFavorisService
 lfs = ListeFavorisService()
 
 
@@ -24,7 +24,7 @@ class MenuRecetteSf(VueAbstraite):
         ).execute()
 
         if choix == "Retour":
-            from src.view.recettes.recettes_vue_user import RecettesVue
+            from view.recettes.recettes_vue_user import RecettesVue
 
             return RecettesVue()
         else:
