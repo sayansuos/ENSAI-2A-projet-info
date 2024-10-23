@@ -32,16 +32,16 @@ class AccueilVue(VueAbstraite):
                 pass
 
             case "Se connecter":
-                from src.view.accueil.connexion_vue import ConnexionVue
+                from view.accueil.connexion_vue import ConnexionVue
 
                 return ConnexionVue("Connexion à l'application")
 
             case "Créer un compte":
-                from src.view.accueil.inscription_vue import InscriptionVue
+                from view.accueil.inscription_vue import InscriptionVue
 
                 return InscriptionVue("Création de compte joueur")
 
             case "Continuer en tant qu'invité":
-                from src.view.users.menu_inv_vue import MenuInvVue
+                from view.users.menu_inv_vue import MenuInvVue
 
-                return MenuInvVue
+                return MenuInvVue()
