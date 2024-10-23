@@ -1,4 +1,5 @@
 import logging
+from dotenv import load_dotenv
 
 from utils.singleton import Singleton
 from utils.log_decorator import log
@@ -111,15 +112,14 @@ class RecetteDao(metaclass=Singleton):
 
         recette = None
         if res:
-
-            id_recette = res["id_recette"][0]
-            nom_recette = res["nom_recette"][0]
-            description_recette = res["description_recette"]
-            note = res["note"]
-            avis = res["avis"].split(";")
+            id_recette = res[0]["id_recette"]
+            nom_recette = res[0]["nom_recette"]
+            description_recette = res[0]["description_recette"]
+            note = res[0]["note"]
+            avis = res[0]["avis"].split(";")
             liste_ingredient = []
             for i in range(0, len(res)):
-                liste_ingredient.append([res["id_ingredient"], res["quantite"]])
+                liste_ingredient.append([res[i]["id_ingredient"], res[i]["quantite"]])
 
             recette = Recette(
                 id_recette, nom_recette, liste_ingredient, description_recette, note, avis
@@ -128,7 +128,54 @@ class RecetteDao(metaclass=Singleton):
         return recette
 
     @log
-    def trouver_par_ingredient(self, ingredient:Ingredient):
+    def trouver_par_nom(self, nom_recette) -> Recette:
+        """
+        Trouver une recette grace à son nom
+
+        Parameters
+        ----------
+        nom_recette : int
+            nom de la recette que l'on souhaite trouver
+
+        Returns
+        -------
+        recette : Recette
+            renvoie la recette que l'on cherche par id
+        """
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT *                                   "
+                        " FROM recette                              "
+                        " JOIN recette_ingredient USING (id_recette)"
+                        " WHERE nom_recette = %(nom_recette)s;  ",
+                        {"nom_recette": nom_recette},
+                    )
+                    res = cursor.fetchall()
+        except Exception as e:
+            logging.info(e)
+            raise
+
+        recette = None
+        if res:
+            id_recette = res[0]["id_recette"]
+            nom_recette = res[0]["nom_recette"]
+            description_recette = res[0]["description_recette"]
+            note = res[0]["note"]
+            avis = res[0]["avis"].split(";")
+            liste_ingredient = []
+            for i in range(0, len(res)):
+                liste_ingredient.append([res[i]["id_ingredient"], res[i]["quantite"]])
+
+            recette = Recette(
+                id_recette, nom_recette, liste_ingredient, description_recette, note, avis
+            )
+
+        return recette
+
+    @log
+    def trouver_par_ingredient(self, ingredient: Ingredient):
         """
         Donne une liste de recette contenant un ingredient
 
@@ -147,15 +194,23 @@ class RecetteDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "SELECT *                                   "
-                        " FROM recette                              "
-                        " JOIN recette_ingredient USING (id_recette)"
-                        " WHERE id_ingredient = %(id_ingredient)s;  ",
+                        "FROM recette                               "
+                        "JOIN recette_ingredient USING (id_recette) "
+                        "WHERE id_ingredient = %(id_ingredient)s;   ",
                         {"id_ingredient": ingredient.id_ingredient},
                     )
                     res = cursor.fetchall()
         except Exception as e:
             logging.info(e)
             raise
+
+        liste_recette = []
+        if res:
+            for recette in res:
+                id_recette = recette["id_recette"]
+                liste_recette.append(self.trouver_par_id(id_recette))
+
+        return liste_recette
 
     @log
     def lister_tous(self) -> list[Recette]:
@@ -230,3 +285,8 @@ class RecetteDao(metaclass=Singleton):
             raise
 
         return res > 0
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    print(RecetteDao().trouver_par_nom(nom_recette="Potato Gratin with Chicken"))
