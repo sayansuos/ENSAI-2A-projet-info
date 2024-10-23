@@ -25,6 +25,10 @@ class ResetDatabase(metaclass=Singleton):
 
         create_schema = f"DROP SCHEMA IF EXISTS {schema} CASCADE; CREATE SCHEMA {schema};"
 
+        pop_db = open("data/pop_db.sql", encoding="utf-8")
+        pop_db_as_string = pop_db.read()
+        pop_db.close()
+
         init_db = open("data/init_db.sql", encoding="utf-8")
         init_db_as_string = init_db.read()
         init_db.close()
@@ -33,6 +37,7 @@ class ResetDatabase(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(create_schema)
+                    cursor.execute(pop_db_as_string)
                     cursor.execute(init_db_as_string)
         except Exception as e:
             logging.info(e)
