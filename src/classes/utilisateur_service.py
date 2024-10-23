@@ -91,7 +91,8 @@ class UtilisateurService(Utilisateur):
         # Ligne à modifier quand on aura écrit la classe UtilisateurDAO
         # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
-        pass
+        mdp = hash_password(mdp, sel=pseudo)
+        return UtilisateurDAO.creer(pseudo, mdp, mail)
 
     @log
     def connecter(self, pseudo: str, mdp: str) -> Utilisateur:
