@@ -1,112 +1,124 @@
-import pytest
 from unittest.mock import MagicMock
-from src.business_object.ingredient import Ingredient
-from src.dao.ingredient_dao import IngredientDao
-from src.service.ingredient_service import IngredientService
+import pytest
+from service.ingredient_service import IngredientService
+from dao.ingredient_dao import IngredientDao
+from business_object.ingredient import Ingredient
+
+# Liste d'ingrédients pour les tests
+liste_ingredients = [
+    Ingredient(nom_ingredient="Tomate", id_ingredient=1),
+    Ingredient(nom_ingredient="Oignon", id_ingredient=2),
+    Ingredient(nom_ingredient="Carotte", id_ingredient=3),
+]
 
 
-@pytest.fixture
-def ingredient_service():
-    """Fixture pour créer une instance d'IngredientService."""
-    service = IngredientService()
-    service.lister_tous = MagicMock()
-    service.creer = MagicMock()
-    service.supprimer = MagicMock()
-    service.trouver_ingredient_par_id = MagicMock()
-    return service
+def test_creer_ingredient_ok():
+    """Création d'un Ingredient réussie"""
+
+    # GIVEN
+    nom_ingredient = "Tomate"
+    IngredientDao().creer = MagicMock(return_value=True)
+
+    # WHEN
+    ingredient = IngredientService().creer(nom_ingredient)
+
+    # THEN
+    assert ingredient.nom_ingredient == nom_ingredient
 
 
-def test_lister_tous(ingredient_service):
-    """Test de la méthode lister_tous."""
-    # Given
-    ingredient_service.lister_tous.return_value = [
-        Ingredient(name="Tomate"),
-        Ingredient(name="Oignon"),
-    ]
+def test_creer_ingredient_echec():
+    """Création d'un Ingredient échouée (car la méthode IngredientDao().creer retourne False)"""
 
-    # When
-    result = ingredient_service.lister_tous()
+    # GIVEN
+    nom_ingredient = "Tomate"
+    IngredientDao().creer = MagicMock(return_value=False)
 
-    # Then
-    assert len(result) == 2
-    assert result[0].name == "Tomate"
-    assert result[1].name == "Oignon"
+    # WHEN
+    ingredient = IngredientService().creer(nom_ingredient)
+
+    # THEN
+    assert ingredient is None
 
 
-def test_creer_ingredient_valide(ingredient_service):
-    """Test de la méthode creer avec un ingrédient valide."""
-    # Given
-    ingredient = Ingredient(name="Carotte")
-    ingredient_service.creer.return_value = ingredient
+def test_creer_mauvais_nom():
+    """Création d'un Ingredient échouée car le nom n'est pas une chaîne de caractères"""
 
-    # When
-    result = ingredient_service.creer(ingredient)
+    # GIVEN
+    nom_ingredient = 123
 
-    # Then
-    assert result is not None
-    assert result.name == "Carotte"
-
-
-def test_creer_ingredient_invalide(ingredient_service):
-    """Test de la méthode creer avec un ingrédient invalide."""
-    # Given
-    ingredient_service.creer.return_value = None
-
-    # When
-    result = ingredient_service.creer("invalid_ingredient")
-
-    # Then
-    assert result is None
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="Le nom de l'ingrédient doit être une chaîne de caractères."
+    ):
+        IngredientService().creer(nom_ingredient)
 
 
-def test_supprimer_ingredient_valide(ingredient_service):
-    """Test de la méthode supprimer avec un ingrédient valide."""
-    # Given
-    ingredient = Ingredient(name="Poivron")
-    ingredient_service.supprimer.return_value = True
+def test_creer_ingredient_doublon():
+    """Création d'un Ingredient échouée si l'ingrédient existe déjà"""
 
-    # When
-    result = ingredient_service.supprimer(ingredient)
+    # GIVEN
+    nom_ingredient = "Tomate"
+    IngredientDao().creer = MagicMock(side_effect=lambda x: x == nom_ingredient)
 
-    # Then
+    # WHEN
+    ingredient = IngredientService().creer(nom_ingredient)
+
+    # THEN
+    assert ingredient is None
+
+
+def test_supprimer_ingredient_ok():
+    """Suppression d'un Ingredient réussie"""
+
+    # GIVEN
+    id_ingredient = 1
+    IngredientDao().supprimer = MagicMock(return_value=True)
+
+    # WHEN
+    result = IngredientService().supprimer(id_ingredient)
+
+    # THEN
     assert result is True
 
 
-def test_supprimer_ingredient_invalide(ingredient_service):
-    """Test de la méthode supprimer avec un ingrédient qui n'existe pas."""
-    # Given
-    ingredient = Ingredient(name="Inexistant")
-    ingredient_service.supprimer.return_value = False
+def test_supprimer_ingredient_echec():
+    """Suppression d'un Ingredient échouée (car la méthode IngredientDao().supprimer retourne False)"""
 
-    # When
-    result = ingredient_service.supprimer(ingredient)
+    # GIVEN
+    id_ingredient = 1
+    IngredientDao().supprimer = MagicMock(return_value=False)
 
-    # Then
+    # WHEN
+    result = IngredientService().supprimer(id_ingredient)
+
+    # THEN
     assert result is False
 
 
-def test_trouver_ingredient_par_id(ingredient_service):
-    """Test de la méthode trouver_ingredient_par_id."""
-    # Given
-    ingredient = Ingredient(name="Ail", id=1)
-    ingredient_service.trouver_ingredient_par_id.return_value = ingredient
+def test_trouver_ingredient_par_id_ok():
+    """Trouver un Ingredient par ID réussie"""
 
-    # When
-    result = ingredient_service.trouver_ingredient_par_id(1)
+    # GIVEN
+    id_ingredient = 1
+    expected_ingredient = Ingredient(nom_ingredient="Tomate", id_ingredient=id_ingredient)
+    IngredientDao().trouver_par_id = MagicMock(return_value=expected_ingredient)
 
-    # Then
-    assert result is not None
-    assert result.name == "Ail"
-    assert result.id == 1
+    # WHEN
+    ingredient = IngredientService().trouver_par_id(id_ingredient)
+
+    # THEN
+    assert ingredient.nom_ingredient == expected_ingredient.nom_ingredient
 
 
-def test_trouver_ingredient_par_id_invalide(ingredient_service):
-    """Test de la méthode trouver_ingredient_par_id pour un ID inexistant."""
-    # Given
-    ingredient_service.trouver_ingredient_par_id.return_value = None
+def test_trouver_ingredient_par_id_invalide():
+    """Trouver un Ingredient par ID échouée si l'ID n'existe pas"""
 
-    # When
-    result = ingredient_service.trouver_ingredient_par_id(999)
+    # GIVEN
+    id_ingredient = 999
+    IngredientDao().trouver_par_id = MagicMock(return_value=None)
 
-    # Then
-    assert result is None
+    # WHEN
+    ingredient = IngredientService().trouver_par_id(id_ingredient)
+
+    # THEN
+    assert ingredient is None
