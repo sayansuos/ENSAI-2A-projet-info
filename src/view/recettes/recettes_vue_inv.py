@@ -20,7 +20,7 @@ class RecettesVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter toutes les recettes"#done
+                "Consulter toutes les recettes",#done
                 "Consulter les recettes par ingrédient",#done
                 "Retour",#done
             ],
