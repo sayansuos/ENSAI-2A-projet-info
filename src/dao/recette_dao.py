@@ -36,36 +36,33 @@ class RecetteDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO projet.recette VALUES                                                     "
-                        "(%(id_recette)s, %(nom_recette)s, %(description_recette)s, %(avis)s, %(note)s) "
-                        "RETURNING id_recette;                                                          ",
+                        "INSERT INTO projet.recette VALUES                              "
+                        "(%(id)s, %(nom)s, %(description_recette)s, %(avis)s, %(note)s) "
+                        "RETURNING id_recette;                                          ",
                         {
-                            "id_recette": recette.id_recette,
-                            "nom_recette": recette.nom_recette,
+                            "id": recette.id_recette,
+                            "nom": recette.nom_recette,
                             "description_recette": recette.description_recette,
                             "avis": "".join(recette.avis),
                             "note": recette.note,
                         },
                     )
                     res = cursor.fetchone()
-                    """
-                    tous_les_ingredients = IngredientDao().lister_tous()
-                    print(tous_les_ingredients)
-                    for ingredient in recette.liste_ingredient:
-                        for ingredient in tous_les_ingredients:
-                            if ingredient.nom_ingredient == ingredient[0]:
-                                id_ingredient = ingredient.id_ingredient
-                        print(id_ingredient)
+                    for raw_ingredient in recette.liste_ingredient:
+                        nom_ingredient = raw_ingredient[0]
+                        quantite_ingredient = raw_ingredient[1]
+                        id_ingredient = IngredientDao.trouver_par_nom(
+                            nom=nom_ingredient
+                        ).id_ingredient
                         cursor.execute(
                             "INSERT INTO projet.recette_ingredient VALUES        "
                             "(%(id_ingredient)s, %(id_recette)s, %(quantite)s);  ",
                             {
                                 "id_ingredient": id_ingredient,
                                 "id_recette": recette.id_recette,
-                                "quantite": ingredient[1],
+                                "quantite": quantite_ingredient,
                             },
                         )
-                    """
 
         except Exception as e:
             logging.info(e)

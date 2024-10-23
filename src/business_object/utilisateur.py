@@ -9,10 +9,10 @@ class Utilisateur:
 
     def __init__(
         self,
-        id_utilisateur: int,
         pseudo: str,
         mdp: str,
         mail: str,
+        id_utilisateur: int = 1,
         recette_favorite: list[Recette] = [],
         ingredient_favori: list[Ingredient] = [],
         ingredient_non_desire: list[Ingredient] = [],

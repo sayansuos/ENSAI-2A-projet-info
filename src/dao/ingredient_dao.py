@@ -93,6 +93,44 @@ class IngredientDao(metaclass=Singleton):
         return ingredient
 
     @log
+    def trouver_par_nom(self, nom_ingredient) -> Ingredient:
+        """
+        Trouver un ingrédient grace à son nom.
+
+        Parameters
+        ----------
+        nom_ingredient : str
+            nom de l'ingrédient que l'on souhaite trouver
+
+        Returns
+        -------
+        ingredient : Ingredient
+            renvoie l'ingrédient que l'on cherche par id
+        """
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        " SELECT *                                   "
+                        "   FROM ingredient                          "
+                        "  WHERE nom_ingredient = %(nom_ingredient)s;  ",
+                        {"nom_ingredient": nom_ingredient},
+                    )
+                    res = cursor.fetchone()
+        except Exception as e:
+            logging.info(e)
+            raise
+
+        ingredient = None
+        if res:
+            ingredient = Ingredient(
+                nom_ingredient=res["nom_ingredient"],
+                id_ingredient=res["id_ingredient"],
+            )
+
+        return ingredient
+
+    @log
     def lister_tous(self) -> list[Ingredient]:
         """
         Lister tous les ingrédients

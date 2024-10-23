@@ -5,12 +5,12 @@ class Recette:
 
     def __init__(
         self,
-        id_recette: int,
         nom_recette: str,
         liste_ingredient: list[list[str, str]],
         description_recette: str,
-        note: float,
-        avis: list[str],
+        id_recette: int = 1,
+        note: float = None,
+        avis: list[str] = [],
     ):
         self.id_recette: int = id_recette
         self.nom_recette: str = nom_recette
