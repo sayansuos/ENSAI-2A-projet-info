@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 import pytest
 from src.service.utilisateur_service import UtilisateurService
-from src.dao.utilisateur_dao import UtilisateurDAO
+from src.dao.utilisateur_dao import UtilisateurDao
 from src.business_object.utilisateur import Utilisateur
 
 
@@ -17,7 +17,7 @@ def test_creer_ok():
 
     # GIVEN
     pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
-    UtilisateurDAO().creer = MagicMock(return_value=True)
+    UtilisateurDao().creer = MagicMock(return_value=True)
 
     # WHEN
     utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
@@ -32,7 +32,7 @@ def test_creer_echec():
 
     # GIVEN
     pseudo, mdp, mail = "jp", "1234", "z@mail.oo"
-    UtilisateurDAO().creer = MagicMock(return_value=False)
+    UtilisateurDao().creer = MagicMock(return_value=False)
 
     # WHEN
     utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
@@ -280,7 +280,7 @@ def test_pseudo_deja_utilise_oui():
     pseudo = "lea"
 
     # WHEN
-    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
+    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateurs)
     res = UtilisateurService().pseudo_deja_utilise(pseudo)
 
     # THEN
@@ -294,7 +294,7 @@ def test_pseudo_deja_utilise_non():
     pseudo = "chaton"
 
     # WHEN
-    UtilisateurDAO().lister_tous = MagicMock(return_value=liste_utilisateurs)
+    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateurs)
     res = UtilisateurService().pseudo_deja_utilise(pseudo)
 
     # THEN
@@ -335,7 +335,7 @@ def test_connecter_ok():
     # GIVEN
     pseudo, mdp = "lea", "0000"
     utilisateur_mock = Utilisateur(pseudo=pseudo, mail="lea@mail.fr", mdp=mdp)
-    UtilisateurDAO().connecter = MagicMock(return_value=utilisateur_mock)
+    UtilisateurDao().connecter = MagicMock(return_value=utilisateur_mock)
 
     # WHEN
     utilisateur = UtilisateurService().connecter(pseudo, mdp)
@@ -350,7 +350,7 @@ def test_supprimer_ok():
 
     # GIVEN
     user = Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="0000")
-    UtilisateurDAO().supprimer = MagicMock(return_value=True)
+    UtilisateurDao().supprimer = MagicMock(return_value=True)
 
     # WHEN
     result = UtilisateurService().supprimer(user)
@@ -381,7 +381,7 @@ def test_trouver_par_id_existant():
     id_user = 998
 
     # WHEN
-    utilisateur = UtilisateurDAO().trouver_par_id(id_user)
+    utilisateur = UtilisateurDao().trouver_par_id(id_user)
 
     # THEN
     assert utilisateur is not None
@@ -394,7 +394,7 @@ def test_trouver_par_id_non_existant():
     id_user = 9999999999999
 
     # WHEN
-    utilisateur = UtilisateurDAO().trouver_par_id(id_user)
+    utilisateur = UtilisateurDao().trouver_par_id(id_user)
 
     # THEN
     assert utilisateur is None
@@ -408,7 +408,7 @@ def test_lister_tous():
     # GIVEN
 
     # WHEN
-    utilisateurs = UtilisateurDAO().lister_tous()
+    utilisateurs = UtilisateurDao().lister_tous()
 
     # THEN
     assert isinstance(utilisateurs, list)
