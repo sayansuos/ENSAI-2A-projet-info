@@ -185,6 +185,6 @@ class RecetteService(Recette):
         recette_str += f"Les ingrédients pour cette recette sont :\n\n"
         for ingr in recette.liste_ingredient:
             ingredient, quantites = ingr
-            recette_str += f"- {ingredient} ({extra_info})"
+            recette_str += f"- {ingredient.nom_ingredient} ({quantites})"
 
         return recette_str
