@@ -1,15 +1,35 @@
-from src.classes.utilisateur import Utilisateur
-from src.classes.recette_service import RecetteService
-from src.classes.recette import Recette
-from src.classes.ingredient import Ingredient
+from src.business_object.utilisateur import Utilisateur
+from src.service.recette_service import RecetteService
+from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
+from src.dao.utilisateur_dao import UtilisateurDAO
+
+from utils.log_decorator import log
+from utils.securite import hash_password
+from typing import List, Optional
 
 
-class UtilisateurDAO(Utilisateur):
+class UtilisateurService(Utilisateur):
     """
-    Permet d'accéder aux informations de l'utilisateur depuis la base de données
+    Définis les méthodes de la classe Utilisateur
     """
 
-    def creer(self, pseudo: str, mdp: str, mail: str) -> bool:
+    @log
+    def pseudo_deja_utilise(self, pseudo: str) -> bool:
+        """
+        Vérifie si le pseudo entré est déjà utilisé dans la base de données.
+
+        Args:
+            pseudo (str): Pseudo voulu par l'utilisateur
+
+        Returns:
+            bool: True si le pseudo est déjà utilisé. False sinon
+        """
+        utilisateurs = UtilisateurDAO().lister_tous()
+        return pseudo in [i.pseudo for i in utilisateurs]
+
+    @log
+    def creer(self, pseudo: str, mdp: str, mail: str) -> Utilisateur:
         """
         Créer un utilisateur selon les paramètres renseignés.
 
@@ -28,7 +48,7 @@ class UtilisateurDAO(Utilisateur):
             ValueError: Il doit y avoir un point après le "@" dans mail
 
         Returns:
-            bool: True si l'utilisateur a été crée. False sinon
+            Utilisateur: Retourne l'utilisateur crée
         """
         if not isinstance(pseudo, str):
             raise TypeError("Le pseudo doit être une chaîne de caractères alphanumériques.")
@@ -60,17 +80,34 @@ class UtilisateurDAO(Utilisateur):
                 "Il doit y avoir un '.' dans votre nom de domaine."
                 "Format attendu : 'blabla@domaine.truc'"
             )
-        if pseudo == "Déjà attribué":
-            return "Le pseudo a déjà été attribué."
+        if ("'" in pseudo) or ("&" in pseudo) or ("|" in pseudo) or ("-" in pseudo):
+            raise ValueError(
+                "Le pseudo ne doit pas contenir de caractères spéciaux."
+                "Caractères interdits : &, |, ', -"
+            )
+        if ("'" in mdp) or ("&" in mdp) or ("|" in mdp) or ("-" in mdp):
+            raise ValueError(
+                "Le mot de passe ne doit pas contenir de caractères spéciaux."
+                "Caractères interdits : &, |, ', -"
+            )
+        if Utilisateur.pseudo_deja_utilise(pseudo):
+            raise ValueError("Le pseudo a déjà été attribué.")
 
         # Pour finir la fonction :
+        # - Définir des méthodes de sécurité (échappement des caractères spéciaux)
+        #   (commencé un peu mais à voir si c'est suffisant)
         # - Définir un id non attribué (prendre le dernier id de la table
         #   Utilisateur et ajouter 1)
         # - Hacher le mot de passe (et utiliser l'id, le pseudo ou le mail comme sel)
 
-        return Utilisateur(id_utilisateur=100000, pseudo=pseudo, mdp=mdp, mail=mail)
+        # Ligne à modifier quand on aura écrit la classe UtilisateurDAO
+        # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
-    def connecter(self, pseudo: str, mdp: str) -> bool:
+        mdp = hash_password(mdp, sel=pseudo)
+        return UtilisateurDAO.creer(pseudo, mdp, mail)
+
+    @log
+    def connecter(self, pseudo: str, mdp: str) -> Utilisateur:
         """
         Permet de se connecter à un utilisateur.
 
@@ -79,14 +116,17 @@ class UtilisateurDAO(Utilisateur):
             mdp (str): Mot de passe de l'utilisateur qui veut se connecter
 
         Returns:
-            bool: True si l'utilisateur se connecte. False sinon
+            Utilisateur: Renvoie l'utilisateur correspondant aux paramètres entrés.
         """
         if not isinstance(pseudo, str):
-            raise TypeError("pseudo doit être une instance de str")
+            raise TypeError("Le pseudo doit être une chaîne de caractères alphanumériques.")
         if not isinstance(mdp, str):
-            raise TypeError("mdp doit être une instance de str")
-        pass
+            raise TypeError("Le mot de passe doit être une chaîne de caractères alphanumériques.")
 
+        # Il faudrait aussi faire attention aux caractères spéciaux
+        return UtilisateurDAO().se_connecter(pseudo, hash_password(mdp, pseudo))
+
+    @log
     def supprimer(self, user: Utilisateur) -> bool:
         """
         Permet de supprimer un utilisateur existant.
@@ -98,8 +138,53 @@ class UtilisateurDAO(Utilisateur):
             bool: True si l'utilisateur a bien été supprimé. False sinon.
         """
         if not isinstance(user, Utilisateur):
-            raise TypeError("user doit être une instance de Utilisateur")
-        pass
+            raise TypeError("L'utilisateur n'est pas renseigné correctement.")
+        # Vérifier si l'utilisateur existe bien dans la base de données
+        # Proposer à l'utilisateur de confirmer son choix (Oui ou Non)
+        # Renvoie True si l'utilisateur a bien été supprimé, False sinon
+        return UtilisateurDAO().supprimer(user)
+
+    @log
+    def lister_tous(self) -> List[Utilisateur]:
+        """
+        Renvoie la liste de tous les utilisateurs dans la base de données
+
+        Returns:
+            List[Utilisateur]: Liste des utilisateurs
+        """
+
+        utilisateurs = UtilisateurDAO().lister_tous()
+        return utilisateurs
+
+    @log
+    def trouver_par_id(self, id_user: int) -> Optional[Utilisateur]:
+        """
+        Permet de trouver un utilisateur avec son identifiant
+
+        Args:
+            id_user (int): Identifiant de l'utilisateur recherché
+
+        Returns:
+            Optional[Utilisateur]: Utilisateur correspondant à l'identifiant recherché.
+                                    None si la recherche ne correspond à rien
+        """
+        return UtilisateurDAO().trouver_par_id(id_user)
+
+    @log
+    def modifier(self, user: Utilisateur) -> Optional[Utilisateur]:
+        """
+        Permet de modifier les informations d'un utilisateur
+
+        Args:
+            user (Utilisateur): Nouvelles informations de l'utilisateur
+
+        Returns:
+            Optional[Utilisateur]: Informations de l'utilisateur modifiées.
+                                    None si la modification a échoué.
+        """
+
+        user.mdp = hash_password(user.mdp, user.pseudo)
+        return user if UtilisateurDAO().modifier(user) else None
 
     def voir_suggestions(self) -> list[Recette]:
         """

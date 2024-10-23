@@ -1,5 +1,5 @@
-from src.classes.recette import Recette
-from src.classes.ingredient import Ingredient
+from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
 
 
 class Utilisateur:
@@ -7,13 +7,18 @@ class Utilisateur:
     Instancie un Utilisateur
     """
 
-    def __init__(self, pseudo: str, mdp: str, mail: str,
-                 id_utilisateur: int = 1,
-                 recette_favorite: list[Recette] = [],
-                 ingredient_favori: list[Ingredient] = [],
-                 ingredient_non_desire: list[Ingredient] = [],
-                 liste_de_course: list[Ingredient] = [],
-                 role: str = "user"):
+    def __init__(
+        self,
+        pseudo: str,
+        mdp: str,
+        mail: str,
+        id_utilisateur: int = 1,
+        recette_favorite: list[Recette] = [],
+        ingredient_favori: list[Ingredient] = [],
+        ingredient_non_desire: list[Ingredient] = [],
+        liste_de_course: list[Ingredient] = [],
+        role: str = "user",
+    ):
         """
         Définis un Utilisateur
 

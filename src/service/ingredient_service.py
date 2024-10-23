@@ -1,5 +1,5 @@
-from src.classes.ingredient import Ingredient
-from src.classes.utilisateur import Utilisateur
+from src.business_object.ingredient import Ingredient
+from src.business_object.utilisateur import Utilisateur
 from src.dao.ingredient_dao import IngredientDao
 from typing import List, Optional
 

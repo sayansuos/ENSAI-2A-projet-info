@@ -4,8 +4,10 @@
 DROP TABLE IF EXISTS projet.utilisateur CASCADE ;
 CREATE TABLE projet.utilisateur(
     id_utilisateur    SERIAL PRIMARY KEY,
+    pseudo            VARCHAR,
     mdp               VARCHAR(256),
-    est_admin         BOOLEAN
+    mail              VARCHAR,
+    role_utilisateur  VARCHAR
 );
 
 -----------------------------------------------------

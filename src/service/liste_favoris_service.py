@@ -1,6 +1,6 @@
-from src.classes.utilisateur import Utilisateur
-from src.classes.recette import Recette
-from src.classes.ingredient import Ingredient
+from src.business_object.utilisateur import Utilisateur
+from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
 
 
 class ListeFavorisService(Utilisateur):
@@ -21,7 +21,6 @@ class ListeFavorisService(Utilisateur):
         """
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette")
-
 
         # Adapter le code suivant pour une éventuelle classe DAO
         if recette not in super.recette_favorite:
