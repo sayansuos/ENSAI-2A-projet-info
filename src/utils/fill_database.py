@@ -41,10 +41,14 @@ class FillDataBase(metaclass=Singleton):
         """
         liste_recette = RecetteClient().get_all_recipes()
         for rec in liste_recette:
+            liste_ingredient = []
+            for raw_ingredient in rec[2]:
+                ingredient = IngredientDao().trouver_par_nom(raw_ingredient[0])
+                liste_ingredient.append([ingredient, raw_ingredient[1]])
             recette = Recette(
                 id_recette=rec[0],
                 nom_recette=rec[1],
-                liste_ingredient=rec[2],
+                liste_ingredient=liste_ingredient,
                 description_recette=rec[3],
                 note=None,
                 avis=[],
