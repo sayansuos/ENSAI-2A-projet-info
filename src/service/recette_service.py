@@ -192,7 +192,7 @@ class RecetteService(Recette):
             raise TypeError("recette doit être une instance de Recette.")
         
         # Voir si ça marche bien comme ça. Sinon on passe par la DAO comme d'habitude.
-        recette_str = f"La description de la recette est :\n\n"
+        recette_str = f"La description de {recette.nom_recette} est :\n\n"
         recette_str += str(recette.description_recette)
         recette_str += f"Les ingrédients pour cette recette sont :\n\n"
         for ingr in recette.liste_ingredient:
