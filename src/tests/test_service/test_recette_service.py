@@ -1,11 +1,12 @@
 from unittest.mock import patch, MagicMock
 from src.services.recette_service import RecetteService
 from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
 
 
 # Test for trouver_recette_par_nom
 @patch("src.services.recette_service.DBConnection")
-def test_trouver_recette_par_nom(mock_db_connection):
+def test_trouver_recette_par_nom_ok(mock_db_connection):
     # GIVEN
     nom_recette = "Spaghetti Bolognese"
     expected_recette = Recette(
@@ -31,6 +32,17 @@ def test_trouver_recette_par_nom(mock_db_connection):
     mock_cursor.execute.assert_called_once_with(
         "SELECT * FROM Recette WHERE nom_recette = %(nom)s", {"nom": nom_recette}
     )
+
+
+def test_trouver_recette_par_nom_invalid_input():
+    # GIVEN
+    nom_invalide = 4012
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="nom doit être une instance de str"
+    ):
+        RecetteService().trouver_recette_par_nom(nom_invalide)
 
 
 # Test for trouver_recette_par_ingredient
@@ -79,6 +91,22 @@ def test_trouver_recette_par_ingredient(mock_db_connection):
     )
 
 
+def test_trouver_recette_par_ingredient_invalid_input():
+    """
+    Création de Utilisateur échoué car le pseudo n'est pas une chaine de
+    caractère
+    """
+
+    # GIVEN
+    ingredient = ["nom_ingredient", 1]
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="Le pseudo doit être une chaîne de caractères alphanumériques."
+    ):
+        RecetteService().trouver_recette_par_ingredient(ingredient)
+
+
 # Test for lister_toutes_recettes
 @patch("src.services.recette_service.DBConnection")
 def test_lister_toutes_recettes(mock_db_connection):
@@ -120,12 +148,6 @@ def test_lister_toutes_recettes(mock_db_connection):
     # THEN
     assert result == expected_recettes
     mock_cursor.execute.assert_called_once_with("SELECT * FROM Recette")
-
-
-# def test_trouver_recette_par_nom_invalid_input():
-#     # GIVEN
-#     # invalid_nom = 176
-#     # à finir
 
 
 if __name__ == "__main__":

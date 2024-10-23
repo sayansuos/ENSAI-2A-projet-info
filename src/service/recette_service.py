@@ -1,6 +1,7 @@
 from typing import List, Optional
 from src.business_object.recette import Recette
 from src.dao.recette_dao import RecetteDao
+from src.business_object.ingredient import Ingredient
 
 
 class RecetteService(Recette):
@@ -27,22 +28,22 @@ class RecetteService(Recette):
         pass
         # return RecetteDao.trouver_par_nom(nom)
 
-    def trouver_recette_par_ingredient(self, ingredient: str) -> List[Recette]:
+    def trouver_recette_par_ingredient(self, ingredient: Ingredient) -> List[Recette]:
         """
         Permet de trouver une liste de recette contenant l'ingrédient entré
         en paramètre
 
         Args:
-            ingredient (str):
-                Nom de l'ingrédient recherché
+            ingredient (Ingredient):
+                Ingrédient recherché
 
         Returns:
             list[Recette]:
                 Renvoie la liste des recettes contenant cet ingrédient
         """
 
-        if not isinstance(ingredient, str):
-            raise TypeError("ingredient doit être une instance de str")
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance de Ingredient")
 
         pass
         # return RecetteDao.trouver_par_ingredient(ingredient)
