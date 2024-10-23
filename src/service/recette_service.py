@@ -9,6 +9,9 @@ class RecetteService(Recette):
     Définis les méthodes de la classe Recette
     """
 
+    def __init__(self):
+        pass
+
     def trouver_recette_par_nom(self, nom: str) -> Optional[Recette]:
         """
         Permet de trouver une recette en indiquant le nom de celle-ci
@@ -57,7 +60,7 @@ class RecetteService(Recette):
                 Liste de toutes les recettes existantes
         """
 
-        return RecetteDao.lister_tous()
+        return RecetteDao().lister_tous()
 
     def noter_recette(self, note: float):
         """
@@ -105,7 +108,7 @@ class RecetteService(Recette):
                 None sinon
         """
 
-        return recette if RecetteDao.creer(recette) is False else None
+        return recette if RecetteDao().creer(recette) is False else None
 
     def supprimer_recette(self, recette: Recette) -> bool:
         """
@@ -121,7 +124,7 @@ class RecetteService(Recette):
                 False sinon.
         """
 
-        return RecetteDao.supprimer(recette)
+        return RecetteDao().supprimer(recette)
 
     def trouver_recette_par_id(self, id: int) -> Optional[Recette]:
         """
@@ -137,7 +140,7 @@ class RecetteService(Recette):
                 Retourne None sinon
         """
 
-        return RecetteDao.trouver_par_id(id)
+        return RecetteDao().trouver_par_id(id)
 
     def voir_note_avis(self, recette: Recette) -> Optional[float]:
         """

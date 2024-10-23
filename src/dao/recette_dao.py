@@ -122,7 +122,7 @@ class RecetteDao(metaclass=Singleton):
                 liste_ingredient.append([res["id_ingredient"], res["quantite"]])
 
             recette = Recette(
-                id_recette, nom_recette, liste_ingredient, description_recette, note, avis
+                 nom_recette= nom_recette, liste_ingredient=liste_ingredient, description_recette=description_recette, id_recette=id_recette, note=note, avis=avis
             )
 
         return recette
