@@ -36,7 +36,7 @@ class UtilisateurDao(metaclass=Singleton):
                     cursor.execute(
                         "INSERT INTO utilisateur(id_utilisateur, pseudo, mdp, mail, role_utilisateur) VALUES       "
                         "(%(id_utilisateur)s, %(pseudo)s, %(mdp)s, %(mail)s, %(role_utilisateur)s)                              "
-                        "  RETURNING id_utilisateur;                                                                ",
+                        "  RETURNING id_utilisateur;                      ",
                         {
                             "id_utilisateur": utilisateur.id_utilisateur,
                             "pseudo": utilisateur.pseudo,

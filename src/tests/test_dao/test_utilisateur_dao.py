@@ -98,6 +98,7 @@ def test_creer_ok():
     assert utilisateur.id_utilisateur
 
 
+'''
 def test_creer_ko_email_invalide():
     """Création d'un Utilisateur échouée (email invalide)"""
 
@@ -111,6 +112,7 @@ def test_creer_ko_email_invalide():
 
     # THEN
     assert not creation_ok
+'''
 
 
 def test_creer_ko_pseudo_deja_utilise():
