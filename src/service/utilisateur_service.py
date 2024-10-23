@@ -70,7 +70,10 @@ class UtilisateurService:
             )
 
         if "@" not in mail:
-            raise ValueError("Il n'y a pas de @ dans l'adresse mail renseignée.")
+            raise ValueError(
+                "Il n'y a pas de @ dans l'adresse mail renseignée."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
 
         # Vérification de la validité de l'adresse mail
         if mail.count("@") != 1:
@@ -81,7 +84,10 @@ class UtilisateurService:
 
         nom_domaine = mail.split("@")[1]
         if "." not in nom_domaine:
-            raise ValueError("Il doit y avoir un point après le '@' dans l'adresse mail.")
+            raise ValueError(
+                "Il doit y avoir un '.' dans votre nom de domaine."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
 
         # Validation du mot de passe pour les caractères spéciaux
         if re.search(r"[&\'| -]", mdp):
