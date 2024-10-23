@@ -1,5 +1,6 @@
 import os
-from dotenv import load_dotenv
+
+# from dotenv import load_dotenv
 import requests
 import string
 
@@ -48,6 +49,6 @@ class RecetteClient:
         return sorted(all_recipes)
 
 
-if __name__ == "__main__":
-    load_dotenv()
-    print(RecetteClient().get_all_recipes()[0:3])
+# if __name__ == "__main__":
+#    load_dotenv()
+#    print(RecetteClient().get_all_recipes()[0:3])

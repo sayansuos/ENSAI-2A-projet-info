@@ -1,4 +1,5 @@
-from src.business_object.ingredient import Ingredient
+from business_object.ingredient import Ingredient
+
 
 class Recette:
     """

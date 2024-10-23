@@ -16,7 +16,7 @@ def test_creer_ok():
     """ "Création de Utilisateur réussie"""
 
     # GIVEN
-    pseudo, mdp, mail = "jp", "123456", "z@mail.oo"
+    pseudo, mdp, mail = "jp", "123456", "jp@mail.oo"
     UtilisateurDao().creer = MagicMock(return_value=True)
 
     # WHEN
@@ -49,9 +49,7 @@ def test_creer_mauvais_pseudo():
     pseudo, mdp, mail = 123, "azerty", "az@gmail.fr"
 
     # WHEN-THEN:
-    with pytest.raises(
-        TypeError, match="Le pseudo doit être une chaîne de caractères alphanumériques."
-    ):
+    with pytest.raises(TypeError, match="Le pseudo doit être une chaîne de caractères."):
         UtilisateurService().creer(pseudo, mdp, mail)
 
 
@@ -63,9 +61,7 @@ def test_creer_mauvais_mdp():
     pseudo, mdp, mail = "michel", 123, "michel@gmail.fr"
 
     # WHEN-THEN:
-    with pytest.raises(
-        TypeError, match="Le mot de passe doit être une chaîne de caractères alphanumériques."
-    ):
+    with pytest.raises(TypeError, match="Le mot de passe doit être une chaîne de caractères."):
         UtilisateurService().creer(pseudo, mdp, mail)
 
 
@@ -79,8 +75,7 @@ def test_creer_mauvais_mail_str():
     # WHEN-THEN:
     with pytest.raises(
         TypeError,
-        match="L'adresse mail doit être une chaîne de caractères sous la"
-        " forme : 'blabla@domaine.truc'",
+        match="L'adresse mail doit être une chaîne de caractères.",
     ):
         UtilisateurService().creer(pseudo, mdp, mail)
 
@@ -90,7 +85,7 @@ def test_creer_mauvais_mdp_longueur():
     de 6 caractères"""
 
     # GIVEN
-    pseudo, mdp, mail = "Michel", "azerty", "az@gmail.fr"
+    pseudo, mdp, mail = "Michel", "azer", "az@gmail.fr"
 
     # WHEN-THEN:
     with pytest.raises(
