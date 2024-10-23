@@ -4,7 +4,7 @@ from dao.ingredient_dao import IngredientDao
 from typing import List, Optional
 
 
-class IngredientService(Utilisateur):
+class IngredientService:
     """
     Définis les méthodes de la classe Ingredient
     """
