@@ -4,7 +4,7 @@ from src.dao.recette_dao import RecetteDao
 from src.business_object.ingredient import Ingredient
 
 
-class RecetteService(Recette):
+class RecetteService:
     """
     Définis les méthodes de la classe Recette
     """
@@ -190,7 +190,7 @@ class RecetteService(Recette):
 
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
-        
+
         # Voir si ça marche bien comme ça. Sinon on passe par la DAO comme d'habitude.
         recette_str = f"La description de {recette.nom_recette} est :\n\n"
         recette_str += str(recette.description_recette)
