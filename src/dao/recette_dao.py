@@ -52,33 +52,33 @@ class RecetteDao(metaclass=Singleton):
                     res = cursor.fetchone()
 
                     for raw_ingredient in recette.liste_ingredient:
-                        nom_ingredient = raw_ingredient[0]
-                        quantite_ingredient = raw_ingredient[1]
-                        id_ingredient = (
-                            IngredientDao()
-                            .trouver_par_nom(nom_ingredient=nom_ingredient, cursor=cursor)
-                            .id_ingredient
-                        )
-
+                        # nom_ingredient = raw_ingredient[0]
+                        # quantite_ingredient = raw_ingredient[1]
+                        # id_ingredient = (
+                        #    IngredientDao()
+                        #    .trouver_par_nom(nom_ingredient=nom_ingredient, cursor=cursor)
+                        #    .id_ingredient
+                        # )
                         cursor.execute(
                             "INSERT INTO projet.recette_ingredient VALUES        "
                             "(%(id_ingredient)s, %(id_recette)s, %(quantite)s);  ",
                             {
-                                "id_ingredient": id_ingredient,
+                                "id_ingredient": raw_ingredient[0].id_ingredient,
                                 "id_recette": recette.id_recette,
-                                "quantite": quantite_ingredient,
+                                "quantite": raw_ingredient[1],
                             },
                         )
 
         except Exception as e:
             logging.info(e)
+            print(e)
 
         created = False
         if res:
             recette.id_recette = res["id_recette"]
             created = True
 
-        return created, res
+        return created
 
     @log
     def trouver_par_id(self, id_recette) -> Recette:
@@ -119,7 +119,8 @@ class RecetteDao(metaclass=Singleton):
             avis = res[0]["avis"].split(";")
             liste_ingredient = []
             for i in range(0, len(res)):
-                liste_ingredient.append([res[i]["id_ingredient"], res[i]["quantite"]])
+                ingredient = IngredientDao().trouver_par_id(res[i]["id_ingredient"])
+                liste_ingredient.append([ingredient, res[i]["quantite"]])
 
             recette = Recette(
                 id_recette, nom_recette, liste_ingredient, description_recette, note, avis
@@ -166,7 +167,8 @@ class RecetteDao(metaclass=Singleton):
             avis = res[0]["avis"].split(";")
             liste_ingredient = []
             for i in range(0, len(res)):
-                liste_ingredient.append([res[i]["id_ingredient"], res[i]["quantite"]])
+                ingredient = IngredientDao.trouver_par_id(res[i]["id_ingredient"])
+                liste_ingredient.append([ingredient, res[i]["quantite"]])
 
             recette = Recette(
                 id_recette, nom_recette, liste_ingredient, description_recette, note, avis
@@ -289,4 +291,3 @@ class RecetteDao(metaclass=Singleton):
 
 if __name__ == "__main__":
     load_dotenv()
-    print(RecetteDao().trouver_par_nom(nom_recette="Potato Gratin with Chicken"))

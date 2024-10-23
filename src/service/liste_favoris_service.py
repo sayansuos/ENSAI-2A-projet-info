@@ -2,50 +2,62 @@ from src.business_object.utilisateur import Utilisateur
 from src.business_object.recette import Recette
 from src.business_object.ingredient import Ingredient
 
+from src.dao.liste_favoris_dao import ListeFavorisDao
 
-class ListeFavorisService(Utilisateur):
+
+class ListeFavorisService:
     """
-    Définis les méthodes permettant de modifier les listes de l'utilisateur
-    concerné
+    Définis les méthodes permettant de modifier les listes de l'utilisateur concerné
     """
 
-    def ajouter_favoris(self, recette: Recette) -> bool:
+    def ajouter_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
-        Ajoute une recette à la liste "recette_favorite" de l'utilisateur
+        Ajoute un ingrédient à la liste des favoris.
 
         Args :
-            recette (Recette) : Recette à ajouter à la liste
+            recette (Recette) : recette à ajouter à la liste
+            utilisateur (Utilisateur) : utilisateur à qui on ajoute la recette favorite
 
         Returns:
-            bool: True si la recette a été ajoutée à la liste, False sinon
+            Bool : True si la recette a été ajoutée à la liste, False sinon
         """
+
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette")
+        if not isinstance(utilisateur, Utilisateur):
+            raise TypeError("utilisateur doit être une instance de Utilisateur")
 
-        # Adapter le code suivant pour une éventuelle classe DAO
-        if recette not in super.recette_favorite:
-            super.recette_favorite.append(recette)
-            return True
-        return False
+        added = False
 
-    def enlever_favoris(self, recette: Recette) -> bool:
+        if recette not in utilisateur.recette_favorite:
+            ListeFavorisDao().ajouter_favoris(recette=recette, utilisateur=utilisateur)
+            added = True
+
+        return added
+
+    def retirer_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
-        Enlève une recette à la liste "recette_favorite" de l'utilisateur
+        Retirer une recette de la liste des favoris.
 
         Args :
             recette (Recette) : Recette à enlever de la liste
+            utilisateur (Utilisateur) : utilisateur à qui on retire la recette favorite
 
         Returns:
-            bool: True si la recette a été enlevée de la liste, False sinon
+            Bool : True si la recette a été enlevée de la liste, False sinon
         """
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette")
+        if not isinstance(utilisateur, Utilisateur):
+            raise TypeError("recette doit être une instance de Recette")
 
-        # Adapter le code suivant pour une éventuelle classe DAO
-        if recette in super.recette_favorite:
-            super.recette_favorite.remove(recette)
-            return True
-        return False
+        deleted = False
+
+        if recette in utilisateur.recette_favorite:
+            ListeFavorisDao().retirer_favoris(recette=recette, utilisateur=utilisateur)
+            deleted = True
+
+        return deleted
 
     def ajouter_ingredient_course(self, ingredient: Ingredient) -> bool:
         """
