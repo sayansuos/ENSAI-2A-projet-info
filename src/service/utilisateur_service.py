@@ -3,6 +3,7 @@ from src.service.recette_service import RecetteService
 from src.business_object.recette import Recette
 from src.business_object.ingredient import Ingredient
 from src.dao.utilisateur_dao import UtilisateurDao
+import re
 
 from utils.log_decorator import log
 from utils.securite import hash_password
@@ -40,9 +41,9 @@ class UtilisateurService:
 
         Raises:
             TypeError: pseudo doit être une str
-            TypeError: mdr doit être une str
+            TypeError: mdp doit être une str
             TypeError: mail doit être une str
-            ValueError: mdr doit contenir plus de 6 caractères
+            ValueError: mdp doit contenir plus de 6 caractères
             ValueError: Il faut un "@" dans mail
             ValueError: Il ne doit y avoir qu'un seul "@" dans mail
             ValueError: Il doit y avoir un point après le "@" dans mail
@@ -51,47 +52,43 @@ class UtilisateurService:
             Utilisateur: Retourne l'utilisateur crée
         """
         if not isinstance(pseudo, str):
-            raise TypeError("Le pseudo doit être une chaîne de caractères alphanumériques.")
+            raise TypeError("Le pseudo doit être une chaîne de caractères.")
+
         if not isinstance(mdp, str):
-            raise TypeError("Le mot de passe doit être une chaîne de caractères alphanumériques.")
+            raise TypeError("Le mot de passe doit être une chaîne de caractères.")
+
         if not isinstance(mail, str):
-            raise TypeError(
-                "L'adresse mail doit être une chaîne de caractères sous la"
-                " forme : 'blabla@domaine.truc'"
-            )
+            raise TypeError("L'adresse mail doit être une chaîne de caractères.")
+
         if len(mdp) < 6:
             raise ValueError("Le mot de passe doit contenir au moins 6 caractères.")
-        if "@" not in mail:
+
+        if re.search(r"[&\'| -]", pseudo):
             raise ValueError(
-                "Il n'y a pas de @ dans l'adresse mail renseignée."
-                "Format attendu : 'blabla@domaine.truc'"
+                "Le pseudo ne doit pas contenir de caractères spéciaux."
+                " Caractères interdits : &, |, ', -"
             )
-        for i in range(len(mail)):
-            if mail[i] == "@":
-                domaine_mail = mail[i : len(mail)]
-                break
-        if "@" in domaine_mail:
+
+        if "@" not in mail:
+            raise ValueError("Il n'y a pas de @ dans l'adresse mail renseignée.")
+
+        # Vérification de la validité de l'adresse mail
+        if mail.count("@") != 1:
             raise ValueError(
                 "Il ne doit y avoir qu'un seul @ dans votre adresse mail."
                 "Format attendu : 'blabla@domaine.truc'"
             )
-        if "." not in domaine_mail:
-            raise ValueError(
-                "Il doit y avoir un '.' dans votre nom de domaine."
-                "Format attendu : 'blabla@domaine.truc'"
-            )
-        if ("'" in pseudo) or ("&" in pseudo) or ("|" in pseudo) or ("-" in pseudo):
-            raise ValueError(
-                "Le pseudo ne doit pas contenir de caractères spéciaux."
-                "Caractères interdits : &, |, ', -"
-            )
-        if ("'" in mdp) or ("&" in mdp) or ("|" in mdp) or ("-" in mdp):
+
+        nom_domaine = mail.split("@")[1]
+        if "." not in nom_domaine:
+            raise ValueError("Il doit y avoir un point après le '@' dans l'adresse mail.")
+
+        # Validation du mot de passe pour les caractères spéciaux
+        if re.search(r"[&\'| -]", mdp):
             raise ValueError(
                 "Le mot de passe ne doit pas contenir de caractères spéciaux."
-                "Caractères interdits : &, |, ', -"
+                " Caractères interdits : &, |, ', -"
             )
-        if Utilisateur.pseudo_deja_utilise(pseudo):
-            raise ValueError("Le pseudo a déjà été attribué.")
 
         # Pour finir la fonction :
         # - Définir des méthodes de sécurité (échappement des caractères spéciaux)
@@ -104,7 +101,7 @@ class UtilisateurService:
         # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
         mdp = hash_password(mdp, sel=pseudo)
-        return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
+        return UtilisateurDao.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
     @log
     def connecter(self, pseudo: str, mdp: str) -> Utilisateur:
