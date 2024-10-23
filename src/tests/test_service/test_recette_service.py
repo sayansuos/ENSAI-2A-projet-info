@@ -13,8 +13,9 @@ def test_trouver_recette_par_nom_ok(mock_db_connection):
 
     nom_recette = "Spaghetti Bolognese"
     expected_recette = Recette(
-        id_recette=1, nom_recette=nom_recette,
-        liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]]
+        id_recette=1,
+        nom_recette=nom_recette,
+        liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
     )
 
     # Mock the DB response
@@ -43,9 +44,7 @@ def test_trouver_recette_par_nom_invalid_input():
     nom_invalide = 4012
 
     # WHEN-THEN:
-    with pytest.raises(
-        TypeError, match="nom doit être une instance de str"
-    ):
+    with pytest.raises(TypeError, match="nom doit être une instance de str"):
         RecetteService().trouver_recette_par_nom(nom_invalide)
 
 
@@ -109,9 +108,7 @@ def test_trouver_recette_par_ingredient_invalid_input():
     ingredient = ["nom_ingredient", 1]
 
     # WHEN-THEN:
-    with pytest.raises(
-        TypeError, match="ingredient doit être une instance de Ingredient"
-    ):
+    with pytest.raises(TypeError, match="ingredient doit être une instance de Ingredient"):
         RecetteService().trouver_recette_par_ingredient(ingredient)
 
 
@@ -182,9 +179,7 @@ def test_noter_recette_invalid_input_type():
     note = "4.5"
 
     # WHEN-THEN:
-    with pytest.raises(
-        TypeError, match="La note doit être un nombre compris entre 0 et 5."
-    ):
+    with pytest.raises(TypeError, match="La note doit être un nombre compris entre 0 et 5."):
         RecetteService().noter_recette(note)
 
 
@@ -197,9 +192,7 @@ def test_noter_recette_invalid_input_value():
     note = 7
 
     # WHEN-THEN:
-    with pytest.raises(
-        ValueError, match="La note doit être comprise entre 0 et 5."
-    ):
+    with pytest.raises(ValueError, match="La note doit être comprise entre 0 et 5."):
         RecetteService().noter_recette(note)
 
 
@@ -223,9 +216,7 @@ def test_commenter_recette_invalid_input_type():
     avis = ["avis", "positif"]
 
     # WHEN-THEN:
-    with pytest.raises(
-        TypeError, match="Le commentaire doit être une chaîne de caractères"
-    ):
+    with pytest.raises(TypeError, match="Le commentaire doit être une chaîne de caractères"):
         RecetteService().commenter_recette(avis)
 
 
