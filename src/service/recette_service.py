@@ -175,7 +175,7 @@ class RecetteService(Recette):
 
         return RecetteDao.voir_note(recette)
 
-    def voir_description(self, recette: Recette) -> str:
+    def voir_recette(self, recette: Recette) -> str:
         """
         Renvoie la description d'une recette
 
@@ -190,6 +190,13 @@ class RecetteService(Recette):
 
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
-
+        
         # Voir si ça marche bien comme ça. Sinon on passe par la DAO comme d'habitude.
-        return super.description
+        recette_str = f"La description de la recette est :\n\n"
+        recette_str += str(recette.description_recette)
+        recette_str += f"Les ingrédients pour cette recette sont :\n\n"
+        for ingr in recette.liste_ingredient:
+            ingredient, quantites = ingr
+            recette_str += f"- {ingredient} ({extra_info})"
+
+        return recette_str
