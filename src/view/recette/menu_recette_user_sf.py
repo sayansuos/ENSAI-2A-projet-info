@@ -47,7 +47,7 @@ class MenuRecetteSf(VueAbstraite):
                 
                 case "Voir les notes et les avis":
 
-                    return recette_service.voir_note(choix), recette_service.voir_avis(choix)
+                    return recette_service.voir_note_avis(choix)
                 
                 case "Noter et laisser un commentaire":
 

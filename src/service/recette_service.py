@@ -139,25 +139,7 @@ class RecetteService(Recette):
 
         return RecetteDao.trouver_par_id(id)
 
-    def voir_avis(self, recette: Recette) -> [List[str]]:
-        """
-        Permet de voir les avis d'une recette
-
-        Args:
-            recette (Recette):
-                Recette dont on veut voir les avis
-
-        Returns:
-            [List[str]]:
-                Liste des avis des utilisateurs sur la recette
-        """
-
-        if not isinstance(recette, Recette):
-            raise TypeError("recette doit être une instance de Recette.")
-
-        return RecetteDao.voir_avis(recette)
-
-    def voir_note(self, recette: Recette) -> Optional[float]:
+    def voir_note_avis(self, recette: Recette) -> Optional[float]:
         """
         Permet de voir la note d'une recette
 
@@ -173,7 +155,13 @@ class RecetteService(Recette):
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
 
-        return RecetteDao.voir_note(recette)
+        note_avis_str = f"Les avis de {recette.nom_recette} sont :\n\n"
+        for av in recette.avis:
+            note_avis_str += f"- {av}"
+        note_avis_str += f"La note de cette recette est :\n\n"
+        note_avis_str += str(recette.note)
+        
+        return note_avis_str
 
     def voir_recette(self, recette: Recette) -> str:
         """

@@ -37,10 +37,10 @@ class MenuRecetteSf(VueAbstraite):
             match choix_bis:
                 case "Lire la recette":
 
-                    return recette_service.voir_description(choix)
+                    return recette_service.voir_recette(choix)
                 
                 case "Voir les notes et les avis":
 
-                    return recette_service.voir_note(choix), recette_service.voir_avis(choix)
+                    return recette_service.voir_note_avis(choix)
 
         return MenuRecetteSf()
