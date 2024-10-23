@@ -4,7 +4,6 @@ from service.ingredient_service import IngredientService
 from dao.ingredient_dao import IngredientDao
 from business_object.ingredient import Ingredient
 
-
 liste_ingredients = [
     Ingredient(nom_ingredient="Tomate", id_ingredient=1),
     Ingredient(nom_ingredient="Oignon", id_ingredient=2),
@@ -17,27 +16,28 @@ def test_creer_ingredient_ok():
 
     # GIVEN
     nom_ingredient = "Tomate"
-    IngredientDao().creer = MagicMock(return_value=True)
+    ingredient = Ingredient(nom_ingredient=nom_ingredient, id_ingredient=1)
+    IngredientDao.creer = MagicMock(return_value=True)
 
     # WHEN
-    ingredient = IngredientService().creer(nom_ingredient)
+    created_ingredient = IngredientService().creer(ingredient)
 
     # THEN
-    assert ingredient.nom_ingredient == nom_ingredient
+    assert created_ingredient.nom_ingredient == nom_ingredient
 
 
 def test_creer_ingredient_echec():
     """Création d'un Ingredient échouée (car la méthode IngredientDao().creer retourne False)"""
 
     # GIVEN
-    nom_ingredient = "Tomate"
-    IngredientDao().creer = MagicMock(return_value=False)
+    ingredient = Ingredient(nom_ingredient="Tomate", id_ingredient=1)
+    IngredientDao.creer = MagicMock(return_value=False)
 
     # WHEN
-    ingredient = IngredientService().creer(nom_ingredient)
+    created_ingredient = IngredientService().creer(ingredient)
 
     # THEN
-    assert ingredient is None
+    assert created_ingredient is None
 
 
 def test_creer_mauvais_nom():
@@ -45,26 +45,25 @@ def test_creer_mauvais_nom():
 
     # GIVEN
     nom_ingredient = 123
+    ingredient = Ingredient(nom_ingredient=nom_ingredient, id_ingredient=1)
 
     # WHEN-THEN:
-    with pytest.raises(
-        TypeError, match="Le nom de l'ingrédient doit être une chaîne de caractères."
-    ):
-        IngredientService().creer(nom_ingredient)
+    with pytest.raises(TypeError, match="ingredient doit être une instance de Ingredient."):
+        IngredientService().creer(nom_ingredient)  # Note: on doit passer un Ingredient ici
 
 
 def test_creer_ingredient_doublon():
     """Création d'un Ingredient échouée si l'ingrédient existe déjà"""
 
     # GIVEN
-    nom_ingredient = "Tomate"
-    IngredientDao().creer = MagicMock(side_effect=lambda x: x == nom_ingredient)
+    ingredient = Ingredient(nom_ingredient="Tomate", id_ingredient=1)
+    IngredientDao.creer = MagicMock(return_value=False)
 
     # WHEN
-    ingredient = IngredientService().creer(nom_ingredient)
+    created_ingredient = IngredientService().creer(ingredient)
 
     # THEN
-    assert ingredient is None
+    assert created_ingredient is None
 
 
 def test_trouver_ingredient_par_id_ok():
@@ -73,7 +72,7 @@ def test_trouver_ingredient_par_id_ok():
     # GIVEN
     id_ingredient = 1
     expected_ingredient = Ingredient(nom_ingredient="Tomate", id_ingredient=id_ingredient)
-    IngredientDao().trouver_par_id = MagicMock(return_value=expected_ingredient)
+    IngredientDao.trouver_par_id = MagicMock(return_value=expected_ingredient)
 
     # WHEN
     ingredient = IngredientService().trouver_ingredient_par_id(id_ingredient)
@@ -87,7 +86,7 @@ def test_trouver_ingredient_par_id_invalide():
 
     # GIVEN
     id_ingredient = 999
-    IngredientDao().trouver_par_id = MagicMock(return_value=None)
+    IngredientDao.trouver_par_id = MagicMock(return_value=None)
 
     # WHEN
     ingredient = IngredientService().trouver_ingredient_par_id(id_ingredient)
