@@ -49,7 +49,7 @@ def test_creer_mauvais_nom():
 
     # WHEN-THEN:
     with pytest.raises(TypeError, match="ingredient doit être une instance de Ingredient."):
-        IngredientService().creer(nom_ingredient)  # Note: on doit passer un Ingredient ici
+        IngredientService().creer(nom_ingredient)
 
 
 def test_creer_ingredient_doublon():
