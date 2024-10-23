@@ -1,112 +1,116 @@
-import pytest
 from unittest.mock import MagicMock
-from src.business_object.ingredient import Ingredient
-from src.dao.ingredient_dao import IngredientDao
+import pytest
 from src.service.ingredient_service import IngredientService
+from src.dao.ingredient_dao import IngredientDao
+from src.business_object.ingredient import Ingredient
+
+# Liste d'ingrédients de test
+liste_ingredients = [
+    Ingredient(name="Tomate", quantity=5),
+    Ingredient(name="Carotte", quantity=10),
+    Ingredient(name="Pomme", quantity=8),
+]
 
 
-@pytest.fixture
-def ingredient_service():
-    """Fixture pour créer une instance d'IngredientService."""
-    service = IngredientService()
-    service.lister_tous = MagicMock()
-    service.creer = MagicMock()
-    service.supprimer = MagicMock()
-    service.trouver_ingredient_par_id = MagicMock()
-    return service
+def test_creer_ingredient_ok():
+    """Création d'un ingrédient réussie."""
+
+    # GIVEN
+    name, quantity = "Tomate", 5
+    IngredientDao().creer = MagicMock(return_value=True)
+
+    # WHEN
+    ingredient = IngredientService().creer(name, quantity)
+
+    # THEN
+    assert ingredient.name == name
+    assert ingredient.quantity == quantity
 
 
-def test_lister_tous(ingredient_service):
-    """Test de la méthode lister_tous."""
-    # Given
-    ingredient_service.lister_tous.return_value = [
-        Ingredient(name="Tomate"),
-        Ingredient(name="Oignon"),
-    ]
+def test_creer_ingredient_echec():
+    """Création d'un ingrédient échouée
+    (car la méthode IngredientDao().creer retourne False)"""
 
-    # When
-    result = ingredient_service.lister_tous()
+    # GIVEN
+    name, quantity = "Tomate", 5
+    IngredientDao().creer = MagicMock(return_value=False)
 
-    # Then
-    assert len(result) == 2
-    assert result[0].name == "Tomate"
-    assert result[1].name == "Oignon"
+    # WHEN
+    ingredient = IngredientService().creer(name, quantity)
+
+    # THEN
+    assert ingredient is None
 
 
-def test_creer_ingredient_valide(ingredient_service):
-    """Test de la méthode creer avec un ingrédient valide."""
-    # Given
-    ingredient = Ingredient(name="Carotte")
-    ingredient_service.creer.return_value = ingredient
+def test_creer_mauvais_name():
+    """Création d'un ingrédient échouée car le nom n'est pas une chaîne de caractères."""
 
-    # When
-    result = ingredient_service.creer(ingredient)
+    # GIVEN
+    name, quantity = 123, 5
 
-    # Then
-    assert result is not None
-    assert result.name == "Carotte"
+    # WHEN-THEN:
+    with pytest.raises(TypeError, match="Le nom doit être une chaîne de caractères."):
+        IngredientService().creer(name, quantity)
 
 
-def test_creer_ingredient_invalide(ingredient_service):
-    """Test de la méthode creer avec un ingrédient invalide."""
-    # Given
-    ingredient_service.creer.return_value = None
+def test_creer_mauvais_quantity():
+    """Création d'un ingrédient échouée car la quantité n'est pas un entier."""
 
-    # When
-    result = ingredient_service.creer("invalid_ingredient")
+    # GIVEN
+    name, quantity = "Tomate", "cinq"
 
-    # Then
-    assert result is None
-
-
-def test_supprimer_ingredient_valide(ingredient_service):
-    """Test de la méthode supprimer avec un ingrédient valide."""
-    # Given
-    ingredient = Ingredient(name="Poivron")
-    ingredient_service.supprimer.return_value = True
-
-    # When
-    result = ingredient_service.supprimer(ingredient)
-
-    # Then
-    assert result is True
+    # WHEN-THEN:
+    with pytest.raises(TypeError, match="La quantité doit être un entier positif."):
+        IngredientService().creer(name, quantity)
 
 
-def test_supprimer_ingredient_invalide(ingredient_service):
-    """Test de la méthode supprimer avec un ingrédient qui n'existe pas."""
-    # Given
-    ingredient = Ingredient(name="Inexistant")
-    ingredient_service.supprimer.return_value = False
+def test_creer_quantity_negatif():
+    """Création d'un ingrédient échouée car la quantité est négative."""
 
-    # When
-    result = ingredient_service.supprimer(ingredient)
+    # GIVEN
+    name, quantity = "Tomate", -5
 
-    # Then
-    assert result is False
+    # WHEN-THEN:
+    with pytest.raises(ValueError, match="La quantité doit être un entier positif."):
+        IngredientService().creer(name, quantity)
 
 
-def test_trouver_ingredient_par_id(ingredient_service):
-    """Test de la méthode trouver_ingredient_par_id."""
-    # Given
-    ingredient = Ingredient(name="Ail", id=1)
-    ingredient_service.trouver_ingredient_par_id.return_value = ingredient
+def test_trouver_ingredient_par_id_ok():
+    """Trouver un ingrédient par ID réussie."""
 
-    # When
-    result = ingredient_service.trouver_ingredient_par_id(1)
+    # GIVEN
+    ingredient_id = 1
+    IngredientDao().trouver_par_id = MagicMock(return_value=liste_ingredients[0])
 
-    # Then
-    assert result is not None
-    assert result.name == "Ail"
-    assert result.id == 1
+    # WHEN
+    ingredient = IngredientService().trouver_par_id(ingredient_id)
+
+    # THEN
+    assert ingredient.name == liste_ingredients[0].name
 
 
-def test_trouver_ingredient_par_id_invalide(ingredient_service):
-    """Test de la méthode trouver_ingredient_par_id pour un ID inexistant."""
-    # Given
-    ingredient_service.trouver_ingredient_par_id.return_value = None
+def test_trouver_ingredient_par_id_echec():
+    """Trouver un ingrédient par ID échouée (ingrédient non trouvé)."""
 
-    # When
-    result = ingredient_service.trouver_ingredient_par_id(999)
+    # GIVEN
+    ingredient_id = 999  # ID qui n'existe pas
+    IngredientDao().trouver_par_id = MagicMock(return_value=None)
 
-    # Then
-    assert result is None
+    # WHEN
+    ingredient = IngredientService().trouver_par_id(ingredient_id)
+
+    # THEN
+    assert ingredient is None
+
+
+def test_lister_tous_ingredients():
+    """Lister tous les ingrédients réussie."""
+
+    # GIVEN
+    IngredientDao().lister_tous = MagicMock(return_value=liste_ingredients)
+
+    # WHEN
+    ingredients = IngredientService().lister_tous()
+
+    # THEN
+    assert len(ingredients) == len(liste_ingredients)

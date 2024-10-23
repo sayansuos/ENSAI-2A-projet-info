@@ -1,6 +1,6 @@
-from src.business_object.ingredient import Ingredient
-from src.business_object.utilisateur import Utilisateur
-from src.dao.ingredient_dao import IngredientDao
+from business_object.ingredient import Ingredient
+from business_object.utilisateur import Utilisateur
+from dao.ingredient_dao import IngredientDao
 from typing import List, Optional
 
 
