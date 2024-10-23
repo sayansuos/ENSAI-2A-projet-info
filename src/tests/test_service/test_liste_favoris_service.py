@@ -1,15 +1,18 @@
 from unittest.mock import patch, MagicMock
 from src.services.liste_favoris_service import ListeFavorisService
-from src.classes.recette import Recette
-from src.classes.ingredient import Ingredient
+from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
 
 
 # Test for ajouter_favoris
 @patch("src.services.liste_favoris_service.Utilisateur")
 def test_ajouter_favoris(mock_utilisateur):
     # GIVEN
-    recette = Recette(id_recette=1, nom_recette="Spaghetti Bolognese",
-                      liste_ingredient=[["Pasta", "100"], ["Meat", "100"]])
+    recette = Recette(
+        id_recette=1,
+        nom_recette="Spaghetti Bolognese",
+        liste_ingredient=[["Pasta", "100"], ["Meat", "100"]],
+    )
     mock_utilisateur.recette_favorite = []
     liste_favoris_service = ListeFavorisService()
 
@@ -25,8 +28,11 @@ def test_ajouter_favoris(mock_utilisateur):
 @patch("src.services.liste_favoris_service.Utilisateur")
 def test_enlever_favoris(mock_utilisateur):
     # GIVEN
-    recette = Recette(id_recette=1, nom_recette="Spaghetti Bolognese",
-                      liste_ingredient=[["Pasta", "100"], ["Meat", "100"]])
+    recette = Recette(
+        id_recette=1,
+        nom_recette="Spaghetti Bolognese",
+        liste_ingredient=[["Pasta", "100"], ["Meat", "100"]],
+    )
     mock_utilisateur.recette_favorite = [recette]
     liste_favoris_service = ListeFavorisService()
 

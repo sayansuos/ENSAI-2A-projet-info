@@ -1,6 +1,6 @@
 from unittest.mock import patch, MagicMock
 from src.services.recette_service import RecetteService
-from src.classes.recette import Recette
+from src.business_object.recette import Recette
 
 
 # Test for trouver_recette_par_nom
@@ -8,13 +8,17 @@ from src.classes.recette import Recette
 def test_trouver_recette_par_nom(mock_db_connection):
     # GIVEN
     nom_recette = "Spaghetti Bolognese"
-    expected_recette = Recette(id_recette=1, nom_recette=nom_recette,
-                               liste_ingredient=[["Pasta", "100"], ["Meat", "100"]])
+    expected_recette = Recette(
+        id_recette=1, nom_recette=nom_recette, liste_ingredient=[["Pasta", "100"], ["Meat", "100"]]
+    )
 
     # Mock the DB response
     mock_cursor = MagicMock()
-    mock_cursor.fetchone.return_value = {"id": 1, "nom": nom_recette,
-                                         "liste_ingredient": [["Pasta", "100"], ["Meat", "100"]]}
+    mock_cursor.fetchone.return_value = {
+        "id": 1,
+        "nom": nom_recette,
+        "liste_ingredient": [["Pasta", "100"], ["Meat", "100"]],
+    }
     mock_db_connection().connection.cursor.return_value.__enter__.return_value = mock_cursor
 
     recette_service = RecetteService()
@@ -35,19 +39,31 @@ def test_trouver_recette_par_ingredient(mock_db_connection):
     # GIVEN
     ingredient = "Tomato"
     expected_recettes = [
-        Recette(id_recette=1, nom_recette="Spaghetti Bolognese",
-                liste_ingredient=[["Pasta", "100"], ["Tomato", "100"]]),
-        Recette(id_recette=2, nom_recette="Pizza Margherita",
-                liste_ingredient=[["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]]),
+        Recette(
+            id_recette=1,
+            nom_recette="Spaghetti Bolognese",
+            liste_ingredient=[["Pasta", "100"], ["Tomato", "100"]],
+        ),
+        Recette(
+            id_recette=2,
+            nom_recette="Pizza Margherita",
+            liste_ingredient=[["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+        ),
     ]
 
     # Mock the DB response
     mock_cursor = MagicMock()
     mock_cursor.fetchall.return_value = [
-        {"id": 1, "nom": "Spaghetti Bolognese",
-         "liste_ingredient": [["Pasta", "100"], ["Tomato", "100"]]},
-        {"id": 2, "nom": "Pizza Margherita",
-         "liste_ingredient": [["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]]}
+        {
+            "id": 1,
+            "nom": "Spaghetti Bolognese",
+            "liste_ingredient": [["Pasta", "100"], ["Tomato", "100"]],
+        },
+        {
+            "id": 2,
+            "nom": "Pizza Margherita",
+            "liste_ingredient": [["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+        },
     ]
     mock_db_connection().connection.cursor.return_value.__enter__.return_value = mock_cursor
 
@@ -68,19 +84,31 @@ def test_trouver_recette_par_ingredient(mock_db_connection):
 def test_lister_toutes_recettes(mock_db_connection):
     # GIVEN
     expected_recettes = [
-        Recette(id_recette=1, nom_recette="Spaghetti Bolognese",
-                liste_ingredient=[["Pasta", "100"], ["Tomato", "100"]]),
-        Recette(id_recette=2, nom_recette="Pizza Margherita",
-                liste_ingredient=[["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]]),
+        Recette(
+            id_recette=1,
+            nom_recette="Spaghetti Bolognese",
+            liste_ingredient=[["Pasta", "100"], ["Tomato", "100"]],
+        ),
+        Recette(
+            id_recette=2,
+            nom_recette="Pizza Margherita",
+            liste_ingredient=[["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+        ),
     ]
 
     # Mock the DB response
     mock_cursor = MagicMock()
     mock_cursor.fetchall.return_value = [
-        {"id": 1, "nom": "Spaghetti Bolognese",
-         "liste_ingredient": [["Pasta", "100"], ["Tomato", "100"]]},
-        {"id": 2, "nom": "Pizza Margherita",
-         "liste_ingredient": [["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]]}
+        {
+            "id": 1,
+            "nom": "Spaghetti Bolognese",
+            "liste_ingredient": [["Pasta", "100"], ["Tomato", "100"]],
+        },
+        {
+            "id": 2,
+            "nom": "Pizza Margherita",
+            "liste_ingredient": [["Dough", "200"], ["Tomato", "50"], ["Cheese", "50"]],
+        },
     ]
     mock_db_connection().connection.cursor.return_value.__enter__.return_value = mock_cursor
 

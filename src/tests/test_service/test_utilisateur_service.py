@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
 import pytest
-from src.classes.utilisateur_service import UtilisateurService
+from src.service.utilisateur_service import UtilisateurService
 from src.dao.utilisateur_dao import UtilisateurDAO
-from src.classes.utilisateur import Utilisateur
+from src.business_object.utilisateur import Utilisateur
 
 
 liste_utilisateurs = [

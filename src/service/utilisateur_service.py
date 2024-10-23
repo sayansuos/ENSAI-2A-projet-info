@@ -1,5 +1,5 @@
 from src.business_object.utilisateur import Utilisateur
-from src.classes.recette_service import RecetteService
+from src.service.recette_service import RecetteService
 from src.business_object.recette import Recette
 from src.business_object.ingredient import Ingredient
 from src.dao.utilisateur_dao import UtilisateurDAO
