@@ -2,14 +2,14 @@ from src.business_object.utilisateur import Utilisateur
 from src.service.recette_service import RecetteService
 from src.business_object.recette import Recette
 from src.business_object.ingredient import Ingredient
-from src.dao.utilisateur_dao import UtilisateurDAO
+from src.dao.utilisateur_dao import UtilisateurDao
 
 from utils.log_decorator import log
 from utils.securite import hash_password
 from typing import List, Optional
 
 
-class UtilisateurService(Utilisateur):
+class UtilisateurService:
     """
     Définis les méthodes de la classe Utilisateur
     """
@@ -25,7 +25,7 @@ class UtilisateurService(Utilisateur):
         Returns:
             bool: True si le pseudo est déjà utilisé. False sinon
         """
-        utilisateurs = UtilisateurDAO().lister_tous()
+        utilisateurs = UtilisateurDao().lister_tous()
         return pseudo in [i.pseudo for i in utilisateurs]
 
     @log
@@ -124,7 +124,7 @@ class UtilisateurService(Utilisateur):
             raise TypeError("Le mot de passe doit être une chaîne de caractères alphanumériques.")
 
         # Il faudrait aussi faire attention aux caractères spéciaux
-        return UtilisateurDAO().se_connecter(pseudo, hash_password(mdp, pseudo))
+        return UtilisateurDao().se_connecter(pseudo, hash_password(mdp, pseudo))
 
     @log
     def supprimer(self, user: Utilisateur) -> bool:
@@ -142,7 +142,7 @@ class UtilisateurService(Utilisateur):
         # Vérifier si l'utilisateur existe bien dans la base de données
         # Proposer à l'utilisateur de confirmer son choix (Oui ou Non)
         # Renvoie True si l'utilisateur a bien été supprimé, False sinon
-        return UtilisateurDAO().supprimer(user)
+        return UtilisateurDao().supprimer(user)
 
     @log
     def lister_tous(self) -> List[Utilisateur]:
@@ -153,7 +153,7 @@ class UtilisateurService(Utilisateur):
             List[Utilisateur]: Liste des utilisateurs
         """
 
-        utilisateurs = UtilisateurDAO().lister_tous()
+        utilisateurs = UtilisateurDao().lister_tous()
         return utilisateurs
 
     @log
@@ -168,7 +168,7 @@ class UtilisateurService(Utilisateur):
             Optional[Utilisateur]: Utilisateur correspondant à l'identifiant recherché.
                                     None si la recherche ne correspond à rien
         """
-        return UtilisateurDAO().trouver_par_id(id_user)
+        return UtilisateurDao().trouver_par_id(id_user)
 
     @log
     def modifier(self, user: Utilisateur, new_user: Utilisateur) -> Optional[Utilisateur]:
@@ -188,7 +188,7 @@ class UtilisateurService(Utilisateur):
         """
 
         user.mdp = hash_password(user.mdp, user.pseudo)
-        return user if UtilisateurDAO().modifier(user) else None
+        return user if UtilisateurDao().modifier(user) else None
 
     def voir_suggestions(self) -> list[Recette]:
         """
