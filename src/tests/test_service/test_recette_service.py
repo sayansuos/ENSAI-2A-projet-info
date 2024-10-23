@@ -93,8 +93,8 @@ def test_trouver_recette_par_ingredient(mock_db_connection):
 
 def test_trouver_recette_par_ingredient_invalid_input():
     """
-    Création de Utilisateur échoué car le pseudo n'est pas une chaine de
-    caractère
+    Recherche de Recette par Ingredient échouée car l'ingrédient n'est pas une instance
+    de Ingredient
     """
 
     # GIVEN
@@ -102,7 +102,7 @@ def test_trouver_recette_par_ingredient_invalid_input():
 
     # WHEN-THEN:
     with pytest.raises(
-        TypeError, match="Le pseudo doit être une chaîne de caractères alphanumériques."
+        TypeError, match="ingredient doit être une instance de Ingredient"
     ):
         RecetteService().trouver_recette_par_ingredient(ingredient)
 
@@ -148,6 +148,58 @@ def test_lister_toutes_recettes(mock_db_connection):
     # THEN
     assert result == expected_recettes
     mock_cursor.execute.assert_called_once_with("SELECT * FROM Recette")
+
+
+def test_noter_recette(mock_db_connection):
+    """
+    bla
+
+    Args:
+        mock_db_connection (_type_): _description_
+    """
+
+    pass
+
+
+def test_noter_recette_invalid_input_type():
+    """
+    Mise à jour de la note d'une recette échouée car la note n'est pas un flottant ou un entier
+    """
+
+    # GIVEN
+    note = "4.5"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="La note doit être un nombre compris entre 0 et 5."
+    ):
+        RecetteService().noter_recette(note)
+
+
+def test_noter_recette(mock_db_connection):
+    """
+    bla
+
+    Args:
+        mock_db_connection (_type_): _description_
+    """
+
+    pass
+
+
+def test_noter_recette_invalid_input_type():
+    """
+    Mise à jour de la note d'une recette échouée car la note n'est pas un flottant ou un entier
+    """
+
+    # GIVEN
+    note = "4.5"
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="La note doit être un nombre compris entre 0 et 5."
+    ):
+        RecetteService().noter_recette(note)
 
 
 if __name__ == "__main__":
