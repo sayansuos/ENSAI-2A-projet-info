@@ -5,7 +5,7 @@ from InquirerPy.validator import PasswordValidator, EmptyInputValidator
 
 from prompt_toolkit.validation import ValidationError, Validator
 
-
+from src.business_object.utilisateur import Utilisateur
 from view.vue_abstraite import VueAbstraite
 from service.utilisateur_service import UtilisateurService
 
@@ -33,7 +33,8 @@ class AjoutVue(VueAbstraite):
         mail = inquirer.text(message="Entrez le mail : ", validate=MailValidator()).execute()
 
         # Appel du service pour créer le joueur
-        user = UtilisateurService().creer(pseudo, mdp, mail)
+        utilisateur = Utilisateur(pseudo, mdp, mail)
+        user = UtilisateurService().creer(utilisateur)
 
         # Si le joueur a été créé
         if user:

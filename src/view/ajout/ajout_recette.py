@@ -5,7 +5,7 @@ from InquirerPy.validator import PasswordValidator, EmptyInputValidator
 
 from prompt_toolkit.validation import ValidationError, Validator
 
-
+from src.business_object.recette import Recette
 from view.vue_abstraite import VueAbstraite
 from src.service.recette_service import RecetteService
 
@@ -33,7 +33,9 @@ class AjoutRecetteVue(VueAbstraite):
             liste_ingredients.append(ingredients)
 
         # Appel du service pour créer la recette
-        recette = RecetteService().creer_recette(nom_recette, description_recette, liste_ingredients)
+
+        la_recette = Recette(nom_recette, description_recette, liste_ingredients)
+        recette = RecetteService().creer_recette(la_recette)
 
         # Si le joueur a été créé
         if recette:
