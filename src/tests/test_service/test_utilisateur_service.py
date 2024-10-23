@@ -371,7 +371,50 @@ def test_supprimer_echec():
         TypeError,
         match="L'utilisateur n'est pas renseigné correctement.",
     ):
-        UtilisateurService().creer(user)
+        UtilisateurService().supprimer(user)
+
+
+def test_trouver_par_id_existant():
+    """Recherche par id d'un utilisateur existant"""
+
+    # GIVEN
+    id_user = 998
+
+    # WHEN
+    utilisateur = UtilisateurDAO().trouver_par_id(id_user)
+
+    # THEN
+    assert utilisateur is not None
+
+
+def test_trouver_par_id_non_existant():
+    """Recherche par id d'un utilisateur n'existant pas"""
+
+    # GIVEN
+    id_user = 9999999999999
+
+    # WHEN
+    utilisateur = UtilisateurDAO().trouver_par_id(id_user)
+
+    # THEN
+    assert utilisateur is None
+
+
+def test_lister_tous():
+    """Vérifie que la méthode renvoie une liste de Joueur
+    de taille supérieure ou égale à 2
+    """
+
+    # GIVEN
+
+    # WHEN
+    utilisateurs = UtilisateurDAO().lister_tous()
+
+    # THEN
+    assert isinstance(utilisateurs, list)
+    for j in utilisateurs:
+        assert isinstance(j, Utilisateur)
+    assert len(utilisateurs) >= 2
 
 
 if __name__ == "__main__":

@@ -1,8 +1,8 @@
-from src.classes.utilisateur import Utilisateur
+from src.business_object.utilisateur import Utilisateur
 from src.classes.recette_service import RecetteService
-from src.classes.recette import Recette
-from src.classes.ingredient import Ingredient
-from src.classes.utilisateur_dao import UtilisateurDAO
+from src.business_object.recette import Recette
+from src.business_object.ingredient import Ingredient
+from src.dao.utilisateur_dao import UtilisateurDAO
 
 from utils.log_decorator import log
 from utils.securite import hash_password
@@ -55,29 +55,41 @@ class UtilisateurService(Utilisateur):
         if not isinstance(mdp, str):
             raise TypeError("Le mot de passe doit être une chaîne de caractères alphanumériques.")
         if not isinstance(mail, str):
-            raise TypeError("L'adresse mail doit être une chaîne de caractères sous la"
-                            " forme : 'blabla@domaine.truc'")
+            raise TypeError(
+                "L'adresse mail doit être une chaîne de caractères sous la"
+                " forme : 'blabla@domaine.truc'"
+            )
         if len(mdp) < 6:
             raise ValueError("Le mot de passe doit contenir au moins 6 caractères.")
         if "@" not in mail:
-            raise ValueError("Il n'y a pas de @ dans l'adresse mail renseignée."
-                             "Format attendu : 'blabla@domaine.truc'")
+            raise ValueError(
+                "Il n'y a pas de @ dans l'adresse mail renseignée."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
         for i in range(len(mail)):
             if mail[i] == "@":
-                domaine_mail = mail[i:len(mail)]
+                domaine_mail = mail[i : len(mail)]
                 break
         if "@" in domaine_mail:
-            raise ValueError("Il ne doit y avoir qu'un seul @ dans votre adresse mail."
-                             "Format attendu : 'blabla@domaine.truc'")
+            raise ValueError(
+                "Il ne doit y avoir qu'un seul @ dans votre adresse mail."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
         if "." not in domaine_mail:
-            raise ValueError("Il doit y avoir un '.' dans votre nom de domaine."
-                             "Format attendu : 'blabla@domaine.truc'")
+            raise ValueError(
+                "Il doit y avoir un '.' dans votre nom de domaine."
+                "Format attendu : 'blabla@domaine.truc'"
+            )
         if ("'" in pseudo) or ("&" in pseudo) or ("|" in pseudo) or ("-" in pseudo):
-            raise ValueError("Le pseudo ne doit pas contenir de caractères spéciaux."
-                             "Caractères interdits : &, |, ', -")
+            raise ValueError(
+                "Le pseudo ne doit pas contenir de caractères spéciaux."
+                "Caractères interdits : &, |, ', -"
+            )
         if ("'" in mdp) or ("&" in mdp) or ("|" in mdp) or ("-" in mdp):
-            raise ValueError("Le mot de passe ne doit pas contenir de caractères spéciaux."
-                             "Caractères interdits : &, |, ', -")
+            raise ValueError(
+                "Le mot de passe ne doit pas contenir de caractères spéciaux."
+                "Caractères interdits : &, |, ', -"
+            )
         if Utilisateur.pseudo_deja_utilise(pseudo):
             raise ValueError("Le pseudo a déjà été attribué.")
 

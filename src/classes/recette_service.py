@@ -1,5 +1,5 @@
 from typing import List, Optional
-from src.classes.recette import Recette
+from src.business_object.recette import Recette
 from src.dao.recette_dao import RecetteDao
 
 
