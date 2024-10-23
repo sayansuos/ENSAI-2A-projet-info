@@ -49,12 +49,16 @@ class RecetteDao(metaclass=Singleton):
                         },
                     )
                     res = cursor.fetchone()
+
                     for raw_ingredient in recette.liste_ingredient:
                         nom_ingredient = raw_ingredient[0]
                         quantite_ingredient = raw_ingredient[1]
-                        id_ingredient = IngredientDao.trouver_par_nom(
-                            nom=nom_ingredient
-                        ).id_ingredient
+                        id_ingredient = (
+                            IngredientDao()
+                            .trouver_par_nom(nom_ingredient=nom_ingredient, cursor=cursor)
+                            .id_ingredient
+                        )
+
                         cursor.execute(
                             "INSERT INTO projet.recette_ingredient VALUES        "
                             "(%(id_ingredient)s, %(id_recette)s, %(quantite)s);  ",

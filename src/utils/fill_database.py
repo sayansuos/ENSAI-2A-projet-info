@@ -29,7 +29,7 @@ class FillDataBase(metaclass=Singleton):
         """
         liste_ingredient = IngredientClient().get_all_ingredients()
         for ing in liste_ingredient:
-            ingredient = Ingredient(ing[0], ing[1])
+            ingredient = Ingredient(id_ingredient=ing[0], nom_ingredient=ing[1])
             IngredientDao().creer(ingredient)
         return True
 
@@ -51,9 +51,3 @@ class FillDataBase(metaclass=Singleton):
             )
             RecetteDao().creer(recette)
         return True
-
-
-if __name__ == "__main__":
-    load_dotenv()
-    FillDataBase().fill_ingredient()
-    FillDataBase().fill_recette()
