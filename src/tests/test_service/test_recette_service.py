@@ -187,10 +187,10 @@ def test_noter_recette(mock_db_connection):
     nombre_de_notes = 3
 
     # WHEN
-    RecetteService.noter_recette(nouvelle_note)
+    RecetteService.noter_recette(nouvelle_note, recette_notee)
 
     # THEN
-
+    # assert recette_notee.note ==
 
 
 def test_noter_recette_invalid_input_type():
