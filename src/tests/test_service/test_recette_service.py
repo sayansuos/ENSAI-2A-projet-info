@@ -1,11 +1,10 @@
 from unittest.mock import patch, MagicMock
-from src.services.recette_service import RecetteService
+from src.service.recette_service import RecetteService
 from src.business_object.recette import Recette
 from src.business_object.ingredient import Ingredient
 
 
 # Test for trouver_recette_par_nom
-@patch("src.services.recette_service.DBConnection")
 def test_trouver_recette_par_nom_ok(mock_db_connection):
     # GIVEN
     nom_recette = "Spaghetti Bolognese"
@@ -46,8 +45,7 @@ def test_trouver_recette_par_nom_invalid_input():
 
 
 # Test for trouver_recette_par_ingredient
-@patch("src.services.recette_service.DBConnection")
-def test_trouver_recette_par_ingredient(mock_db_connection):
+def test_trouver_recette_par_ingredient_ok(mock_db_connection):
     # GIVEN
     ingredient = "Tomato"
     expected_recettes = [
@@ -108,7 +106,6 @@ def test_trouver_recette_par_ingredient_invalid_input():
 
 
 # Test for lister_toutes_recettes
-@patch("src.services.recette_service.DBConnection")
 def test_lister_toutes_recettes(mock_db_connection):
     # GIVEN
     expected_recettes = [
@@ -176,7 +173,22 @@ def test_noter_recette_invalid_input_type():
         RecetteService().noter_recette(note)
 
 
-def test_noter_recette(mock_db_connection):
+def test_noter_recette_invalid_input_value():
+    """
+    Mise à jour de la note d'une recette échouée car la note n'est pas comprise entre 0 et 5
+    """
+
+    # GIVEN
+    note = 7
+
+    # WHEN-THEN:
+    with pytest.raises(
+        TypeError, match="La note doit être comprise entre 0 et 5."
+    ):
+        RecetteService().noter_recette(note)
+
+
+def test_commenter_recette(mock_db_connection):
     """
     bla
 
@@ -187,19 +199,19 @@ def test_noter_recette(mock_db_connection):
     pass
 
 
-def test_noter_recette_invalid_input_type():
+def test_commenter_recette_invalid_input_type():
     """
-    Mise à jour de la note d'une recette échouée car la note n'est pas un flottant ou un entier
+    Mise à jour des avis d'une recette échouée car l'avis n'est pas une chaîne de caractères
     """
 
     # GIVEN
-    note = "4.5"
+    avis = ["avis", "positif"]
 
     # WHEN-THEN:
     with pytest.raises(
-        TypeError, match="La note doit être un nombre compris entre 0 et 5."
+        TypeError, match="Le commentaire doit être une chaîne de caractères"
     ):
-        RecetteService().noter_recette(note)
+        RecetteService().noter_recette(avis)
 
 
 if __name__ == "__main__":
