@@ -30,6 +30,20 @@ class UtilisateurService:
         return pseudo in [i.pseudo for i in utilisateurs]
 
     @log
+    def mail_deja_utilise(self, mail: str) -> bool:
+        """
+        Vérifie si le mail entré est déjà utilisé dans la base de données.
+
+        Args:
+            mail (str): Mail utilisé par l'utilisateur
+
+        Returns:
+            bool: True si le pseudo est déjà utilisé. False sinon
+        """
+        utilisateurs = UtilisateurDao().lister_tous()
+        return mail in [i.mail for i in utilisateurs]
+
+    @log
     def creer(self, pseudo: str, mdp: str, mail: str) -> Utilisateur:
         """
         Créer un utilisateur selon les paramètres renseignés.
@@ -89,12 +103,17 @@ class UtilisateurService:
                 "Format attendu : 'blabla@domaine.truc'"
             )
 
-        # Validation du mot de passe pour les caractères spéciaux
         if re.search(r"[&\'| -]", mdp):
             raise ValueError(
                 "Le mot de passe ne doit pas contenir de caractères spéciaux."
                 " Caractères interdits : &, |, ', -"
             )
+
+        if self.pseudo_deja_utilise(pseudo):
+            raise ValueError("Le pseudo est déjà utilisé")
+
+        if self.mail_deja_utilise(mail):
+            raise ValueError("Le mail est déjà utilisé")
 
         # Pour finir la fonction :
         # - Définir des méthodes de sécurité (échappement des caractères spéciaux)
@@ -107,7 +126,7 @@ class UtilisateurService:
         # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
         mdp = hash_password(mdp, sel=pseudo)
-        return UtilisateurDao.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
+        return UtilisateurDao().creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
     @log
     def connecter(self, pseudo: str, mdp: str) -> Utilisateur:

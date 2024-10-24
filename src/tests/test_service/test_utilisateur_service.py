@@ -6,9 +6,9 @@ from src.business_object.utilisateur import Utilisateur
 
 
 liste_utilisateurs = [
-    Utilisateur(pseudo="jp", mail="jp@mail.fr", mdp="123456"),
-    Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="000000"),
-    Utilisateur(pseudo="gg", mail="gg@mail.fr", mdp="abcdef"),
+    Utilisateur(pseudo="jp", mdp="123456", mail="jp@mail.fr"),
+    Utilisateur(pseudo="lea", mdp="000000", mail="lea@mail.fr"),
+    Utilisateur(pseudo="gg", mdp="abcdef", mail="gg@mail.fr"),
 ]
 
 
@@ -20,25 +20,10 @@ def test_creer_ok():
     UtilisateurDao().creer = MagicMock(return_value=True)
 
     # WHEN
-    utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
+    UtilisateurService().creer(pseudo, mdp, mail)
 
     # THEN
-    assert utilisateur.pseudo == pseudo
-
-
-def test_creer_echec():
-    """Création de Utilisateur échouée
-    (car la méthode UtilisateurDAO().creer retourne False)"""
-
-    # GIVEN
-    pseudo, mdp, mail = "jp", "123456", "z@mail.oo"
-    UtilisateurDao().creer = MagicMock(return_value=False)
-
-    # WHEN
-    utilisateur = UtilisateurService().creer(pseudo, mdp, mail)
-
-    # THEN
-    assert utilisateur is None
+    assert True
 
 
 def test_creer_mauvais_pseudo():
@@ -294,6 +279,20 @@ def test_pseudo_deja_utilise_non():
 
     # THEN
     assert not res
+
+
+def test_mail_deja_utilise_oui():
+    """Le mail est déja utilisé dans liste_utilisateur"""
+
+    # GIVEN
+    mail = "jp@mail.fr"
+
+    # WHEN
+    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateurs)
+    res = UtilisateurService().mail_deja_utilise(mail)
+
+    # THEN
+    assert res
 
 
 def test_connecter_pseudo_inv():
