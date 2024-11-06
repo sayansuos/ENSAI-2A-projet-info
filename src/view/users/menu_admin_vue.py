@@ -57,17 +57,17 @@ class MenuAdminVue(VueAbstraite):
                 return lister_tous()
             
             case "Supprimer un compte":
-                from src.view.vues_suppression.suppression_vue import SuppressionVue
+                from view.vues_suppression.suppression_vue import SuppressionVue
 
                 return SuppressionVue()
             
             case "Supprimer une recette":
-                from src.view.vues_suppression.suppression_recette_vue import SuppressionRecetteVue
+                from view.vues_suppression.suppression_recette_vue import SuppressionRecetteVue
 
                 return SuppressionRecetteVue()
 
             case "Consulter les recettes":
-                from src.service.recette_service import RecetteService
+                from service.recette_service import RecetteService
 
                 return lister_toutes_recettes()
             

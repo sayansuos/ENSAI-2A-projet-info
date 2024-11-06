@@ -46,6 +46,6 @@ class MenuInvVue(VueAbstraite):
                 return AccueilVue()
             
             case "Consulter les recettes":
-                from src.view.recettes.recettes_vue_inv import RecettesVue
+                from view.recettes.recettes_vue_inv import RecettesVue
 
                 return RecettesVue()

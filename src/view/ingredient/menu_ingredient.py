@@ -1,8 +1,8 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.ingredient_service import IngredientService
-from src.service.liste_favoris_service import ListeFavorisService
+from service.ingredient_service import IngredientService
+from service.liste_favoris_service import ListeFavorisService
 lfs = ListeFavorisService()
 
 
@@ -24,7 +24,7 @@ class MenuIngredient(VueAbstraite):
         ).execute()
 
         if choix == "Retour au menu des ingrédients":
-            from src.view.ingredients.ingredients_vue import IngredientsVue
+            from view.ingredients.ingredients_vue import IngredientsVue
 
             return IngredientsVue()
         else :
@@ -56,7 +56,7 @@ class MenuIngredient(VueAbstraite):
                     return lfs.enlever_ingredient_non_desire(choix)
                    
         
-        from src.view.ingredients.ingredients_vue import IngredientsVue
+        from view.ingredients.ingredients_vue import IngredientsVue
 
         message = f"C'est fait !\n\n"
         

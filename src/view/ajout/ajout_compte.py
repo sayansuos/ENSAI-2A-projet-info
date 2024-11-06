@@ -5,7 +5,7 @@ from InquirerPy.validator import PasswordValidator, EmptyInputValidator
 
 from prompt_toolkit.validation import ValidationError, Validator
 
-from src.business_object.utilisateur import Utilisateur
+from business_object.utilisateur import Utilisateur
 from view.vue_abstraite import VueAbstraite
 from service.utilisateur_service import UtilisateurService
 
@@ -44,7 +44,7 @@ class AjoutVue(VueAbstraite):
         else:
             message = "Erreur de connexion (pseudo ou mot de passe invalide)"
 
-        from src.view.users.menu_admin_vue import MenuAdminVue
+        from view.users.menu_admin_vue import MenuAdminVue
 
         return MenuAdminVue(message)
 

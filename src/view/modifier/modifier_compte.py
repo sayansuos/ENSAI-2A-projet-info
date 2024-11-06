@@ -1,8 +1,8 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.utilisateur_service import UtilisateurService
-from src.business_object.utilisateur import Utilisateur
+from service.utilisateur_service import UtilisateurService
+from business_object.utilisateur import Utilisateur
 
 class ModifierCompte(VueAbstraite):
 
@@ -28,7 +28,7 @@ class ModifierCompte(VueAbstraite):
         else:
             message = "Erreur"
         
-        from src.view.users.menu_admin_vue import MenuAdminVue
+        from view.users.menu_admin_vue import MenuAdminVue
 
         return MenuAdminVue(message)
         

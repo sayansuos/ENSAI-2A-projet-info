@@ -1,8 +1,8 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.ingredient_service import IngredientService
-from src.service.recette_service import RecetteService
+from service.ingredient_service import IngredientService
+from service.recette_service import RecetteService
 
 
 class MenuRecetteAf(VueAbstraite):
@@ -30,7 +30,7 @@ class MenuRecetteAf(VueAbstraite):
         ).execute()
 
         if choix_deux == "Retour":
-            from src.view.recettes.recettes_vue_inv import RecettesVue
+            from view.recettes.recettes_vue_inv import RecettesVue
 
             return RecettesVue()
         else:
@@ -45,10 +45,10 @@ class MenuRecetteAf(VueAbstraite):
             match choix_bis:
                 case "Lire la recette":
 
-                    return recette_service.voir_description(choix_deux)
+                    return recette_service.voir_recette(choix_deux)
                 
                 case "Voir les notes et les avis":
 
-                    return recette_service.voir_note(choix_deux), recette_service.voir_avis(choix_deux)
-
+                    return recette_service.voir_note_avis(choix_deux)
+        
         return MenuRecetteAf()

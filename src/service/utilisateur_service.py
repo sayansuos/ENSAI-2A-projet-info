@@ -1,8 +1,8 @@
-from src.business_object.utilisateur import Utilisateur
-from src.service.recette_service import RecetteService
-from src.business_object.recette import Recette
-from src.business_object.ingredient import Ingredient
-from src.dao.utilisateur_dao import UtilisateurDao
+from business_object.utilisateur import Utilisateur
+from service.recette_service import RecetteService
+from business_object.recette import Recette
+from business_object.ingredient import Ingredient
+from dao.utilisateur_dao import UtilisateurDao
 import re
 
 from utils.log_decorator import log

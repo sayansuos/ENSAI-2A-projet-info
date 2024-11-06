@@ -1,6 +1,5 @@
 from business_object.ingredient import Ingredient
 
-
 class Recette:
     """
     Instancie un objet de type Recette

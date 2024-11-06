@@ -1,7 +1,7 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.utilisateur_service import UtilisateurService
+from service.utilisateur_service import UtilisateurService
 
 
 class SuppressionVue(VueAbstraite):
@@ -22,11 +22,11 @@ class SuppressionVue(VueAbstraite):
         ).execute()
 
         if choix == "Retour au Menu Administrateur":
-            from src.view.users.menu_admin_vue import MenuAdminVue
+            from view.users.menu_admin_vue import MenuAdminVue
 
             return MenuAdminVue()
         else :
-            from src.view.users.menu_admin_vue import MenuAdminVue
+            from view.users.menu_admin_vue import MenuAdminVue
 
             utilisateur_service.supprimer(choix)
             message = f"L'utilisateur {choix} a été supprimé.\n\n"

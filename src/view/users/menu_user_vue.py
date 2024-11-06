@@ -3,7 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-from src.service.utilisateur_service import UtilisateurService
+from service.utilisateur_service import UtilisateurService
 
 
 class MenuUserVue(VueAbstraite):
@@ -51,7 +51,7 @@ class MenuUserVue(VueAbstraite):
                 return AccueilVue()
             
             case "Consulter les recettes":
-                from src.view.recettes.recettes_vue_user import RecettesVue
+                from view.recettes.recettes_vue_user import RecettesVue
 
                 return RecettesVue()
 
@@ -68,7 +68,7 @@ class MenuUserVue(VueAbstraite):
                 return voir_liste_course()
             
             case "Voir les ingrédients":
-                from src.view.ingredients.ingredients_vue import IngredientsVue
+                from view.ingredients.ingredients_vue import IngredientsVue
 
                 return IngredientsVue()
                 

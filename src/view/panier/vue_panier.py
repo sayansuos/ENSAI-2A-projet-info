@@ -1,7 +1,7 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from src.service.utilisateur_service import UtilisateurService
+from service.utilisateur_service import UtilisateurService
 
 
 class PanierVue(VueAbstraite):
@@ -22,15 +22,15 @@ class PanierVue(VueAbstraite):
         ).execute()
 
         if choix == "Retour":
-            from src.view.menu_user_vue import MenuUserVue
+            from view.menu_user_vue import MenuUserVue
 
             return MenuUserVue()
         else:
-            from src.service.liste_favoris_service import ListeFavorisService
+            from service.liste_favoris_service import ListeFavorisService
 
             return enlever_ingredient_course(choix)
 
-        from src.view.menu_user_vue import MenuUserVue
+        from view.menu_user_vue import MenuUserVue
 
         message = f"L'ingrédient {choix} a été retiré de la liste de course\n\n"
         

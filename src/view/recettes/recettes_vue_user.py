@@ -28,12 +28,16 @@ class RecettesVue(VueAbstraite):
 
         match choix:
             case "Consulter toutes les recettes":
-                pass
+                from view.recette.menu_recette_user_sf import MenuRecetteSf
+
+                return MenuRecetteSf()
 
             case "Consulter les recettes par ingrédient":
-                pass
+                from view.recette.menu_recette_user_af import MenuRecetteAf
+
+                return MenuRecetteAf()
             
             case "Retour":
-                from src.view.users.menu_user_vue import MenuUserVue
+                from view.users.menu_user_vue import MenuUserVue
 
                 return MenuUserVue()

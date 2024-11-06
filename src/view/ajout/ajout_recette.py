@@ -5,9 +5,9 @@ from InquirerPy.validator import PasswordValidator, EmptyInputValidator
 
 from prompt_toolkit.validation import ValidationError, Validator
 
-from src.business_object.recette import Recette
+from business_object.recette import Recette
 from view.vue_abstraite import VueAbstraite
-from src.service.recette_service import RecetteService
+from service.recette_service import RecetteService
 
 
 class AjoutRecetteVue(VueAbstraite):
@@ -16,7 +16,7 @@ class AjoutRecetteVue(VueAbstraite):
         nom_recette = inquirer.text(message="Quel est le nom de la recette ? : ").execute()
 
         if RecetteService().recette_deja_faite(nom_recette):
-            from src.view.users.menu_admin_vue import MenuAdminVue
+            from view.users.menu_admin_vue import MenuAdminVue
 
             return MenuAdminVue(f"La recette {nom_recette} a déjà été créée.")
 
@@ -45,6 +45,6 @@ class AjoutRecetteVue(VueAbstraite):
         else:
             message = "Erreur"
 
-        from src.view.users.menu_admin_vue import MenuAdminVue
+        from view.users.menu_admin_vue import MenuAdminVue
 
         return MenuAdminVue(message)

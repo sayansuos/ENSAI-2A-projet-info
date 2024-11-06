@@ -1,9 +1,14 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from src.service.recette_service import RecetteService
-from src.business_object.recette import Recette
-from src.business_object.ingredient import Ingredient
-from src.dao.recette_dao import RecetteDao
+
+from services.recette_service import RecetteService
+from business_object.recette import Recette
+from business_object.ingredient import Ingredient
+from dao.recette_dao import RecetteDao
+
+# Test for trouver_recette_par_nom
+@patch("services.recette_service.DBConnection")
+def test_trouver_recette_par_nom_ok(mock_db_connection):
 
 ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
 ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
@@ -88,6 +93,7 @@ def test_trouver_par_nom_non_existant():
 
 
 # Test for trouver_recette_par_ingredient
+@patch("services.recette_service.DBConnection")
 def test_trouver_recette_par_ingredient_ok(mock_db_connection):
     # GIVEN
     ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
@@ -152,6 +158,7 @@ def test_trouver_recette_par_ingredient_invalid_input():
 
 
 # Test for lister_toutes_recettes
+@patch("services.recette_service.DBConnection")
 def test_lister_toutes_recettes():
     """
     Vérifie que la méthode pour lister toutes les recettes de la base de données marche bien

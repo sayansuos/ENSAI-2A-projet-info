@@ -3,8 +3,8 @@ import pytest
 from unittest.mock import patch
 from utils.reset_database import ResetDatabase
 from utils.securite import hash_password
-from src.dao.utilisateur_dao import UtilisateurDao
-from src.business_object.utilisateur import Utilisateur
+from dao.utilisateur_dao import UtilisateurDao
+from business_object.utilisateur import Utilisateur
 
 
 @pytest.fixture(scope="session", autouse=True)
