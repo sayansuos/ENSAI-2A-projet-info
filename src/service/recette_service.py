@@ -4,7 +4,7 @@ from dao.recette_dao import RecetteDao
 from business_object.ingredient import Ingredient
 
 
-class RecetteService(Recette):
+class RecetteService:
     """
     Définis les méthodes de la classe Recette
     """
@@ -62,7 +62,7 @@ class RecetteService(Recette):
 
         return RecetteDao().lister_tous()
 
-    def noter_recette(self, note: float):
+    def noter_recette(self, note: float, recette: Recette):
         """
         Permet de noter une recette de 0 à 5.
 
@@ -75,22 +75,34 @@ class RecetteService(Recette):
             raise TypeError("La note doit être un nombre compris entre 0 et 5.")
         if note < 0 or note > 5:
             raise ValueError("La note doit être comprise entre 0 et 5.")
+        if not isinstance(recette, Recette):
+            raise TypeError("La recette doit être une instance de Recette.")
 
         # super.note = super.note * (nb_notes / (nb_notes + 1)) + note / (nb_notes + 1)
         # nb_notes += 1
         pass
 
-    def commenter_recette(self, commentaire: str):
+    def commenter_recette(self, commentaire: str, recette: Recette):
         """
         Permet de commenter une recette
 
         Args:
             commentaire (str):
-                Avis de l'utilisateur sur la recette
+                Avis donné sur la recette
+            recette (Recette):
+                Recette que l'on veut commenter
+
+        Raises:
+            TypeError:
+                Retournée si le commentaire n'est pas un str
+            TypeError:
+                Retournée si la recette n'est pas une instance de Recette
         """
 
         if not isinstance(commentaire, str):
             raise TypeError("Le commentaire doit être une chaîne de caractères")
+        if not isinstance(recette, Recette):
+            raise TypeError("La recette doit être une instance de Recette")
 
         pass
 
@@ -181,7 +193,7 @@ class RecetteService(Recette):
 
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
-        
+
         # Voir si ça marche bien comme ça. Sinon on passe par la DAO comme d'habitude.
         recette_str = f"La description de {recette.nom_recette} est :\n\n"
         recette_str += str(recette.description_recette)

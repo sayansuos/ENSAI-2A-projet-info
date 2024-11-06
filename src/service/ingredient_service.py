@@ -4,7 +4,7 @@ from dao.ingredient_dao import IngredientDao
 from typing import List, Optional
 
 
-class IngredientService(Utilisateur):
+class IngredientService:
     """
     Définis les méthodes de la classe Ingredient
     """
@@ -36,24 +36,6 @@ class IngredientService(Utilisateur):
             raise TypeError("ingredient doit être une instance de Ingredient.")
 
         return ingredient if IngredientDao.creer(ingredient) is True else None
-
-    def supprimer(self, ingredient: Ingredient) -> bool:
-        """
-        Permet de supprimer un ingrédient de la base de données
-
-        Args:
-            ingredient (Ingredient): Ingrédient à supprimer de la base de données
-
-        Returns:
-            bool:
-                True si l'ingrédient a bien été supprimé de la base de données
-                False sinon
-        """
-
-        if not isinstance(ingredient, Ingredient):
-            raise TypeError("ingredient doit être une instance de Ingredient.")
-
-        return IngredientDao.supprimer(ingredient)
 
     def trouver_ingredient_par_id(self, id: int) -> Optional[Ingredient]:
         """

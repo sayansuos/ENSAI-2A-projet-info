@@ -47,3 +47,8 @@ class Utilisateur:
         self.ingredient_non_desire: list[Ingredient] = ingredient_non_desire
         self.liste_de_course: list[Ingredient] = liste_de_course
         self.role: str = role
+
+    @property
+    def mail(self):
+        """Retourne l'adresse mail de l'utilisateur."""
+        return self.__mail
