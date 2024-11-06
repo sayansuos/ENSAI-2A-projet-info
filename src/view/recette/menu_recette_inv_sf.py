@@ -1,13 +1,15 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
+from view.users.menu_inv_vue import MenuInvVue
 from service.recette_service import RecetteService
 
 
 class MenuRecetteSf(VueAbstraite):
-    """Vue qui affiche :
-    - toutes les recettes dispo
-    - les options
+    """
+    Vue qui affiche :
+      - toutes les recettes dispo
+      - les options
     """
 
     def choisir_menu(self):
@@ -36,11 +38,21 @@ class MenuRecetteSf(VueAbstraite):
 
             match choix_bis:
                 case "Lire la recette":
+                    print(recette_service.lire_recette(choix), "\n\n")
+                    choix_bis_bis = inquirer.select(
+                        message="Consulter une autre recette ? ",
+                        choices=["Oui", "Non"],
+                    ).execute()
+                    if choix_bis_bis == "Non":
+                        return MenuInvVue()
 
-                    return recette_service.voir_recette(choix)
-                
                 case "Voir les notes et les avis":
-
-                    return recette_service.voir_note_avis(choix)
+                    print(recette_service.voir_note_avis(choix), "\n\n")
+                    choix_bis_bis = inquirer.select(
+                        message="Consulter une autre recette ? ",
+                        choices=["Oui", "Non"],
+                    ).execute()
+                    if choix_bis_bis == "Non":
+                        return MenuInvVue()
 
         return MenuRecetteSf()

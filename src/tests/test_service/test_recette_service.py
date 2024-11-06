@@ -1,37 +1,38 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-from services.recette_service import RecetteService
+from service.recette_service import RecetteService
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
 from dao.recette_dao import RecetteDao
+
 
 # Test for trouver_recette_par_nom
 @patch("services.recette_service.DBConnection")
 def test_trouver_recette_par_nom_ok(mock_db_connection):
 
-ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
-ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
-ingredient_3 = Ingredient(nom_ingredient="Dough", id_ingredient=3)
-ingredient_4 = Ingredient(nom_ingredient="Cheese", id_ingredient=4)
-ingredient_5 = Ingredient(nom_ingredient="Meat", id_ingredient=2)
-liste_recettes = [
-    Recette(
-        nom_recette="Spaghetti Bolognese",
-        liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
-        description_recette="Spaghetti avec de la viande",
-    ),
-    Recette(
-        nom_recette="Spaghetti Tomato",
-        liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
-        description_recette="Spaghetti avec de la sauce tomate",
-    ),
-    Recette(
-        nom_recette="Pizza Margherita",
-        liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
-        description_recette="Je sais pas quoi écrire, c'est une pizza",
-    ),
-]
+    ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
+    ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
+    ingredient_3 = Ingredient(nom_ingredient="Dough", id_ingredient=3)
+    ingredient_4 = Ingredient(nom_ingredient="Cheese", id_ingredient=4)
+    ingredient_5 = Ingredient(nom_ingredient="Meat", id_ingredient=2)
+    liste_recettes = [
+        Recette(
+            nom_recette="Spaghetti Bolognese",
+            liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
+            description_recette="Spaghetti avec de la viande",
+        ),
+        Recette(
+            nom_recette="Spaghetti Tomato",
+            liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
+            description_recette="Spaghetti avec de la sauce tomate",
+        ),
+        Recette(
+            nom_recette="Pizza Margherita",
+            liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
+            description_recette="Je sais pas quoi écrire, c'est une pizza",
+        ),
+    ]
 
 
 def test_creer_recette_ok():

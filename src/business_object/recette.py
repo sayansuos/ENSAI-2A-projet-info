@@ -1,5 +1,6 @@
 from business_object.ingredient import Ingredient
 
+
 class Recette:
     """
     Instancie un objet de type Recette
@@ -20,3 +21,6 @@ class Recette:
         self.description_recette: str = description_recette
         self.note: float = note
         self.avis: list[str] = avis
+
+    def __str__(self):
+        return f"[{self.id_recette}] {self.nom_recette}"

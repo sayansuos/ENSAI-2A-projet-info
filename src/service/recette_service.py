@@ -170,15 +170,21 @@ class RecetteService:
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
 
-        note_avis_str = f"Les avis de {recette.nom_recette} sont :\n\n"
-        for av in recette.avis:
-            note_avis_str += f"- {av}"
-        note_avis_str += f"La note de cette recette est :\n\n"
-        note_avis_str += str(recette.note)
-        
+        note_avis_str = "\n\n" + str(recette) + "\n\n" + "Avis :"
+        if len(recette.avis) > 1:
+            note_avis_str += "\n"
+            for av in recette.avis:
+                note_avis_str += f"- {av} \n"
+        else:
+            note_avis_str += " Il n'y a aucun avis pour cette recette. \n"
+        if recette.note:
+            note_avis_str += f"\nNote : {recette.note}/5"
+        else:
+            note_avis_str += "\nNote : Il n'y a aucune note pour cette recette."
+
         return note_avis_str
 
-    def voir_recette(self, recette: Recette) -> str:
+    def lire_recette(self, recette: Recette) -> str:
         """
         Renvoie la description d'une recette
 
@@ -192,14 +198,12 @@ class RecetteService:
         """
 
         if not isinstance(recette, Recette):
-            raise TypeError("recette doit être une instance de Recette.")
+            raise TypeError("Recette doit être une instance de Recette.")
 
-        # Voir si ça marche bien comme ça. Sinon on passe par la DAO comme d'habitude.
-        recette_str = f"La description de {recette.nom_recette} est :\n\n"
-        recette_str += str(recette.description_recette)
-        recette_str += f"Les ingrédients pour cette recette sont :\n\n"
+        recette_str = "\n\n" + str(recette) + "\n\n" + "Ingredients :\n"
         for ingr in recette.liste_ingredient:
             ingredient, quantites = ingr
-            recette_str += f"- {ingredient.nom_ingredient} ({quantites})"
+            recette_str += f"- {ingredient.nom_ingredient} ({quantites}) \n"
+        recette_str += f"\nDescription : \n{recette.description_recette}"
 
         return recette_str

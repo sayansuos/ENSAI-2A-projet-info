@@ -48,6 +48,9 @@ class Utilisateur:
         self.liste_de_course: list[Ingredient] = liste_de_course
         self.role: str = role
 
+    def __str__(self):
+        return f"[{self.id_utilisateur}] {self.pseudo}"
+
     @property
     def mail(self):
         """Retourne l'adresse mail de l'utilisateur."""

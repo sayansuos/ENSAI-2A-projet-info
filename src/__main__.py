@@ -4,7 +4,8 @@ import dotenv
 from utils.log_init import initialiser_logs
 
 from view.accueil.accueil_vue import AccueilVue
-from view.users.menu_inv_vue import MenuInvVue
+
+# from view.users.menu_inv_vue import MenuInvVue
 
 
 if __name__ == "__main__":
@@ -13,7 +14,7 @@ if __name__ == "__main__":
 
     initialiser_logs("Application")
 
-    vue_courante = AccueilVue("Bienvenue")
+    vue_courante = AccueilVue(message="Bienvenue")
     nb_erreurs = 0
 
     while vue_courante:
@@ -21,24 +22,19 @@ if __name__ == "__main__":
             print("Le programme recense trop d'erreurs et va s'arrêter")
             break
 
-         # Affichage du menu
-        vue_courante.afficher()
-
-        # Affichage des choix possibles
-        vue_courante = vue_courante.choisir_menu()
-        #try:
+        try:
             # Affichage du menu
-         #   vue_courante.afficher()
-
+            vue_courante.afficher()
             # Affichage des choix possibles
-          #  vue_courante = vue_courante.choisir_menu()
-        #except Exception as e:
-         #   logging.info(e)
-          #  print(e)
-           # nb_erreurs += 1
-            #vue_courante = AccueilVue("Une erreur est survenue, retour au menu principal")
+            vue_courante = vue_courante.choisir_menu()
 
-    # Lorsque l on quitte l application
+        except Exception as e:
+            logging.info(e)
+            print(e)
+            nb_erreurs += 1
+            vue_courante = AccueilVue("Une erreur est survenue, retour au menu principal")
+
+    # Lorsque l'on quitte l'application
     print("----------------------------------")
     print("Au revoir")
 

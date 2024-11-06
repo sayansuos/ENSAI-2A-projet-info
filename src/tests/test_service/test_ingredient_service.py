@@ -79,3 +79,7 @@ def test_trouver_ingredient_par_id_invalide():
     ingredient = IngredientService().trouver_ingredient_par_id(id_ingredient)
 
     assert ingredient is None
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
