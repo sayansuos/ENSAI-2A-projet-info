@@ -48,8 +48,7 @@ class RecetteService:
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance de Ingredient")
 
-        pass
-        # return RecetteDao.trouver_par_ingredient(ingredient)
+        return RecetteDao().trouver_par_ingredient(ingredient)
 
     def lister_toutes_recettes(self) -> List[Recette]:
         """

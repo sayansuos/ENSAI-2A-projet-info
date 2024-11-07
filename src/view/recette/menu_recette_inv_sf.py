@@ -3,6 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.users.menu_inv_vue import MenuInvVue
 from service.recette_service import RecetteService
+from view.recettes.recettes_vue_inv import RecettesVue
 
 
 class MenuRecetteSf(VueAbstraite):
@@ -14,18 +15,22 @@ class MenuRecetteSf(VueAbstraite):
 
     def choisir_menu(self):
         recette_service = RecetteService()
+        recettes = recette_service.lister_toutes_recettes()
 
-        liste_recettes = recette_service.lister_toutes_recettes()
-        liste_recettes.append("Retour")
+        choix = "-> Page suivante"
+        i = 0
 
-        choix = inquirer.select(
-            message="Choisissez une recette : ",
-            choices=liste_recettes,
-        ).execute()
+        while choix == "-> Page suivante":
+            i += 10
+            liste_recettes = recettes[i - 10 : i]
+            liste_recettes.append("-> Page suivante")
+            liste_recettes.append("Retour")
+            choix = inquirer.select(
+                message="Choisissez une recette : ",
+                choices=liste_recettes,
+            ).execute()
 
         if choix == "Retour":
-            from view.recettes.recettes_vue_inv import RecettesVue
-
             return RecettesVue()
         else:
             choix_bis = inquirer.select(
@@ -55,4 +60,4 @@ class MenuRecetteSf(VueAbstraite):
                     if choix_bis_bis == "Non":
                         return MenuInvVue()
 
-        return MenuRecetteSf()
+        return RecettesVue()

@@ -17,7 +17,7 @@ class IngredientService:
             List[Ingredient]: Liste de tous les ingrédients
         """
 
-        return IngredientDao.lister_tous()
+        return IngredientDao().lister_tous()
 
     def creer(self, ingredient: Ingredient) -> Optional[Ingredient]:
         """

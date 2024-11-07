@@ -20,9 +20,9 @@ class RecettesVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter toutes les recettes",#done
-                "Consulter les recettes par ingrédient",#done
-                "Retour",#done
+                "Consulter toutes les recettes",  # done
+                "Consulter les recettes par ingrédient",  # done
+                "Retour",  # done
             ],
         ).execute()
 
@@ -36,7 +36,7 @@ class RecettesVue(VueAbstraite):
                 from view.recette.menu_recette_inv_af import MenuRecetteAf
 
                 return MenuRecetteAf()
-            
+
             case "Retour":
                 from view.users.menu_inv_vue import MenuInvVue
 

@@ -1,8 +1,10 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
+from view.users.menu_inv_vue import MenuInvVue
 from service.ingredient_service import IngredientService
 from service.recette_service import RecetteService
+from view.recettes.recettes_vue_inv import RecettesVue
 
 
 class MenuRecetteAf(VueAbstraite):
@@ -13,13 +15,20 @@ class MenuRecetteAf(VueAbstraite):
 
     def choisir_menu(self):
         recette_service = RecetteService()
-        ingredient_service = IngredientService
+        ingredient_service = IngredientService()
+        ingredients = ingredient_service.lister_tous()
 
-        liste_ingredients = ingredient_service.lister_tous()
-        choix = inquirer.select(
-            message="Choisissez un ingrédient : ",
-            choices=liste_ingredients,
-        ).execute()
+        choix = "-> Page suivante"
+        i = 0
+
+        while choix == "-> Page suivante":
+            i += 10
+            liste_ingredients = ingredients[i - 10 : i]
+            liste_ingredients.append("-> Page suivante")
+            choix = inquirer.select(
+                message="Choisissez un ingrédient : ",
+                choices=liste_ingredients,
+            ).execute()
 
         liste_recette_filtree = recette_service.trouver_recette_par_ingredient(choix)
         liste_recette_filtree.append("Retour")
@@ -30,8 +39,6 @@ class MenuRecetteAf(VueAbstraite):
         ).execute()
 
         if choix_deux == "Retour":
-            from view.recettes.recettes_vue_inv import RecettesVue
-
             return RecettesVue()
         else:
             choix_bis = inquirer.select(
@@ -44,11 +51,21 @@ class MenuRecetteAf(VueAbstraite):
 
             match choix_bis:
                 case "Lire la recette":
+                    print(recette_service.lire_recette(choix_deux), "\n\n")
+                    choix_bis_bis = inquirer.select(
+                        message="Consulter une autre recette ? ",
+                        choices=["Oui", "Non"],
+                    ).execute()
+                    if choix_bis_bis == "Non":
+                        return MenuInvVue()
 
-                    return recette_service.voir_recette(choix_deux)
-                
                 case "Voir les notes et les avis":
+                    print(recette_service.voir_note_avis(choix_deux), "\n\n")
+                    choix_bis_bis = inquirer.select(
+                        message="Consulter une autre recette ? ",
+                        choices=["Oui", "Non"],
+                    ).execute()
+                    if choix_bis_bis == "Non":
+                        return MenuInvVue()
 
-                    return recette_service.voir_note_avis(choix_deux)
-        
-        return MenuRecetteAf()
+        return RecettesVue()
