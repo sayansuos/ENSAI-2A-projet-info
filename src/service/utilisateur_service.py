@@ -167,15 +167,19 @@ class UtilisateurService:
         return UtilisateurDao().supprimer(user)
 
     @log
-    def lister_tous(self) -> List[Utilisateur]:
+    def lister_tous(self, inclure_mdp=False) -> List[Utilisateur]:
         """
         Renvoie la liste de tous les utilisateurs dans la base de données
+        Si inclure_mdp=True, les mots de passe seront inclus
+        Par défaut, tous les mdp des joueurs sont à None
 
         Returns:
             List[Utilisateur]: Liste des utilisateurs
         """
-
         utilisateurs = UtilisateurDao().lister_tous()
+        if not inclure_mdp:
+            for u in utilisateurs:
+                u.mdp = None
         return utilisateurs
 
     @log
@@ -193,7 +197,7 @@ class UtilisateurService:
         return UtilisateurDao().trouver_par_id(id_user)
 
     @log
-    def modifier(self, user: Utilisateur, new_user: Utilisateur) -> Optional[Utilisateur]:
+    def modifier(self, user: Utilisateur) -> Optional[Utilisateur]:
         """
         Permet de modifier les informations d'un utilisateur
 

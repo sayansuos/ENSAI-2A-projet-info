@@ -10,8 +10,8 @@ class Utilisateur:
     def __init__(
         self,
         pseudo: str,
-        mdp: str,
         mail: str,
+        mdp: str,
         id_utilisateur: int = 1,
         recette_favorite: list[Recette] = [],
         ingredient_favori: list[Ingredient] = [],
@@ -40,8 +40,8 @@ class Utilisateur:
         """
         self.id_utilisateur: int = id_utilisateur
         self.pseudo: str = pseudo
-        self.__mdp: str = mdp
-        self.__mail: str = mail
+        self.mdp: str = mdp
+        self.mail: str = mail
         self.recette_favorite: list[Recette] = recette_favorite
         self.ingredient_favori: list[Ingredient] = ingredient_favori
         self.ingredient_non_desire: list[Ingredient] = ingredient_non_desire

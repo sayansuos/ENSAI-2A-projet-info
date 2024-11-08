@@ -8,6 +8,8 @@ from utils.singleton import Singleton
 from utils.fill_database import FillDataBase
 from dao.db_connection import DBConnection
 
+from service.utilisateur_service import UtilisateurService
+
 
 class ResetDatabase(metaclass=Singleton):
     """
@@ -47,6 +49,13 @@ class ResetDatabase(metaclass=Singleton):
         except Exception as e:
             logging.info(e)
             raise
+
+        # Appliquer le hashage des mots de passe à chaque utilisateur
+        utilisateur_service = UtilisateurService()
+        for u in utilisateur_service.lister_tous(inclure_mdp=True):
+            utilisateur_service.modifier(u)
+
+        return True
 
         FillDataBase().fill_ingredient()
         FillDataBase().fill_recette()

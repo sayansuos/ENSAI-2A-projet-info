@@ -5,6 +5,7 @@ from view.session import Session
 
 from service.utilisateur_service import UtilisateurService
 
+
 class ConnexionVue(VueAbstraite):
     """Vue de Connexion (saisie de pseudo et mdp)"""
 
@@ -24,10 +25,16 @@ class ConnexionVue(VueAbstraite):
             Session().connexion(utilisateur)
 
             if role == "admin":
-                from view.menu_admin_vue import MenuAdminVue  # Afficher un menu spécifique pour l'admin
+                from view.menu_admin_vue import (
+                    MenuAdminVue,
+                )  # Afficher un menu spécifique pour l'admin
+
                 return MenuAdminVue(message)
             else:
-                from view.menu_user_vue import MenuUserVue  # Afficher un menu pour un utilisateur normal
+                from view.menu_user_vue import (
+                    MenuUserVue,
+                )  # Afficher un menu pour un utilisateur normal
+
                 return MenuUserVue(message)
 
         # En cas d'erreur de connexion

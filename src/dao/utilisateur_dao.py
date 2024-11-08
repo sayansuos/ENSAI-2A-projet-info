@@ -120,7 +120,7 @@ class UtilisateurDao(metaclass=Singleton):
                             pseudo=row["pseudo"],
                             mdp=row["mdp"],
                             mail=row["mail"],
-                            role_utilisateur=row["role_utilisateur"],
+                            role=row["role_utilisateur"],
                         )
                         liste_utilisateurs.append(utilisateur)
 
@@ -131,7 +131,7 @@ class UtilisateurDao(metaclass=Singleton):
         return liste_utilisateurs
 
     @log
-    def modifier_utilisateur(self, utilisateur) -> bool:
+    def modifier(self, utilisateur) -> bool:
         """Modification d'un utilisateur dans la base de données.
 
         Parameters
@@ -235,7 +235,7 @@ class UtilisateurDao(metaclass=Singleton):
                 pseudo=res["pseudo"],
                 mdp=res["mdp"],
                 mail=res["mail"],
-                role_utilisateur=res["role_utilisateur"],
+                role=res["role_utilisateur"],
             )
 
         return utilisateur
