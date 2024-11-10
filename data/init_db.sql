@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS projet.utilisateur CASCADE ;
 CREATE TABLE projet.utilisateur(
     id_utilisateur    SERIAL PRIMARY KEY,
     pseudo            VARCHAR,
-    mdp               VARCHAR(256),
+    mdp               VARCHAR,
     mail              VARCHAR,
     role_utilisateur  VARCHAR
 );

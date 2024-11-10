@@ -2,7 +2,7 @@ from business_object.utilisateur import Utilisateur
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
 
-from src.dao.liste_favoris_dao import ListeFavorisDao
+from dao.liste_favoris_dao import ListeFavorisDao
 
 
 class ListeFavorisService:
@@ -180,7 +180,7 @@ class ListeFavorisService:
             raise TypeError("utilisateur doit être une instance de Utilisateur")
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance de Ingredient")
-        if not isinstance(modif, str):
+        if not isinstance(modif, str) and modif is not None:
             raise TypeError("modif doit être une instance de str")
         if modif != "F" and modif != "ND" and modif is not None:
             raise TypeError("modif doit être 'F', 'ND' ou None.")
@@ -197,6 +197,7 @@ class ListeFavorisService:
                 ingredient=ingredient, utilisateur=utilisateur, modif=modif
             )
             modified = True
+
         if not ListeFavorisDao().est_dans_preference_ingredient(
             ingredient=ingredient, utilisateur=utilisateur
         ):

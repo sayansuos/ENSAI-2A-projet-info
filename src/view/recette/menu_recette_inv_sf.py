@@ -32,32 +32,45 @@ class MenuRecetteSf(VueAbstraite):
 
         if choix == "Retour":
             return RecettesVue()
+
         else:
-            choix_bis = inquirer.select(
-                message="Que voulez-vous faire ?",
-                choices=[
-                    "Lire la recette",
-                    "Voir les notes et les avis",
-                ],
-            ).execute()
+            autre_action = "Oui"
+            while autre_action == "Oui":
+                choix_bis = inquirer.select(
+                    message="Que voulez-vous faire ?",
+                    choices=[
+                        "Lire la recette",
+                        "Voir les notes et les avis",
+                    ],
+                ).execute()
 
-            match choix_bis:
-                case "Lire la recette":
-                    print(recette_service.lire_recette(choix), "\n\n")
-                    choix_bis_bis = inquirer.select(
-                        message="Consulter une autre recette ? ",
-                        choices=["Oui", "Non"],
-                    ).execute()
-                    if choix_bis_bis == "Non":
-                        return MenuInvVue()
+                match choix_bis:
+                    case "Lire la recette":
+                        print(recette_service.lire_recette(choix), "\n\n")
+                        autre_action = inquirer.select(
+                            message="Réaliser une autre action pour cette recette ?",
+                            choices=["Oui", "Non"],
+                        ).execute()
+                        if autre_action == "Non":
+                            choix_bis_bis = inquirer.select(
+                                message="Consulter une autre recette ? ",
+                                choices=["Oui", "Non"],
+                            ).execute()
+                            if choix_bis_bis == "Non":
+                                return MenuInvVue()
 
-                case "Voir les notes et les avis":
-                    print(recette_service.voir_note_avis(choix), "\n\n")
-                    choix_bis_bis = inquirer.select(
-                        message="Consulter une autre recette ? ",
-                        choices=["Oui", "Non"],
-                    ).execute()
-                    if choix_bis_bis == "Non":
-                        return MenuInvVue()
+                    case "Voir les notes et les avis":
+                        print(recette_service.voir_note_avis(choix), "\n\n")
+                        autre_action = inquirer.select(
+                            message="Réaliser une autre action pour cette recette ?",
+                            choices=["Oui", "Non"],
+                        ).execute()
+                        if autre_action == "Non":
+                            choix_bis_bis = inquirer.select(
+                                message="Consulter une autre recette ? ",
+                                choices=["Oui", "Non"],
+                            ).execute()
+                            if choix_bis_bis == "Non":
+                                return MenuInvVue()
 
         return RecettesVue()

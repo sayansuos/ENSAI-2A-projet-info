@@ -113,20 +113,20 @@ class UtilisateurDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute("SELECT * FROM utilisateur;")
                     res_utilisateurs = cursor.fetchall()
-
-                    for row in res_utilisateurs:
-                        utilisateur = Utilisateur(
-                            id_utilisateur=row["id_utilisateur"],
-                            pseudo=row["pseudo"],
-                            mdp=row["mdp"],
-                            mail=row["mail"],
-                            role=row["role_utilisateur"],
-                        )
-                        liste_utilisateurs.append(utilisateur)
-
         except Exception as e:
             logging.info(e)
             raise
+
+        if res_utilisateurs:
+            for row in res_utilisateurs:
+                utilisateur = Utilisateur(
+                    id_utilisateur=row["id_utilisateur"],
+                    pseudo=row["pseudo"],
+                    mdp=row["mdp"],
+                    mail=row["mail"],
+                    role=row["role_utilisateur"],
+                )
+                liste_utilisateurs.append(utilisateur)
 
         return liste_utilisateurs
 
@@ -159,7 +159,7 @@ class UtilisateurDao(metaclass=Singleton):
                             "pseudo": utilisateur.pseudo,
                             "mdp": utilisateur.mdp,
                             "mail": utilisateur.mail,
-                            "role_utilisateur": utilisateur.role_utilisateur,
+                            "role_utilisateur": utilisateur.role,
                             "id_utilisateur": utilisateur.id_utilisateur,
                         },
                     )

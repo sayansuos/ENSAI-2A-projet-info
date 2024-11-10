@@ -32,13 +32,13 @@ class ResetDatabase(metaclass=Singleton):
 
         create_schema = f"DROP SCHEMA IF EXISTS {schema} CASCADE; CREATE SCHEMA {schema};"
 
-        pop_db = open("data/pop_db.sql", encoding="utf-8")
-        pop_db_as_string = pop_db.read()
-        pop_db.close()
-
         init_db = open("data/init_db.sql", encoding="utf-8")
         init_db_as_string = init_db.read()
         init_db.close()
+
+        pop_db = open("data/pop_db.sql", encoding="utf-8")
+        pop_db_as_string = pop_db.read()
+        pop_db.close()
 
         try:
             with DBConnection().connection as connection:
@@ -54,8 +54,6 @@ class ResetDatabase(metaclass=Singleton):
         utilisateur_service = UtilisateurService()
         for u in utilisateur_service.lister_tous(inclure_mdp=True):
             utilisateur_service.modifier(u)
-
-        return True
 
         FillDataBase().fill_ingredient()
         FillDataBase().fill_recette()

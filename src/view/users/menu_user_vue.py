@@ -20,6 +20,10 @@ class MenuUserVue(VueAbstraite):
         retourne la prochaine vue, celle qui est choisie par l'utilisateur
     """
 
+    def __init__(self, message, utilisateur):
+        super().__init__(message)
+        self.utilisateur = utilisateur
+
     def choisir_menu(self):
         """Choix du menu suivant de l'utilisateur
 
@@ -34,12 +38,12 @@ class MenuUserVue(VueAbstraite):
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter les recettes", #done
-                "Consulter les suggestions", #done
-                "Consulter les favoris", #done
-                "Consulter les ingrédients",#done
-                "Consulter le panier",#done
-                "Se déconnecter", #done
+                "Consulter les recettes",  # done
+                "Consulter les suggestions",  # done
+                "Consulter les favoris",  # done
+                "Consulter les préférences ingrédients",  # done
+                "Consulter le panier",  # done
+                "Se déconnecter",  # done
             ],
         ).execute()
 
@@ -49,7 +53,7 @@ class MenuUserVue(VueAbstraite):
                 from view.accueil.accueil_vue import AccueilVue
 
                 return AccueilVue()
-            
+
             case "Consulter les recettes":
                 from view.recettes.recettes_vue_user import RecettesVue
 
@@ -58,7 +62,7 @@ class MenuUserVue(VueAbstraite):
             case "Consulter les suggestions":
 
                 return voir_suggestions()
-            
+
             case "Consulter les favoris":
 
                 return voir_favoris()
@@ -66,9 +70,8 @@ class MenuUserVue(VueAbstraite):
             case "Consulter le panier":
 
                 return voir_liste_course()
-            
-            case "Voir les ingrédients":
+
+            case "Consulter les préférences ingrédients":
                 from view.ingredients.ingredients_vue import IngredientsVue
 
-                return IngredientsVue()
-                
+                return IngredientsVue(message=self.message, utilisateur=self.utilisateur)

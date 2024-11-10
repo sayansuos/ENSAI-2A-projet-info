@@ -1,8 +1,12 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
+from view.users.menu_user_vue import MenuUserVue
+from view.recettes.recettes_vue_user import RecettesVue
+
 from service.recette_service import RecetteService
 from service.liste_favoris_service import ListeFavorisService
+
 lfs = ListeFavorisService()
 
 
@@ -14,56 +18,83 @@ class MenuRecetteSf(VueAbstraite):
 
     def choisir_menu(self):
         recette_service = RecetteService()
+        recettes = recette_service.lister_toutes_recettes()
 
-        liste_recettes = recette_service.lister_toutes_recettes()
-        liste_recettes.append("Retour")
+        choix = "-> Page suivante"
+        i = 0
 
-        choix = inquirer.select(
-            message="Choisissez une recette : ",
-            choices=liste_recettes,
-        ).execute()
-
-        if choix == "Retour":
-            from view.recettes.recettes_vue_user import RecettesVue
-
-            return RecettesVue()
-        else:
-            choix_bis = inquirer.select(
-                message="Que voulez-vous faire ?",
-                choices=[
-                    "Lire la recette",
-                    "Voir les notes et les avis",
-                    "Noter et laisser un commentaire",
-                    "Ajouter dans les favoris",
-                    "Supprimer des favoris",
-                    "Ajouter les ingrédients au panier",
-                ],
+        while choix == "-> Page suivante":
+            i += 10
+            liste_recettes = recettes[i - 10 : i]
+            liste_recettes.append("-> Page suivante")
+            liste_recettes.append("Retour")
+            choix = inquirer.select(
+                message="Choisissez une recette : ",
+                choices=liste_recettes,
             ).execute()
 
-            match choix_bis:
-                case "Lire la recette":
+        if choix == "Retour":
+            return RecettesVue()
 
-                    return recette_service.voir_recette(choix)
-                
-                case "Voir les notes et les avis":
+        else:
+            autre_action = "Oui"
+            while autre_action == "Oui":
+                choix_bis = inquirer.select(
+                    message="Que voulez-vous faire ?",
+                    choices=[
+                        "Lire la recette",
+                        "Voir les notes et les avis",
+                        "Noter et laisser un commentaire",
+                        "Ajouter dans les favoris",
+                        "Supprimer des favoris",
+                        "Ajouter les ingrédients au panier",
+                    ],
+                ).execute()
 
-                    return recette_service.voir_note_avis(choix)
-                
-                case "Noter et laisser un commentaire":
+                match choix_bis:
+                    case "Lire la recette":
+                        print(recette_service.lire_recette(choix), "\n\n")
+                        autre_action = inquirer.select(
+                            message="Réaliser une autre action pour cette recette ?",
+                            choices=["Oui", "Non"],
+                        ).execute()
+                        if autre_action == "Non":
+                            choix_bis_bis = inquirer.select(
+                                message="Consulter une autre recette ? ",
+                                choices=["Oui", "Non"],
+                            ).execute()
+                            if choix_bis_bis == "Non":
+                                return MenuUserVue()
 
-                    pass
+                    case "Voir les notes et les avis":
+                        print(recette_service.voir_note_avis(choix), "\n\n")
+                        autre_action = inquirer.select(
+                            message="Réaliser une autre action pour cette recette ?",
+                            choices=["Oui", "Non"],
+                        ).execute()
+                        if autre_action == "Non":
+                            choix_bis_bis = inquirer.select(
+                                message="Consulter une autre recette ? ",
+                                choices=["Oui", "Non"],
+                            ).execute()
+                            if choix_bis_bis == "Non":
+                                return MenuUserVue()
 
-                case "Ajouter dans les favoris":
+                    case "Noter et laisser un commentaire":
 
-                    return lfs.ajouter_favoris(choix)
-                
-                case "Supprimer des favoris":
+                        pass
 
-                    return lfs.supprimer_favoris(choix)
-                
-                case "Ajouter les ingredients au panier":
-                    ingr = recette_service.ingredients_recette(choix)
+                    case "Ajouter dans les favoris":
 
-                    return lfs.ajouter_ingredient_course(ingr)
+                        return lfs.ajouter_favoris(choix)
 
-        return MenuRecetteSf()
+                    case "Supprimer des favoris":
+
+                        return lfs.supprimer_favoris(choix)
+
+                    case "Ajouter les ingredients au panier":
+                        ingr = recette_service.ingredients_recette(choix)
+
+                        return lfs.ajouter_ingredient_course(ingr)
+
+        return RecettesVue()

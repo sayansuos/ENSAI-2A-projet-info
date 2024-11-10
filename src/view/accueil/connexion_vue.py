@@ -15,7 +15,7 @@ class ConnexionVue(VueAbstraite):
         mdp = inquirer.secret(message="Entrez votre mot de passe :").execute()
 
         # Appel du service pour trouver l'utilisateur
-        utilisateur, role = UtilisateurService().connecter(pseudo, mdp)
+        utilisateur = UtilisateurService().connecter(pseudo, mdp)
 
         # Si l'utilisateur a été trouvé à partir des ses identifiants de connexion
         if utilisateur:
@@ -24,18 +24,16 @@ class ConnexionVue(VueAbstraite):
             # Sauvegarder la session
             Session().connexion(utilisateur)
 
-            if role == "admin":
-                from view.menu_admin_vue import (
-                    MenuAdminVue,
-                )  # Afficher un menu spécifique pour l'admin
+            if utilisateur.role == "admin":
+                # Afficher un menu spécifique pour l'admin
+                from view.users.menu_admin_vue import MenuAdminVue
 
-                return MenuAdminVue(message)
+                return MenuAdminVue(message, utilisateur=utilisateur)
             else:
-                from view.menu_user_vue import (
-                    MenuUserVue,
-                )  # Afficher un menu pour un utilisateur normal
+                # Afficher un menu pour un utilisateur normal
+                from view.users.menu_user_vue import MenuUserVue
 
-                return MenuUserVue(message)
+                return MenuUserVue(message, utilisateur=utilisateur)
 
         # En cas d'erreur de connexion
         message = "Erreur de connexion (pseudo ou mot de passe invalide)"
