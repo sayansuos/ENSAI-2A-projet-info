@@ -86,7 +86,7 @@ class RecetteService:
                 Retourne la recette si elle a été correctement ajoutée à la base de données
                 None sinon
         """
-        return recette if RecetteDao().creer(recette) is False else None
+        return recette if RecetteDao().creer(recette) is True else None
 
     def supprimer_recette(self, recette: Recette) -> bool:
         """
@@ -151,9 +151,9 @@ class RecetteService:
         if not isinstance(com, str):
             raise TypeError("com doit être une instance de str.")
         if note < 0 and note > 5:
-            raise TypeError("La note doit être comprise entre 0 et 5.")
+            raise ValueError("La note doit être comprise entre 0 et 5.")
         if ";" in com:
-            raise TypeError("';' ne peut pas être utilisé dans le commentaire.")
+            raise ValueError("';' ne peut pas être utilisé dans le commentaire.")
 
         return RecetteDao().ajouter_note_et_com(recette=recette, note=note, com=com)
 
