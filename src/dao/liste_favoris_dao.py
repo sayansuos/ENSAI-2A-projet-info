@@ -20,6 +20,42 @@ class ListeFavorisDao(metaclass=Singleton):
     """
 
     @log
+    def est_dans_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
+        """
+        Vérifie si les ingrédients d'une recette sont dans la liste des favoris.
+
+        Args :
+            recette (Recette) : recette dont on souhaite vérifier les ingrédients
+            utilisateur (Utilisateur) : utilisateur à qui appartient la liste de course
+
+        Returns:
+            bool: True si les ingrédients sont dans la liste de course, False sinon
+        """
+        res = None
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT *                                  "
+                        "  FROM recette_favorite                   "
+                        " WHERE id_utilisateur=%(id_utilisateur)s; ",
+                        {"id_utilisateur": utilisateur.id_utilisateur},
+                    )
+                    res = cursor.fetchall()
+        except Exception as e:
+            logging.info(e)
+            raise
+
+        est_dans_favoris = False
+
+        for row in res:
+            if recette.id_recette == row["id_recette"]:
+                est_dans_favoris = True
+
+        return est_dans_favoris
+
+    @log
     def consulter_favoris(utilisateur: Utilisateur) -> list[Recette]:
         """
         Renvoie la liste des recettes favorites de l'utilisateur.
@@ -86,8 +122,8 @@ class ListeFavorisDao(metaclass=Singleton):
             logging.info(e)
 
         added = False
+
         if res:
-            recette.id_recette = res["id_recette"]
             added = True
 
         return added
@@ -230,7 +266,6 @@ class ListeFavorisDao(metaclass=Singleton):
         added = False
 
         if res:
-            recette.id_recette = res["id_recette"]
             added = True
 
         return added
@@ -269,7 +304,7 @@ class ListeFavorisDao(metaclass=Singleton):
         return res > 0
 
     @log
-    def consulter_preference_ingredient(self, utilisateur: Utilisateur) -> list[Ingredient]:
+    def consulter_preference_ingredient_favori(self, utilisateur: Utilisateur) -> list[Ingredient]:
         """
         Renvoie les préférences pour les ingrédients de l'utilisateur.
 
@@ -278,7 +313,6 @@ class ListeFavorisDao(metaclass=Singleton):
 
         Returns:
             liste_ingredients_favoris : liste des ingrédients favoris de l'utilisateur
-            liste_ingredients_non_desires : liste des ingrédients non-désirés de l'utilisateur
         """
         res = None
 
@@ -297,19 +331,50 @@ class ListeFavorisDao(metaclass=Singleton):
             raise
 
         liste_ingredients_favoris = []
-        liste_ingredients_non_desires = []
         if res:
             for row in res:
                 if row["favori"] is True:
                     id_ingredient = row["id_ingredient"]
-                    liste_ingredients_favoris.append(IngredientDao.trouver_par_id(id_ingredient))
+                    liste_ingredients_favoris.append(IngredientDao().trouver_par_id(id_ingredient))
+        return liste_ingredients_favoris
+
+    @log
+    def consulter_preference_ingredient_non_desire(
+        self, utilisateur: Utilisateur
+    ) -> list[Ingredient]:
+        """
+        Renvoie les préférences pour les ingrédients de l'utilisateur.
+
+        Args :
+            utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les préférences
+
+        Returns:
+            liste_ingredients_favoris : liste des ingrédients favoris de l'utilisateur
+        """
+        res = None
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT *                                  "
+                        "  FROM preference_ingredient              "
+                        " WHERE id_utilisateur=%(id_utilisateur)s; ",
+                        {"id_utilisateur": utilisateur.id_utilisateur},
+                    )
+                    res = cursor.fetchall()
+        except Exception as e:
+            logging.info(e)
+            raise
+
+        liste_ingredients_non_desires = []
+        if res:
+            for row in res:
                 if row["non_desire"] is True:
                     id_ingredient = row["id_ingredient"]
-                    liste_ingredients_non_desires.append(
-                        IngredientDao.trouver_par_id(id_ingredient)
-                    )
-
-        return liste_ingredients_favoris, liste_ingredients_non_desires
+                    ingredient = IngredientDao().trouver_par_id(id_ingredient)
+                    liste_ingredients_non_desires.append(ingredient)
+        return liste_ingredients_non_desires
 
     @log
     def est_dans_preference_ingredient(
@@ -337,6 +402,7 @@ class ListeFavorisDao(metaclass=Singleton):
                         {"id_utilisateur": utilisateur.id_utilisateur},
                     )
                     res = cursor.fetchall()
+                    print(res)
         except Exception as e:
             logging.info(e)
             raise
@@ -344,7 +410,7 @@ class ListeFavorisDao(metaclass=Singleton):
         est_dans_preference_ingredient = False
 
         for row in res:
-            if ingredient.id_recette == row["id_ingredient"]:
+            if ingredient.id_ingredient == row["id_ingredient"]:
                 est_dans_preference_ingredient = True
 
         return est_dans_preference_ingredient
@@ -365,13 +431,15 @@ class ListeFavorisDao(metaclass=Singleton):
         """
         res = None
 
-        raw_non_desire = False
-        raw_favori = False
-
         if modif == "F":
+            raw_non_desire = False
             raw_favori = True
-        if modif == "ND":
+        elif modif == "ND":
             raw_non_desire = True
+            raw_favori = False
+        else:
+            raw_non_desire = False
+            raw_favori = False
 
         try:
             with DBConnection().connection as connection:
@@ -418,8 +486,8 @@ class ListeFavorisDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "DELETE FROM projet.preference_ingredient            "
-                        " WHERE id_utilisateur = %(id_utilisateur)s "
+                        "DELETE FROM projet.preference_ingredient         "
+                        " WHERE id_utilisateur = %(id_utilisateur)s       "
                         "   AND id_ingredient = %(id_ingredient)s         ",
                         {
                             "id_ingredient": ingredient.id_ingredient,

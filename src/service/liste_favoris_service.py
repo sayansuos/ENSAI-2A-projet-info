@@ -29,7 +29,7 @@ class ListeFavorisService:
 
     def ajouter_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
-        Ajoute un ingrédient à la liste des favoris.
+        Ajoute une recette à la liste des favoris.
 
         Args :
             recette (Recette) : recette à ajouter à la liste
@@ -46,7 +46,7 @@ class ListeFavorisService:
 
         added = False
 
-        if recette not in utilisateur.recette_favorite:
+        if not ListeFavorisDao().est_dans_favoris(recette=recette, utilisateur=utilisateur):
             ListeFavorisDao().ajouter_favoris(recette=recette, utilisateur=utilisateur)
             added = True
 
@@ -70,7 +70,7 @@ class ListeFavorisService:
 
         deleted = False
 
-        if recette in utilisateur.recette_favorite:
+        if ListeFavorisDao().est_dans_favoris(recette=recette, utilisateur=utilisateur):
             ListeFavorisDao().retirer_favoris(recette=recette, utilisateur=utilisateur)
             deleted = True
 
@@ -141,9 +141,9 @@ class ListeFavorisService:
 
         return deleted
 
-    def consulter_preference_ingredient(self, utilisateur: Utilisateur) -> list[Ingredient]:
+    def consulter_preference_ingredient_favori(self, utilisateur: Utilisateur) -> list[Ingredient]:
         """
-        Liste les ingrédients favoris et les ingrédients non désirés de l'utilisateur
+        Liste les ingrédients favoris de l'utilisateur
 
         Args :
             utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les préférences
@@ -155,11 +155,46 @@ class ListeFavorisService:
         if not isinstance(utilisateur, Utilisateur):
             raise TypeError("utilisateur doit être une instance de Utilisateur")
 
-        liste_ingredients_favoris, liste_ingredients_non_desires = (
-            ListeFavorisDao().consulter_preference_ingredient(utilisateur=utilisateur)
-        )
+        fav = ListeFavorisDao().consulter_preference_ingredient_favori(utilisateur=utilisateur)
+        utilisateur.ingredient_favori = fav
+        if len(fav) > 0:
+            pref_str = f"Ingrédients favoris de {utilisateur.pseudo} : \n\n"
+            for ingr in fav:
+                pref_str += f"- {ingr} \n"
+            pref_str += "\n\n"
+        else:
+            pref_str = "Il n'y aucun ingrédient favori. \n\n"
+        return pref_str
 
-        return liste_ingredients_favoris, liste_ingredients_non_desires
+        return ListeFavorisDao().consulter_preference_ingredient_favori(utilisateur=utilisateur)
+
+    def consulter_preference_ingredient_non_desire(
+        self, utilisateur: Utilisateur
+    ) -> list[Ingredient]:
+        """
+        Liste les ingrédients non désirés de l'utilisateur
+
+        Args :
+            utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les préférences
+
+        Returns:
+            liste_ingredients_non_desires : liste des ingrédients non-désirés de l'utilisateur
+        """
+        if not isinstance(utilisateur, Utilisateur):
+            raise TypeError("utilisateur doit être une instance de Utilisateur")
+
+        non_desires = ListeFavorisDao().consulter_preference_ingredient_non_desire(
+            utilisateur=utilisateur
+        )
+        utilisateur.ingredient_non_desire = non_desires
+        if len(non_desires) > 0:
+            pref_str = f"Ingrédients non-désirés de {utilisateur.pseudo} : \n\n"
+            for ingr in non_desires:
+                pref_str += f"- {ingr} \n"
+            pref_str += "\n\n"
+        else:
+            pref_str = "Il n'y aucun ingrédient non-désiré. \n\n"
+        return pref_str
 
     def modifier_preference_ingredient(
         self, ingredient: Ingredient, utilisateur: Utilisateur, modif: str
@@ -207,3 +242,34 @@ class ListeFavorisService:
             modified = True
 
         return modified
+
+    def retirer_preference_ingredient(
+        self, ingredient: Ingredient, utilisateur: Utilisateur
+    ) -> bool:
+        """
+        Retire un ingrédient à la liste des préférences
+
+        Args :
+            ingredient (Ingredient) : ingredient qu'on souhaite retirer des préférences
+            utilisateur (Utilisateur) : utilisateur à qui on modifie la liste de course
+
+        Returns:
+            bool: True si l'ingrédients a bien été retiré à la table, False sinon
+        """
+
+        if not isinstance(utilisateur, Utilisateur):
+            raise TypeError("utilisateur doit être une instance de Utilisateur")
+        if not isinstance(ingredient, Ingredient):
+            raise TypeError("ingredient doit être une instance de Ingredient")
+
+        deleted = False
+
+        if ListeFavorisDao().est_dans_preference_ingredient(
+            ingredient=ingredient, utilisateur=utilisateur
+        ):
+            ListeFavorisDao().retirer_preference_ingredient(
+                ingredient=ingredient, utilisateur=utilisateur
+            )
+            deleted = True
+
+        return deleted

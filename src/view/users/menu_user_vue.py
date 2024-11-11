@@ -4,6 +4,7 @@ from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
 from service.utilisateur_service import UtilisateurService
+from service.liste_favoris_service import ListeFavorisService
 
 
 class MenuUserVue(VueAbstraite):
@@ -57,15 +58,14 @@ class MenuUserVue(VueAbstraite):
             case "Consulter les recettes":
                 from view.recettes.recettes_vue_user import RecettesVue
 
-                return RecettesVue()
+                return RecettesVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les suggestions":
 
                 return voir_suggestions()
 
             case "Consulter les favoris":
-
-                return voir_favoris()
+                pass
 
             case "Consulter le panier":
 

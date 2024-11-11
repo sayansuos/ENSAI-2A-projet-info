@@ -6,6 +6,10 @@ from view.vue_abstraite import VueAbstraite
 class RecettesVue(VueAbstraite):
     """Vue d'accueil de l'application"""
 
+    def __init__(self, message, utilisateur):
+        super().__init__(message)
+        self.utilisateur = utilisateur
+
     def choisir_menu(self):
         """Choix du menu suivant
 
@@ -28,18 +32,16 @@ class RecettesVue(VueAbstraite):
 
         match choix:
             case "Consulter toutes les recettes":
-                print("abc")
                 from view.recette.menu_recette_user_sf import MenuRecetteSf
 
-                print("abc")
-                return MenuRecetteSf()
+                return MenuRecetteSf(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les recettes par ingrédient":
                 from view.recette.menu_recette_user_af import MenuRecetteAf
 
-                return MenuRecetteAf()
+                return MenuRecetteAf(message=self.message, utilisateur=self.utilisateur)
 
             case "Retour":
                 from view.users.menu_user_vue import MenuUserVue
 
-                return MenuUserVue()
+                return MenuUserVue(message=self.message, utilisateur=self.utilisateur)

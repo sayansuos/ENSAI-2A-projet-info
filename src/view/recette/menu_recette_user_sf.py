@@ -4,10 +4,10 @@ from view.vue_abstraite import VueAbstraite
 from view.users.menu_user_vue import MenuUserVue
 from view.recettes.recettes_vue_user import RecettesVue
 
+from business_object.recette import Recette
+
 from service.recette_service import RecetteService
 from service.liste_favoris_service import ListeFavorisService
-
-lfs = ListeFavorisService()
 
 
 class MenuRecetteSf(VueAbstraite):
@@ -15,6 +15,10 @@ class MenuRecetteSf(VueAbstraite):
     - toutes les recettes dispo
     - les options
     """
+
+    def __init__(self, message, utilisateur):
+        super().__init__(message)
+        self.utilisateur = utilisateur
 
     def choisir_menu(self):
         recette_service = RecetteService()
@@ -54,47 +58,58 @@ class MenuRecetteSf(VueAbstraite):
                 match choix_bis:
                     case "Lire la recette":
                         print(recette_service.lire_recette(choix), "\n\n")
-                        autre_action = inquirer.select(
-                            message="Réaliser une autre action pour cette recette ?",
-                            choices=["Oui", "Non"],
-                        ).execute()
-                        if autre_action == "Non":
-                            choix_bis_bis = inquirer.select(
-                                message="Consulter une autre recette ? ",
-                                choices=["Oui", "Non"],
-                            ).execute()
-                            if choix_bis_bis == "Non":
-                                return MenuUserVue()
 
                     case "Voir les notes et les avis":
                         print(recette_service.voir_note_avis(choix), "\n\n")
-                        autre_action = inquirer.select(
-                            message="Réaliser une autre action pour cette recette ?",
-                            choices=["Oui", "Non"],
-                        ).execute()
-                        if autre_action == "Non":
-                            choix_bis_bis = inquirer.select(
-                                message="Consulter une autre recette ? ",
-                                choices=["Oui", "Non"],
-                            ).execute()
-                            if choix_bis_bis == "Non":
-                                return MenuUserVue()
 
                     case "Noter et laisser un commentaire":
-
-                        pass
+                        note = inquirer.select(
+                            message="Quelle note attribuez-vous à cette recette ?",
+                            choices=[
+                                "0/5",
+                                "1/5",
+                                "2/5",
+                                "3/5",
+                                "4/5",
+                                "5/5",
+                            ],
+                        ).execute()
+                        note = int(note[0])
+                        com = inquirer.text(
+                            message="Laissez un commentaire ! (pas de ';')\n"
+                        ).execute()
+                        recette_service.ajouter_note_et_com(recette=choix, note=note, com=com)
+                        choix = recette_service.trouver_recette_par_id(choix.id_recette)
+                        print("\n\nC'est fait !!!\n\n")
 
                     case "Ajouter dans les favoris":
-
-                        return lfs.ajouter_favoris(choix)
+                        ListeFavorisService().ajouter_favoris(
+                            recette=choix, utilisateur=self.utilisateur
+                        )
+                        print("\n\nC'est fait !!!\n\n")
 
                     case "Supprimer des favoris":
-
-                        return lfs.supprimer_favoris(choix)
+                        ListeFavorisService().retirer_favoris(
+                            recette=choix, utilisateur=self.utilisateur
+                        )
+                        print("\n\nC'est fait !!!\n\n")
 
                     case "Ajouter les ingredients au panier":
-                        ingr = recette_service.ingredients_recette(choix)
+                        ListeFavorisService().ajouter_liste_course(
+                            recette=choix, utilisateur=self.utilisateur
+                        )
+                        print("\n\nC'est fait !!!\n\n")
 
-                        return lfs.ajouter_ingredient_course(ingr)
+                autre_action = inquirer.select(
+                    message="Réaliser une autre action pour cette recette ?",
+                    choices=["Oui", "Non"],
+                ).execute()
+                if autre_action == "Non":
+                    choix_bis_bis = inquirer.select(
+                        message="Consulter une autre recette ? ",
+                        choices=["Oui", "Non"],
+                    ).execute()
+                    if choix_bis_bis == "Non":
+                        return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
-        return RecettesVue()
+        return RecettesVue(message=self.message, utilisateur=self.utilisateur)

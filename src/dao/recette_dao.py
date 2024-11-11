@@ -293,6 +293,59 @@ class RecetteDao(metaclass=Singleton):
 
         return res > 0
 
+    @log
+    def ajouter_note_et_com(self, recette: Recette, note: int, com: str) -> bool:
+        """
+        Ajoute une note et un commentaire à une recette.
+
+        Args :
+            recette (Recette) : recette dont les ingrédients sont  à ajouter à la table
+            note (int) : Note attribuée à la recette
+            com (str) : Commentaire attribué à la recette
+
+        Returns:
+            bool: True si la note et le commentaires ont été ajouté à la table, False sinon
+        """
+        res = None
+
+        avis = ""
+
+        for msg in recette.avis:
+            avis += f"{msg} ;"
+        avis += com
+        raw_note = recette.note
+        nb_note = len(recette.avis)
+
+        if recette.note is None:
+            raw_note = 0
+            nb_note = 0
+            avis = com
+
+        try:
+            with DBConnection().connection as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        " UPDATE recette                            "
+                        "    SET avis = %(avis)s, note = %(note)s   "
+                        "  WHERE id_recette = %(id_recette)s        "
+                        " RETURNING id_recette                      ",
+                        {
+                            "avis": avis,
+                            "note": (raw_note * nb_note + note) / (nb_note + 1),
+                            "id_recette": recette.id_recette,
+                        },
+                    )
+                    res = cursor.fetchone()
+        except Exception as e:
+            logging.info(e)
+
+        added = False
+
+        if res:
+            added = True
+
+        return added
+
 
 if __name__ == "__main__":
     load_dotenv()

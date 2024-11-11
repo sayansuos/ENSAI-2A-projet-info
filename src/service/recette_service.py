@@ -12,6 +12,21 @@ class RecetteService:
     def __init__(self):
         pass
 
+    def trouver_recette_par_id(self, id: int) -> Optional[Recette]:
+        """
+        Permet de trouver une recette par identifiant
+
+        Args:
+            id (int):
+                Identifiant de la recette recherchée
+
+        Returns:
+            Optional[Recette]:
+                Retourne la recette correspondant à l'identifiant.
+                Retourne None sinon
+        """
+        return RecetteDao().trouver_par_id(id)
+
     def trouver_recette_par_nom(self, nom: str) -> Optional[Recette]:
         """
         Permet de trouver une recette en indiquant le nom de celle-ci
@@ -27,9 +42,7 @@ class RecetteService:
         """
         if not isinstance(nom, str):
             raise TypeError("nom doit être une instance de str")
-
-        pass
-        # return RecetteDao.trouver_par_nom(nom)
+        return RecetteDao().trouver_par_nom(nom)
 
     def trouver_recette_par_ingredient(self, ingredient: Ingredient) -> List[Recette]:
         """
@@ -47,7 +60,6 @@ class RecetteService:
 
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance de Ingredient")
-
         return RecetteDao().trouver_par_ingredient(ingredient)
 
     def lister_toutes_recettes(self) -> List[Recette]:
@@ -58,52 +70,7 @@ class RecetteService:
             list[Recette]:
                 Liste de toutes les recettes existantes
         """
-
         return RecetteDao().lister_tous()
-
-    def noter_recette(self, note: float, recette: Recette):
-        """
-        Permet de noter une recette de 0 à 5.
-
-        Args:
-            note (float):
-                Note donnée à la recette. Les notes vont de 0 à 5, avec un pas de 0.5
-        """
-
-        if not (isinstance(note, float) or isinstance(note, int)):
-            raise TypeError("La note doit être un nombre compris entre 0 et 5.")
-        if note < 0 or note > 5:
-            raise ValueError("La note doit être comprise entre 0 et 5.")
-        if not isinstance(recette, Recette):
-            raise TypeError("La recette doit être une instance de Recette.")
-
-        # super.note = super.note * (nb_notes / (nb_notes + 1)) + note / (nb_notes + 1)
-        # nb_notes += 1
-        pass
-
-    def commenter_recette(self, commentaire: str, recette: Recette):
-        """
-        Permet de commenter une recette
-
-        Args:
-            commentaire (str):
-                Avis donné sur la recette
-            recette (Recette):
-                Recette que l'on veut commenter
-
-        Raises:
-            TypeError:
-                Retournée si le commentaire n'est pas un str
-            TypeError:
-                Retournée si la recette n'est pas une instance de Recette
-        """
-
-        if not isinstance(commentaire, str):
-            raise TypeError("Le commentaire doit être une chaîne de caractères")
-        if not isinstance(recette, Recette):
-            raise TypeError("La recette doit être une instance de Recette")
-
-        pass
 
     def creer_recette(self, recette: Recette) -> Optional[Recette]:
         """
@@ -118,7 +85,6 @@ class RecetteService:
                 Retourne la recette si elle a été correctement ajoutée à la base de données
                 None sinon
         """
-
         return recette if RecetteDao().creer(recette) is False else None
 
     def supprimer_recette(self, recette: Recette) -> bool:
@@ -134,24 +100,7 @@ class RecetteService:
                 True si la recette a été correctement supprimée.
                 False sinon.
         """
-
         return RecetteDao().supprimer(recette)
-
-    def trouver_recette_par_id(self, id: int) -> Optional[Recette]:
-        """
-        Permet de trouver une recette par identifiant
-
-        Args:
-            id (int):
-                Identifiant de la recette recherchée
-
-        Returns:
-            Optional[Recette]:
-                Retourne la recette correspondant à l'identifiant.
-                Retourne None sinon
-        """
-
-        return RecetteDao().trouver_par_id(id)
 
     def voir_note_avis(self, recette: Recette) -> Optional[float]:
         """
@@ -165,23 +114,47 @@ class RecetteService:
                 Note de la recette si la recette a été notée au moins une fois.
                 None sinon.
         """
-
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
 
         note_avis_str = "\n\n" + str(recette) + "\n\n" + "Avis :"
-        if len(recette.avis) > 1:
+        if recette.avis[0] != "":
             note_avis_str += "\n"
             for av in recette.avis:
                 note_avis_str += f"- {av} \n"
         else:
             note_avis_str += " Il n'y a aucun avis pour cette recette. \n"
         if recette.note:
-            note_avis_str += f"\nNote : {recette.note}/5"
+            note_avis_str += f"\nNote : {round(recette.note, 2)}/5"
         else:
             note_avis_str += "\nNote : Il n'y a aucune note pour cette recette."
 
         return note_avis_str
+
+    def ajouter_note_et_com(self, recette: Recette, note: int, com: str) -> bool:
+        """
+        Ajoute une note et un commentaire à une recette.
+
+        Args :
+            recette (Recette) : recette dont les ingrédients sont  à ajouter à la table
+            note (int) : Note attribuée à la recette
+            com (str) : Commentaire attribué à la recette
+
+        Returns:
+            bool: True si la note et le commentaires ont été ajouté à la table, False sinon
+        """
+        if not isinstance(recette, Recette):
+            raise TypeError("recette doit être une instance de Recette.")
+        if not isinstance(note, int):
+            raise TypeError("note doit être une instance de int.")
+        if not isinstance(com, str):
+            raise TypeError("com doit être une instance de str.")
+        if note < 0 and note > 5:
+            raise TypeError("La note doit être comprise entre 0 et 5.")
+        if ";" in com:
+            raise TypeError("';' ne peut pas être utilisé dans le commentaire.")
+
+        return RecetteDao().ajouter_note_et_com(recette=recette, note=note, com=com)
 
     def lire_recette(self, recette: Recette) -> str:
         """

@@ -1,6 +1,5 @@
 import logging
-
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 from utils.singleton import Singleton
 from utils.log_decorator import log
@@ -161,7 +160,7 @@ class IngredientDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "SELECT *                              "
-                        "  FROM projet.ingredient;                    "
+                        "  FROM projet.ingredient;             "
                     )
                     res = cursor.fetchall()
         except Exception as e:
@@ -175,7 +174,10 @@ class IngredientDao(metaclass=Singleton):
                 ingredient = Ingredient(
                     id_ingredient=row["id_ingredient"], nom_ingredient=row["nom_ingredient"]
                 )
-
                 liste_ingredients.append(ingredient)
-
         return liste_ingredients
+
+
+if __name__ == "__main__":
+    load_dotenv()
+    print(IngredientDao().trouver_par_id(id_ingredient=1))

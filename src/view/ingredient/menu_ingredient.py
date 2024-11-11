@@ -7,8 +7,6 @@ from view.vue_abstraite import VueAbstraite
 from service.ingredient_service import IngredientService
 from service.liste_favoris_service import ListeFavorisService
 
-lfs = ListeFavorisService()
-
 
 class MenuIngredient(VueAbstraite):
     """
@@ -57,26 +55,22 @@ class MenuIngredient(VueAbstraite):
 
             match choix_bis:
                 case "Ajouter l'ingrédient aux favoris":
-
-                    lfs.modifier_preference_ingredient(
+                    ListeFavorisService().modifier_preference_ingredient(
                         ingredient=choix, utilisateur=self.utilisateur, modif="F"
                     )
 
                 case "Retirer l'ingrédient des favoris":
-
-                    lfs.modifier_preference_ingredient(
+                    ListeFavorisService().modifier_preference_ingredient(
                         ingredient=choix, utilisateur=self.utilisateur, modif=None
                     )
 
-                case "Ajouter l'ingredient aux non-désirés":
-
-                    lfs.modifier_preference_ingredient(
+                case "Ajouter l'ingrédient aux non-désirés":
+                    ListeFavorisService().modifier_preference_ingredient(
                         ingredient=choix, utilisateur=self.utilisateur, modif="ND"
                     )
 
-                case "Retirer l'ingredient des non-désirés":
-
-                    lfs.modifier_preference_ingredient(
+                case "Retirer l'ingrédient des non-désirés":
+                    ListeFavorisService().modifier_preference_ingredient(
                         ingredient=choix, utilisateur=self.utilisateur, modif=None
                     )
 

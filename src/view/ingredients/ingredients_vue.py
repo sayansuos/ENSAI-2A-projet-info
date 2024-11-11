@@ -1,9 +1,7 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from service.utilisateur_service import UtilisateurService
-
-print("abc")
+from service.liste_favoris_service import ListeFavorisService
 
 
 class IngredientsVue(VueAbstraite):
@@ -41,16 +39,22 @@ class IngredientsVue(VueAbstraite):
                 return MenuIngredient(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les ingrédients favoris":
-
-                print(self.utilisateur.ingredient_favori)
+                print(
+                    ListeFavorisService().consulter_preference_ingredient_favori(
+                        utilisateur=self.utilisateur
+                    )
+                )
                 return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les ingrédients non-désirés":
-
-                print(self.utilisateur.ingredient_non_desire)
+                print(
+                    ListeFavorisService().consulter_preference_ingredient_non_desire(
+                        utilisateur=self.utilisateur
+                    )
+                )
                 return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Retour":
                 from view.users.menu_user_vue import MenuUserVue
 
-                return MenuUserVue()
+                return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
