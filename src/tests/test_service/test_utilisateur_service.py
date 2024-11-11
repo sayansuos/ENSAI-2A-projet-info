@@ -1,4 +1,5 @@
 from unittest.mock import MagicMock
+from unittest.mock import patch
 import pytest
 from service.utilisateur_service import UtilisateurService
 from dao.utilisateur_dao import UtilisateurDao
@@ -329,10 +330,9 @@ def test_connecter_ok():
     # GIVEN
     pseudo, mdp = "lea", "000000"
     utilisateur_mock = Utilisateur(pseudo=pseudo, mail="lea@mail.fr", mdp=mdp)
-    UtilisateurDao().connecter = MagicMock(return_value=utilisateur_mock)
 
-    # WHEN
-    utilisateur = UtilisateurService().connecter(pseudo, mdp)
+    with patch("dao.utilisateur_dao.UtilisateurDao.se_connecter", return_value=utilisateur_mock):
+        utilisateur = UtilisateurService().connecter(pseudo, mdp)
 
     # THEN
     assert utilisateur.pseudo == pseudo
@@ -373,9 +373,11 @@ def test_trouver_par_id_existant():
 
     # GIVEN
     id_user = 998
+    utilisateur_mock = Utilisateur(pseudo="test_user", mail="test@mail.com", mdp="password")
 
-    # WHEN
-    utilisateur = UtilisateurDao().trouver_par_id(id_user)
+    # Utilisation de patch pour simuler la méthode trouver_par_id
+    with patch("dao.utilisateur_dao.UtilisateurDao.trouver_par_id", return_value=utilisateur_mock):
+        utilisateur = UtilisateurDao().trouver_par_id(id_user)
 
     # THEN
     assert utilisateur is not None
