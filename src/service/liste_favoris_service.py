@@ -23,9 +23,7 @@ class ListeFavorisService:
         if not isinstance(utilisateur, Utilisateur):
             raise TypeError("utilisateur doit être une instance de Utilisateur")
 
-        liste_favoris = ListeFavorisDao().consulter_favoris(utilisateur=utilisateur)
-
-        return liste_favoris
+        return ListeFavorisDao().consulter_favoris(utilisateur=utilisateur)
 
     def ajouter_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
@@ -90,7 +88,6 @@ class ListeFavorisService:
             raise TypeError("utilisateur doit être une instance de Utilisateur")
 
         liste_course = ListeFavorisDao().consulter_liste_course(utilisateur=utilisateur)
-
         return liste_course
 
     def ajouter_liste_course(self, recette: Recette, utilisateur: Utilisateur) -> bool:
@@ -111,13 +108,13 @@ class ListeFavorisService:
 
         added = False
 
-        if not ListeFavorisDao().est_dans_liste_course(recette=recette, utilisateur=utilisateur):
-            ListeFavorisDao().ajouter_liste_course(recette=recette, utilisateur=utilisateur)
-            added = True
+        added = ListeFavorisDao().ajouter_liste_course(recette=recette, utilisateur=utilisateur)
 
         return added
 
-    def enlever_liste_course(self, recette: Recette, utilisateur: Utilisateur) -> bool:
+    def retirer_liste_course(
+        self, recette: Recette, ingredient: Ingredient, utilisateur: Utilisateur
+    ) -> bool:
         """
         Enlève tous les ingrédients de la recette à la liste "liste_de_course" de l'utilisateur
 
@@ -129,14 +126,20 @@ class ListeFavorisService:
             bool: True si les ingrédients ont été retiré à la liste, False sinon
         """
         if not isinstance(recette, Recette):
+            raise TypeError("recette doit être une instance de Recette")
+        if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance d'Ingredient")
         if not isinstance(utilisateur, Utilisateur):
             raise TypeError("utilisateur doit être une instance de Utilisateur")
 
         deleted = False
 
-        if ListeFavorisDao().est_dans_liste_course(recette=recette, utilisateur=utilisateur):
-            ListeFavorisDao().retirer_liste_course(recette=recette, utilisateur=utilisateur)
+        if ListeFavorisDao().est_dans_liste_course(
+            recette=recette, ingredient=ingredient, utilisateur=utilisateur
+        ):
+            ListeFavorisDao().retirer_liste_course(
+                recette=recette, ingredient=ingredient, utilisateur=utilisateur
+            )
             deleted = True
 
         return deleted

@@ -172,11 +172,16 @@ class RecetteDao(metaclass=Singleton):
             avis = res[0]["avis"].split(";")
             liste_ingredient = []
             for i in range(0, len(res)):
-                ingredient = IngredientDao.trouver_par_id(res[i]["id_ingredient"])
+                ingredient = IngredientDao().trouver_par_id(res[i]["id_ingredient"])
                 liste_ingredient.append([ingredient, res[i]["quantite"]])
 
             recette = Recette(
-                id_recette, nom_recette, liste_ingredient, description_recette, note, avis
+                nom_recette=nom_recette,
+                liste_ingredient=liste_ingredient,
+                description_recette=description_recette,
+                id_recette=id_recette,
+                note=note,
+                avis=avis,
             )
 
         return recette

@@ -54,4 +54,23 @@ class IngredientService:
         if not isinstance(id, int):
             raise TypeError("id doit être un entier naturel.")
 
-        return IngredientDao.trouver_par_id(id)
+        return IngredientDao().trouver_par_id(id)
+
+    def trouver_par_nom(self, nom: str) -> Ingredient:
+        """
+        Permet de trouver un ingrédient grâce à son nom.
+
+        Args:
+            nom (str): Nom de l'ingrédient recherché
+
+        Returns:
+            Optional[Ingredient]:
+                Retourne un ingrédient si l'identifiant correspond à quelque chose dans la base
+                de données.
+                None sinon
+        """
+
+        if not isinstance(nom, str):
+            raise TypeError("nom doit être une instance de str.")
+
+        return IngredientDao().trouver_par_nom(nom)
