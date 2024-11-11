@@ -28,8 +28,13 @@ class MenuRecetteSf(VueAbstraite):
         i = 0
 
         while choix == "-> Page suivante":
-            i += 10
-            liste_recettes = recettes[i - 10 : i]
+            i += 1
+            if abs(10 * (i - 1) - len(recettes)) > 10:
+                liste_recettes = recettes[10 * (i - 1) : 10 * i]
+            else:
+                liste_recettes = recettes[10 * (i - 1) :]
+                i = 0
+
             liste_recettes.append("-> Page suivante")
             liste_recettes.append("Retour")
             choix = inquirer.select(

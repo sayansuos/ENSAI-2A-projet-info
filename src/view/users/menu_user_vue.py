@@ -61,9 +61,9 @@ class MenuUserVue(VueAbstraite):
                 return RecettesVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les suggestions":
-                print("1234")
+                from view.recette.menu_recette_sugg import MenuRecetteSugg
 
-                # return voir_suggestions()
+                return MenuRecetteSugg(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les favoris":
                 from view.recette.menu_recette_fav import MenuRecetteFav

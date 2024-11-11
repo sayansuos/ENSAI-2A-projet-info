@@ -3,6 +3,9 @@ from business_object.recette import Recette
 from business_object.ingredient import Ingredient
 
 from dao.liste_favoris_dao import ListeFavorisDao
+from service.recette_service import RecetteService
+
+import random
 
 
 class ListeFavorisService:
@@ -276,3 +279,38 @@ class ListeFavorisService:
             deleted = True
 
         return deleted
+
+    def consulter_suggestion(self, utilisateur: Utilisateur) -> list[Recette]:
+        """
+        Renvoie une liste de 10 recettes qui ne sont pas dans les favoris mais qui contiennent au
+        moins un ingrédient favori et aucun non-désiré.
+
+        Args :
+            utilisateur (Utilisateur) : utilisateur à qui on modifie la liste de course
+
+        Returns:
+            bool: True si l'ingrédients a bien été retiré à la table, False sinon
+        """
+        liste_favoris = ListeFavorisDao().consulter_preference_ingredient_favori(
+            utilisateur=utilisateur
+        )
+        liste_non_desires = ListeFavorisDao().consulter_preference_ingredient_non_desire(
+            utilisateur=utilisateur
+        )
+
+        avec_ing_fav = []
+        avec_ing_nd = []
+        recette_fav = self.consulter_favoris(utilisateur=utilisateur)
+
+        for ingr_fav in liste_favoris:
+            avec_ing_fav += RecetteService().trouver_recette_par_ingredient(ingredient=ingr_fav)
+
+        for ingr_nd in liste_non_desires:
+            avec_ing_nd += RecetteService().trouver_recette_par_ingredient(ingredient=ingr_nd)
+
+        suggestion = []
+        for recette in avec_ing_fav:
+            if recette not in avec_ing_nd and recette not in recette_fav:
+                suggestion.append(recette)
+
+        return suggestion

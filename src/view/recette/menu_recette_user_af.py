@@ -28,8 +28,13 @@ class MenuRecetteAf(VueAbstraite):
         i = 0
 
         while choix == "-> Page suivante":
-            i += 10
-            liste_ingredients = ingredients[i - 10 : i]
+            i += 1
+            if abs(10 * (i - 1) - len(ingredients)) > 10:
+                liste_ingredients = ingredients[10 * (i - 1) : 10 * i]
+            else:
+                liste_ingredients = ingredients[10 * (i - 1) :]
+                i = 0
+
             liste_ingredients.append("-> Page suivante")
             choix = inquirer.select(
                 message="Choisissez un ingrédient : ",

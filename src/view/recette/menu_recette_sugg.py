@@ -10,7 +10,7 @@ from service.recette_service import RecetteService
 from service.liste_favoris_service import ListeFavorisService
 
 
-class MenuRecetteFav(VueAbstraite):
+class MenuRecetteSugg(VueAbstraite):
     """Vue qui affiche :
     - toutes les recettes dispo
     - les options
@@ -22,7 +22,7 @@ class MenuRecetteFav(VueAbstraite):
 
     def choisir_menu(self):
         recette_service = RecetteService()
-        recettes = ListeFavorisService().consulter_favoris(utilisateur=self.utilisateur)
+        recettes = ListeFavorisService().consulter_suggestion(utilisateur=self.utilisateur)
 
         choix = "-> Page suivante"
         i = 0
@@ -43,7 +43,7 @@ class MenuRecetteFav(VueAbstraite):
             ).execute()
 
         if choix == "Retour":
-            return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
+            return MenuUserVue()
 
         else:
             autre_action = "Oui"
@@ -54,6 +54,7 @@ class MenuRecetteFav(VueAbstraite):
                         "Lire la recette",
                         "Voir les notes et les avis",
                         "Noter et laisser un commentaire",
+                        "Ajouter dans les favoris",
                         "Supprimer des favoris",
                         "Ajouter les ingrédients au panier",
                     ],
@@ -86,6 +87,12 @@ class MenuRecetteFav(VueAbstraite):
                         choix = recette_service.trouver_recette_par_id(choix.id_recette)
                         print("\n\nC'est fait !!!\n\n")
 
+                    case "Ajouter dans les favoris":
+                        ListeFavorisService().ajouter_favoris(
+                            recette=choix, utilisateur=self.utilisateur
+                        )
+                        print("\n\nC'est fait !!!\n\n")
+
                     case "Supprimer des favoris":
                         ListeFavorisService().retirer_favoris(
                             recette=choix, utilisateur=self.utilisateur
@@ -110,4 +117,4 @@ class MenuRecetteFav(VueAbstraite):
                     if choix_bis_bis == "Non":
                         return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
-        return MenuRecetteFav(message=self.message, utilisateur=self.utilisateur)
+        return MenuRecetteSugg(message=self.message, utilisateur=self.utilisateur)
