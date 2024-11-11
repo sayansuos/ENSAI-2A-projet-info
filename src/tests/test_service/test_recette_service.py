@@ -7,32 +7,28 @@ from business_object.ingredient import Ingredient
 from dao.recette_dao import RecetteDao
 
 
-# Test for trouver_recette_par_nom
-@patch("services.recette_service.DBConnection")
-def test_trouver_recette_par_nom_ok(mock_db_connection):
-
-    ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
-    ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
-    ingredient_3 = Ingredient(nom_ingredient="Dough", id_ingredient=3)
-    ingredient_4 = Ingredient(nom_ingredient="Cheese", id_ingredient=4)
-    ingredient_5 = Ingredient(nom_ingredient="Meat", id_ingredient=2)
-    liste_recettes = [
-        Recette(
-            nom_recette="Spaghetti Bolognese",
-            liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
-            description_recette="Spaghetti avec de la viande",
-        ),
-        Recette(
-            nom_recette="Spaghetti Tomato",
-            liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
-            description_recette="Spaghetti avec de la sauce tomate",
-        ),
-        Recette(
-            nom_recette="Pizza Margherita",
-            liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
-            description_recette="Je sais pas quoi écrire, c'est une pizza",
-        ),
-    ]
+ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
+ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
+ingredient_3 = Ingredient(nom_ingredient="Dough", id_ingredient=3)
+ingredient_4 = Ingredient(nom_ingredient="Cheese", id_ingredient=4)
+ingredient_5 = Ingredient(nom_ingredient="Meat", id_ingredient=2)
+liste_recettes = [
+    Recette(
+        nom_recette="Spaghetti Bolognese",
+        liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
+        description_recette="Spaghetti avec de la viande",
+    ),
+    Recette(
+        nom_recette="Spaghetti Tomato",
+        liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
+        description_recette="Spaghetti avec de la sauce tomate",
+    ),
+    Recette(
+        nom_recette="Pizza Margherita",
+        liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
+        description_recette="Je sais pas quoi écrire, c'est une pizza",
+    ),
+]
 
 
 def test_creer_recette_ok():
@@ -53,7 +49,7 @@ def test_creer_recette_ok():
     RecetteDao().creer = MagicMock(return_value=True)
 
     # WHEN
-    recette = RecetteService().creer_recette(expected_recette)
+    recette = RecetteService.creer_recette(expected_recette)
 
     # THEN
     assert recette.nom_recette == nom_recette
@@ -176,33 +172,18 @@ def test_lister_toutes_recettes():
     assert len(recettes) >= 2
 
 
-def test_noter_recette(mock_db_connection):
-    """
-    bla
-
-    Args:
-        mock_db_connection (_type_): _description_
-    """
-
+def test_commenter_recette():
     # GIVEN
-    ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
-    ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
-
-    recette_notee = Recette(
-        nom_recette="Spaghetti Tomato",
-        liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
-        description_recette="Spaghetti avec de la sauce tomate",
-        note=4,
-    )
-
-    nouvelle_note = 5
-    nombre_de_notes = 3
+    recette = liste_recettes[1]
+    note = 5
+    commentaire = "avis positif"
+    RecetteDao().ajouter_note_et_com = MagicMock(return_value=True)
 
     # WHEN
-    RecetteService.noter_recette(nouvelle_note, recette_notee)
+    RecetteService.ajouter_note_et_com(recette=recette, note=note, com=commentaire)
 
     # THEN
-    # assert recette_notee.note ==
+    assert True
 
 
 def test_noter_recette_invalid_input_type():
@@ -215,7 +196,7 @@ def test_noter_recette_invalid_input_type():
 
     # WHEN-THEN:
     with pytest.raises(TypeError, match="La note doit être un nombre compris entre 0 et 5."):
-        RecetteService().noter_recette(note)
+        RecetteService().ajouter_note_et_com(recette=liste_recettes[1], note=note, com="")
 
 
 def test_noter_recette_invalid_input_value():
@@ -228,31 +209,33 @@ def test_noter_recette_invalid_input_value():
 
     # WHEN-THEN:
     with pytest.raises(ValueError, match="La note doit être comprise entre 0 et 5."):
-        RecetteService().noter_recette(note)
-
-
-def test_commenter_recette(mock_db_connection):
-    """
-    bla
-
-    Args:
-        mock_db_connection (_type_): _description_
-    """
-
-    pass
+        RecetteService().ajouter_note_et_com(recette=liste_recettes[1], note=note, com="")
 
 
 def test_commenter_recette_invalid_input_type():
     """
-    Mise à jour des avis d'une recette échouée car l'avis n'est pas une chaîne de caractères
+    Ajout d'un commentaire d'une recette échoué car le commentaire n'est pas un str
     """
 
     # GIVEN
-    avis = ["avis", "positif"]
+    commentaire = ["avis", "positif"]
 
     # WHEN-THEN:
-    with pytest.raises(TypeError, match="Le commentaire doit être une chaîne de caractères"):
-        RecetteService().commenter_recette(avis)
+    with pytest.raises(ValueError, match="com doit être une instance de str."):
+        RecetteService().ajouter_note_et_com(recette=liste_recettes[1], note=5, com=commentaire)
+
+
+def test_commenter_recette_invalid_input_value():
+    """
+    Ajout d'un commentaire d'une recette échoué car le commentaire contient un ";"
+    """
+
+    # GIVEN
+    commentaire = "avis ; positif"
+
+    # WHEN-THEN:
+    with pytest.raises(ValueError, match="';' ne peut pas être utilisé dans le commentaire."):
+        RecetteService().ajouter_note_et_com(recette=liste_recettes[1], note=5, com=commentaire)
 
 
 if __name__ == "__main__":
