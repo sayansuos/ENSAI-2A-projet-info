@@ -1,4 +1,4 @@
-import regex
+import re as regex
 
 from InquirerPy import inquirer
 from InquirerPy.validator import PasswordValidator, EmptyInputValidator
@@ -11,6 +11,7 @@ from service.utilisateur_service import UtilisateurService
 
 
 class InscriptionVue(VueAbstraite):
+
     def choisir_menu(self):
         # Demande à l'utilisateur de saisir pseudo, mot de passe...
         pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()

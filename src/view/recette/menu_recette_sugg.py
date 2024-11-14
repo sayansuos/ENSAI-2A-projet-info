@@ -43,7 +43,7 @@ class MenuRecetteSugg(VueAbstraite):
             ).execute()
 
         if choix == "Retour":
-            return MenuUserVue()
+            return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
         else:
             autre_action = "Oui"
