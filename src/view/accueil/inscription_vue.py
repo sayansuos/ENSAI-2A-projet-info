@@ -1,4 +1,4 @@
-import re as regex
+import regex
 
 from InquirerPy import inquirer
 from InquirerPy.validator import PasswordValidator, EmptyInputValidator

@@ -1,10 +1,12 @@
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
 
+from utils.singleton import Singleton
+
 from dotenv import load_dotenv
 
 
-class Utilisateur:
+class Utilisateur(metaclass=Singleton):
     """
     Instancie un Utilisateur
     """
