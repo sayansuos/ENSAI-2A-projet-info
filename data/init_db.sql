@@ -6,7 +6,6 @@ CREATE TABLE projet.utilisateur(
     id_utilisateur    SERIAL PRIMARY KEY,
     pseudo            VARCHAR,
     mdp               VARCHAR,
-    mail              VARCHAR,
     role_utilisateur  VARCHAR
 );
 

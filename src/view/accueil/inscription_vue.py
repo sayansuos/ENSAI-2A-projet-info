@@ -1,4 +1,4 @@
-import regex
+# import regex
 
 from InquirerPy import inquirer
 from InquirerPy.validator import PasswordValidator, EmptyInputValidator
@@ -31,10 +31,8 @@ class InscriptionVue(VueAbstraite):
             ),
         ).execute()
 
-        mail = inquirer.text(message="Entrez votre mail : ", validate=MailValidator()).execute()
-
         # Appel du service pour créer le joueur
-        user = UtilisateurService().creer(pseudo, mdp, mail)
+        user = UtilisateurService().creer(pseudo, mdp)
 
         # Si le joueur a été créé
         if user:
@@ -47,15 +45,3 @@ class InscriptionVue(VueAbstraite):
         from view.accueil.accueil_vue import AccueilVue
 
         return AccueilVue(message)
-
-
-class MailValidator(Validator):
-    """la classe MailValidator verifie si la chaine de caractères
-    que l'on entre correspond au format de l'email"""
-
-    def validate(self, document) -> None:
-        ok = regex.match(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", document.text)
-        if not ok:
-            raise ValidationError(
-                message="Please enter a valid mail", cursor_position=len(document.text)
-            )

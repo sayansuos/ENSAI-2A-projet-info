@@ -6,7 +6,7 @@ from utils.singleton import Singleton
 from dotenv import load_dotenv
 
 
-class Utilisateur(metaclass=Singleton):
+class Utilisateur:
     """
     Instancie un Utilisateur
     """
@@ -15,8 +15,7 @@ class Utilisateur(metaclass=Singleton):
         self,
         pseudo: str,
         mdp: str,
-        mail: str = None,
-        id_utilisateur: int = 1,
+        id_utilisateur: int = None,
         recette_favorite: list[Recette] = [],
         ingredient_favori: list[Ingredient] = [],
         ingredient_non_desire: list[Ingredient] = [],
@@ -45,7 +44,6 @@ class Utilisateur(metaclass=Singleton):
         self.id_utilisateur = id_utilisateur
         self.pseudo = pseudo
         self.mdp = mdp
-        self.mail = mail
         self.recette_favorite = recette_favorite
         self.ingredient_favori = ingredient_favori
         self.ingredient_non_desire = ingredient_non_desire

@@ -1,7 +1,7 @@
-INSERT INTO utilisateur(pseudo, mdp, mail, role_utilisateur) VALUES
-('admin', '0000', 'admin@projet.fr', 'admin'),
-('maurice', '1234', 'maurice@ensai.fr', 'user'),
-('batricia', '9876', 'bat@projet.fr', 'user'),
-('miguel', 'abcd', 'miguel@projet.fr', 'user'),
-('gilbert', 'toto', 'gilbert@projet.fr', 'user'),
-('junior', 'aaaa', 'junior@projet.fr', 'user');
+INSERT INTO utilisateur(pseudo, mdp, role_utilisateur) VALUES
+('admin', '0000', 'admin'),
+('maurice', '1234', 'user'),
+('batricia', '9876', 'user'),
+('miguel', 'abcd', 'user'),
+('gilbert', 'toto', 'user'),
+('junior', 'aaaa', 'user');

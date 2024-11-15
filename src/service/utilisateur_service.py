@@ -30,28 +30,13 @@ class UtilisateurService:
         return pseudo in [i.pseudo for i in utilisateurs]
 
     @log
-    def mail_deja_utilise(self, mail: str) -> bool:
-        """
-        Vérifie si le mail entré est déjà utilisé dans la base de données.
-
-        Args:
-            mail (str): Mail utilisé par l'utilisateur
-
-        Returns:
-            bool: True si le pseudo est déjà utilisé. False sinon
-        """
-        utilisateurs = UtilisateurDao().lister_tous()
-        return mail in [i.mail for i in utilisateurs]
-
-    @log
-    def creer(self, pseudo: str, mdp: str, mail: str) -> Utilisateur:
+    def creer(self, pseudo: str, mdp: str) -> Utilisateur:
         """
         Créer un utilisateur selon les paramètres renseignés.
 
         Args:
             pseudo (str): Pseudo voulu pour l'utilisateur
             mdp (str): Mot de passe voulu pour l'utilisateur
-            mail (str): Adresse mail voulue pour l'utilisateur
 
         Raises:
             TypeError: pseudo doit être une str
@@ -71,9 +56,6 @@ class UtilisateurService:
         if not isinstance(mdp, str):
             raise TypeError("Le mot de passe doit être une chaîne de caractères.")
 
-        if not isinstance(mail, str):
-            raise TypeError("L'adresse mail doit être une chaîne de caractères.")
-
         if len(mdp) < 6:
             raise ValueError("Le mot de passe doit contenir au moins 6 caractères.")
 
@@ -81,26 +63,6 @@ class UtilisateurService:
             raise ValueError(
                 "Le pseudo ne doit pas contenir de caractères spéciaux."
                 " Caractères interdits : &, |, ', -"
-            )
-
-        if "@" not in mail:
-            raise ValueError(
-                "Il n'y a pas de @ dans l'adresse mail renseignée."
-                "Format attendu : 'blabla@domaine.truc'"
-            )
-
-        # Vérification de la validité de l'adresse mail
-        if mail.count("@") != 1:
-            raise ValueError(
-                "Il ne doit y avoir qu'un seul @ dans votre adresse mail."
-                "Format attendu : 'blabla@domaine.truc'"
-            )
-
-        nom_domaine = mail.split("@")[1]
-        if "." not in nom_domaine:
-            raise ValueError(
-                "Il doit y avoir un '.' dans votre nom de domaine."
-                "Format attendu : 'blabla@domaine.truc'"
             )
 
         if re.search(r"[&\'| -]", mdp):
@@ -111,9 +73,6 @@ class UtilisateurService:
 
         if self.pseudo_deja_utilise(pseudo):
             raise ValueError("Le pseudo est déjà utilisé")
-
-        if self.mail_deja_utilise(mail):
-            raise ValueError("Le mail est déjà utilisé")
 
         # Pour finir la fonction :
         # - Définir des méthodes de sécurité (échappement des caractères spéciaux)
@@ -126,7 +85,9 @@ class UtilisateurService:
         # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
 
         mdp = hash_password(mdp, sel=pseudo)
-        return UtilisateurDao().creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
+        utilisateur = Utilisateur(pseudo=pseudo, mdp=mdp)
+        UtilisateurDao().creer(utilisateur)
+        return utilisateur
 
     @log
     def connecter(self, pseudo: str, mdp: str) -> Utilisateur:

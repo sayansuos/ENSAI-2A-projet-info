@@ -32,15 +32,13 @@ class UtilisateurDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO utilisateur(id_utilisateur, pseudo, mdp, mail, role_utilisateur) VALUES "
-                        "(%(id_utilisateur)s, %(pseudo)s, %(mdp)s, %(mail)s, %(role_utilisateur)s) "
+                        "INSERT INTO utilisateur(pseudo, mdp, role_utilisateur) VALUES "
+                        "( %(pseudo)s, %(mdp)s, %(role_utilisateur)s) "
                         "RETURNING id_utilisateur;",
                         {
-                            "id_utilisateur": utilisateur.id_utilisateur,
                             "pseudo": utilisateur.pseudo,
                             "mdp": utilisateur.mdp,
-                            "mail": utilisateur.mail,
-                            "role_utilisateur": utilisateur.role_utilisateur,
+                            "role_utilisateur": utilisateur.role,
                         },
                     )
                     res = cursor.fetchone()
@@ -87,7 +85,6 @@ class UtilisateurDao(metaclass=Singleton):
                             id_utilisateur=res_utilisateur["id_utilisateur"],
                             pseudo=res_utilisateur["pseudo"],
                             mdp=res_utilisateur["mdp"],
-                            mail=res_utilisateur["mail"],
                             role_utilisateur=res_utilisateur["role_utilisateur"],
                         )
 
@@ -115,6 +112,7 @@ class UtilisateurDao(metaclass=Singleton):
                     res_utilisateurs = cursor.fetchall()
         except Exception as e:
             logging.info(e)
+            print(e)
             raise
 
         if res_utilisateurs:
@@ -123,7 +121,6 @@ class UtilisateurDao(metaclass=Singleton):
                     id_utilisateur=row["id_utilisateur"],
                     pseudo=row["pseudo"],
                     mdp=row["mdp"],
-                    mail=row["mail"],
                     role=row["role_utilisateur"],
                 )
                 liste_utilisateurs.append(utilisateur)
@@ -152,13 +149,11 @@ class UtilisateurDao(metaclass=Singleton):
                         "UPDATE utilisateur "
                         "SET pseudo = %(pseudo)s, "
                         "mdp = %(mdp)s, "
-                        "mail = %(mail)s, "
                         "role_utilisateur = %(role_utilisateur)s "
                         "WHERE id_utilisateur = %(id_utilisateur)s;",
                         {
                             "pseudo": utilisateur.pseudo,
                             "mdp": utilisateur.mdp,
-                            "mail": utilisateur.mail,
                             "role_utilisateur": utilisateur.role,
                             "id_utilisateur": utilisateur.id_utilisateur,
                         },
@@ -219,12 +214,14 @@ class UtilisateurDao(metaclass=Singleton):
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "SELECT * FROM utilisateur " "WHERE pseudo = %(pseudo)s AND mdp = %(mdp)s;",
+                        "SELECT * FROM projet.utilisateur "
+                        "WHERE pseudo = %(pseudo)s AND mdp = %(mdp)s;",
                         {"pseudo": pseudo, "mdp": mdp},
                     )
                     res = cursor.fetchone()
         except Exception as e:
             logging.info(e)
+            print(e)
             raise
 
         utilisateur = None
@@ -234,7 +231,6 @@ class UtilisateurDao(metaclass=Singleton):
                 id_utilisateur=res["id_utilisateur"],
                 pseudo=res["pseudo"],
                 mdp=res["mdp"],
-                mail=res["mail"],
                 role=res["role_utilisateur"],
             )
 
