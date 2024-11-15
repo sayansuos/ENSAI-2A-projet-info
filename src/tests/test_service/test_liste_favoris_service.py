@@ -1,17 +1,18 @@
 from unittest.mock import patch, MagicMock
-from services.liste_favoris_service import ListeFavorisService
+from service.liste_favoris_service import ListeFavorisService
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
+import pytest
 
 
 # Test for ajouter_favoris
-@patch("services.liste_favoris_service.Utilisateur")
 def test_ajouter_favoris(mock_utilisateur):
     # GIVEN
     recette = Recette(
         id_recette=1,
         nom_recette="Spaghetti Bolognese",
         liste_ingredient=[["Pasta", "100"], ["Meat", "100"]],
+        description_recette="Spaghetti à la bolognaise"
     )
     mock_utilisateur.recette_favorite = []
     liste_favoris_service = ListeFavorisService()
@@ -25,19 +26,19 @@ def test_ajouter_favoris(mock_utilisateur):
 
 
 # Test for enlever_favoris
-@patch("services.liste_favoris_service.Utilisateur")
 def test_enlever_favoris(mock_utilisateur):
     # GIVEN
     recette = Recette(
         id_recette=1,
         nom_recette="Spaghetti Bolognese",
         liste_ingredient=[["Pasta", "100"], ["Meat", "100"]],
+        description_recette="Spaghetti à la bolognaise"
     )
     mock_utilisateur.recette_favorite = [recette]
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.enlever_favoris(recette)
+    result = liste_favoris_service.retirer_favoris(recette)
 
     # THEN
     assert result is True
@@ -45,7 +46,6 @@ def test_enlever_favoris(mock_utilisateur):
 
 
 # Test for ajouter_ingredient_course
-@patch("classes.Utilisateur")
 def test_ajouter_ingredient_course(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Tomato")
@@ -53,7 +53,7 @@ def test_ajouter_ingredient_course(mock_utilisateur):
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.ajouter_ingredient_course(ingredient)
+    result = liste_favoris_service.ajouter_liste_course(ingredient)
 
     # THEN
     assert result is True
@@ -61,7 +61,6 @@ def test_ajouter_ingredient_course(mock_utilisateur):
 
 
 # Test for enlever_ingredient_course
-@patch("classes.Utilisateur")
 def test_enlever_ingredient_course(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Tomato")
@@ -69,7 +68,7 @@ def test_enlever_ingredient_course(mock_utilisateur):
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.enlever_ingredient_course(ingredient)
+    result = liste_favoris_service.retirer_liste_course(ingredient)
 
     # THEN
     assert result is True
@@ -77,7 +76,6 @@ def test_enlever_ingredient_course(mock_utilisateur):
 
 
 # Test for ajouter_ingredient_favori
-@patch("classes.Utilisateur")
 def test_ajouter_ingredient_favori(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Cheese")
@@ -85,7 +83,7 @@ def test_ajouter_ingredient_favori(mock_utilisateur):
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.ajouter_ingredient_favori(ingredient)
+    result = liste_favoris_service.modifier_preference_ingredient(ingredient, modif="F")
 
     # THEN
     assert result is True
@@ -93,7 +91,6 @@ def test_ajouter_ingredient_favori(mock_utilisateur):
 
 
 # Test for enlever_ingredient_favori
-@patch("classes.Utilisateur")
 def test_enlever_ingredient_favori(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Cheese")
@@ -101,7 +98,7 @@ def test_enlever_ingredient_favori(mock_utilisateur):
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.enlever_ingredient_favori(ingredient)
+    result = liste_favoris_service.retirer_preference_ingredient(ingredient)
 
     # THEN
     assert result is True
@@ -109,7 +106,6 @@ def test_enlever_ingredient_favori(mock_utilisateur):
 
 
 # Test for ajouter_ingredient_non_desire
-@patch("classes.Utilisateur")
 def test_ajouter_ingredient_non_desire(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Broccoli")
@@ -117,7 +113,7 @@ def test_ajouter_ingredient_non_desire(mock_utilisateur):
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.ajouter_ingredient_non_desire(ingredient)
+    result = liste_favoris_service.modifier_preference_ingredient(ingredient, modif="ND")
 
     # THEN
     assert result is True
@@ -125,7 +121,6 @@ def test_ajouter_ingredient_non_desire(mock_utilisateur):
 
 
 # Test for enlever_ingredient_non_desire
-@patch("classes.Utilisateur")
 def test_enlever_ingredient_non_desire(mock_utilisateur):
     # GIVEN
     ingredient = Ingredient(id_ingredient=1, nom_ingredient="Broccoli")
@@ -133,7 +128,7 @@ def test_enlever_ingredient_non_desire(mock_utilisateur):
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.enlever_ingredient_non_desire(ingredient)
+    result = liste_favoris_service.retirer_preference_ingredient(ingredient)
 
     # THEN
     assert result is True
@@ -159,7 +154,7 @@ def test_enlever_favoris_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="recette doit être une instance de Recette"):
-        liste_favoris_service.enlever_favoris(invalid_recette)
+        liste_favoris_service.retirer_favoris(invalid_recette)
 
 
 # Test ajouter_ingredient_course with invalid input
@@ -170,7 +165,7 @@ def test_ajouter_ingredient_course_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
-        liste_favoris_service.ajouter_ingredient_course(invalid_ingredient)
+        liste_favoris_service.ajouter_liste_course(invalid_ingredient)
 
 
 # Test enlever_ingredient_course with invalid input
@@ -181,7 +176,7 @@ def test_enlever_ingredient_course_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
-        liste_favoris_service.enlever_ingredient_course(invalid_ingredient)
+        liste_favoris_service.retirer_liste_course(invalid_ingredient)
 
 
 # Test ajouter_ingredient_favori with invalid input
@@ -192,7 +187,7 @@ def test_ajouter_ingredient_favori_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
-        liste_favoris_service.ajouter_ingredient_favori(invalid_ingredient)
+        liste_favoris_service.modifier_preference_ingredient(invalid_ingredient, modif="F")
 
 
 # Test enlever_ingredient_favori with invalid input
@@ -203,7 +198,7 @@ def test_enlever_ingredient_favori_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
-        liste_favoris_service.enlever_ingredient_favori(invalid_ingredient)
+        liste_favoris_service.retirer_preference_ingredient(invalid_ingredient)
 
 
 # Test ajouter_ingredient_non_desire with invalid input
@@ -214,7 +209,7 @@ def test_ajouter_ingredient_non_desire_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
-        liste_favoris_service.ajouter_ingredient_non_desire(invalid_ingredient)
+        liste_favoris_service.modifier_preference_ingredient(invalid_ingredient, modif="ND")
 
 
 # Test enlever_ingredient_non_desire with invalid input
@@ -224,11 +219,9 @@ def test_enlever_ingredient_non_desire_invalid_input():
     liste_favoris_service = ListeFavorisService()
 
     # WHEN/THEN
-    with pytest.raises(TypeError, match="ingredient doit être une instance d'Ingredient"):
-        liste_favoris_service.enlever_ingredient_non_desire(invalid_ingredient)
+    with pytest.raises(TypeError, match="ingredient doit être une instance de Ingredient"):
+        liste_favoris_service.retirer_preference_ingredient(invalid_ingredient)
 
 
 if __name__ == "__main__":
-    import pytest
-
     pytest.main([__file__])
