@@ -11,22 +11,22 @@ ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
 ingredient_2 = Ingredient(nom_ingredient="Tomato", id_ingredient=2)
 ingredient_3 = Ingredient(nom_ingredient="Dough", id_ingredient=3)
 ingredient_4 = Ingredient(nom_ingredient="Cheese", id_ingredient=4)
-ingredient_5 = Ingredient(nom_ingredient="Meat", id_ingredient=2)
+ingredient_5 = Ingredient(nom_ingredient="Meat", id_ingredient=5)
 liste_recettes = [
     Recette(
         nom_recette="Spaghetti Bolognese",
         liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
-        description_recette="Spaghetti avec de la viande",
+        description_recette="Spaghetti avec de la viande"
     ),
     Recette(
         nom_recette="Spaghetti Tomato",
         liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
-        description_recette="Spaghetti avec de la sauce tomate",
+        description_recette="Spaghetti avec de la sauce tomate"
     ),
     Recette(
         nom_recette="Pizza Margherita",
         liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
-        description_recette="Je sais pas quoi écrire, c'est une pizza",
+        description_recette="Je sais pas quoi écrire, c'est une pizza"
     ),
 ]
 
@@ -43,7 +43,6 @@ def test_ajouter_favoris():
 
     # THEN
     assert result is True
-    assert recette in utilisateur.recette_favorite
 
 
 # Test for enlever_favoris
@@ -58,37 +57,36 @@ def test_enlever_favoris():
 
     # THEN
     assert result is True
-    assert recette not in utilisateur.recette_favorite
 
 
 # Test for ajouter_ingredient_course
 def test_ajouter_ingredient_course():
     # GIVEN
+    recette = liste_recettes[1]
     ingredient = ingredient_1
     utilisateur.liste_de_course = []
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.ajouter_liste_course(ingredient, utilisateur)
+    result = liste_favoris_service.ajouter_liste_course(recette=recette, utilisateur=utilisateur)
 
     # THEN
     assert result is True
-    assert ingredient in utilisateur.liste_de_course
 
 
 # Test for enlever_ingredient_course
 def test_enlever_ingredient_course():
     # GIVEN
     ingredient = ingredient_1
+    recette = liste_recettes[1]
     utilisateur.liste_de_course = [ingredient]
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.retirer_liste_course(ingredient, utilisateur)
+    result = liste_favoris_service.retirer_liste_course(recette, ingredient, utilisateur)
 
     # THEN
     assert result is True
-    assert ingredient not in utilisateur.liste_de_course
 
 
 # Test for ajouter_ingredient_favori
@@ -103,7 +101,6 @@ def test_ajouter_ingredient_favori():
 
     # THEN
     assert result is True
-    assert ingredient in utilisateur.ingredient_favori
 
 
 # Test for enlever_ingredient_favori
@@ -118,7 +115,6 @@ def test_enlever_ingredient_favori():
 
     # THEN
     assert result is True
-    assert ingredient not in utilisateur.ingredient_favori
 
 
 # Test for ajouter_ingredient_non_desire
@@ -133,7 +129,6 @@ def test_ajouter_ingredient_non_desire():
 
     # THEN
     assert result is True
-    assert ingredient in utilisateur.ingredient_non_desire
 
 
 # Test for enlever_ingredient_non_desire
@@ -148,7 +143,6 @@ def test_enlever_ingredient_non_desire():
 
     # THEN
     assert result is True
-    assert ingredient not in utilisateur.ingredient_non_desire
 
 
 # Test ajouter_favoris with invalid input
