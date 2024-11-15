@@ -150,7 +150,7 @@ class RecetteService:
             raise TypeError("note doit être une instance de int.")
         if not isinstance(com, str):
             raise TypeError("com doit être une instance de str.")
-        if note < 0 and note > 5:
+        if note < 0 or note > 5:
             raise ValueError("La note doit être comprise entre 0 et 5.")
         if ";" in com:
             raise ValueError("';' ne peut pas être utilisé dans le commentaire.")
