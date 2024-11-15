@@ -5,8 +5,6 @@ from business_object.ingredient import Ingredient
 from dao.liste_favoris_dao import ListeFavorisDao
 from service.recette_service import RecetteService
 
-import random
-
 
 class ListeFavorisService:
     """
