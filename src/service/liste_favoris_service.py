@@ -100,7 +100,7 @@ class ListeFavorisService:
             utilisateur (Utilisateur) : utilisateur à qui on modifie la liste de course
 
         Returns:
-            bool: True si les ingrédients ont été ajouté à la liste, False sinon
+            bool: True si les ingrédients ont été ajouté à la liste , False sinon
         """
         if not isinstance(recette, Recette):
             raise TypeError("ingredient doit être une instance d'Ingredient")
