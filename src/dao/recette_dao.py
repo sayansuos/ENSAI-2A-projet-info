@@ -71,7 +71,6 @@ class RecetteDao(metaclass=Singleton):
 
         except Exception as e:
             logging.info(e)
-            print(e)
 
         created = False
         if res:

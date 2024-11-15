@@ -2,6 +2,7 @@ from typing import List, Optional
 from business_object.recette import Recette
 from dao.recette_dao import RecetteDao
 from business_object.ingredient import Ingredient
+from view.session import Session
 
 
 class RecetteService:
@@ -71,7 +72,7 @@ class RecetteService:
             list[Recette]:
                 Liste de toutes les recettes existantes
         """
-        return RecetteDao().lister_tous()
+        return Session().liste_recettes
 
     def creer_recette(self, recette: Recette) -> Optional[Recette]:
         """

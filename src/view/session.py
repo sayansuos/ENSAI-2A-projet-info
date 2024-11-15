@@ -14,11 +14,15 @@ class Session(metaclass=Singleton):
         """Création de la session"""
         self.joueur = None
         self.debut_connexion = None
+        self.liste_recettes = None
 
     def connexion(self, joueur):
         """Enregistement des données en session"""
         self.joueur = joueur
         self.debut_connexion = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+    def load_recipes(self, recipes):
+        self.liste_recettes = recipes
 
     def deconnexion(self):
         """Suppression des données de la session"""

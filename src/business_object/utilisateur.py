@@ -51,7 +51,7 @@ class Utilisateur:
         self.role = role
 
     def __str__(self):
-        return f"[{self.id_utilisateur}] {self.pseudo}"
+        return f"[{self.id_utilisateur}] {self.pseudo} ({self.role})"
 
 
 #    @property

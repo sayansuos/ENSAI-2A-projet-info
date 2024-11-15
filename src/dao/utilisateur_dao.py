@@ -166,7 +166,7 @@ class UtilisateurDao(metaclass=Singleton):
         return res == 1
 
     @log
-    def supprimer_utilisateur(self, id_utilisateur) -> bool:
+    def supprimer(self, id_utilisateur) -> bool:
         """Suppression d'un utilisateur dans la base de données.
 
         Parameters

@@ -2,6 +2,8 @@ import logging
 import dotenv
 
 from utils.log_init import initialiser_logs
+from view.session import Session
+from dao.recette_dao import RecetteDao
 
 from view.accueil.accueil_vue import AccueilVue
 
@@ -14,6 +16,10 @@ if __name__ == "__main__":
 
     initialiser_logs("Application")
 
+    # Initialisation de la liste des recettes
+    print("Chargement des recettes... (2min)")
+    Session().load_recipes(RecetteDao().lister_tous())
+
     vue_courante = AccueilVue(message="Bienvenue")
     nb_erreurs = 0
 
@@ -24,6 +30,7 @@ if __name__ == "__main__":
 
         try:
             # Affichage du menu
+
             vue_courante.afficher()
             # Affichage des choix possibles
             vue_courante = vue_courante.choisir_menu()

@@ -39,8 +39,8 @@ CREATE TABLE projet.recette_ingredient(
     id_recette     INTEGER,
     quantite       VARCHAR,
     PRIMARY KEY (id_ingredient, id_recette),
-    FOREIGN KEY (id_ingredient) REFERENCES projet.ingredient(id_ingredient),
-    FOREIGN KEY (id_recette) REFERENCES projet.recette(id_recette)
+    FOREIGN KEY (id_ingredient) REFERENCES projet.ingredient(id_ingredient) ON DELETE CASCADE,
+    FOREIGN KEY (id_recette) REFERENCES projet.recette(id_recette) ON DELETE CASCADE
 );
 
 -----------------------------------------------------
@@ -51,8 +51,8 @@ CREATE TABLE recette_favorite(
     id_utilisateur    INTEGER,
     id_recette       INTEGER,
     PRIMARY KEY (id_utilisateur, id_recette),
-    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-    FOREIGN KEY (id_recette) REFERENCES recette(id_recette)
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur) ON DELETE CASCADE,
+    FOREIGN KEY (id_recette) REFERENCES recette(id_recette) ON DELETE CASCADE
 );
 
 -----------------------------------------------------
@@ -63,8 +63,8 @@ CREATE TABLE preference_ingredient(
     id_utilisateur    INTEGER,
     id_ingredient     INTEGER,
     PRIMARY KEY (id_utilisateur, id_ingredient),
-    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-    FOREIGN KEY (id_ingredient) REFERENCES ingredient(id_ingredient),
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur) ON DELETE CASCADE,
+    FOREIGN KEY (id_ingredient) REFERENCES ingredient(id_ingredient) ON DELETE CASCADE,
     non_desire  BOOLEAN,
     favori      BOOLEAN
 );
@@ -78,6 +78,6 @@ CREATE TABLE liste_course(
     id_ingredient     INTEGER,
     id_recette        INTEGER,
     PRIMARY KEY (id_utilisateur, id_ingredient, id_recette),
-    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur),
-    FOREIGN KEY (id_ingredient, id_recette) REFERENCES recette_ingredient(id_ingredient, id_recette)
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id_utilisateur) ON DELETE CASCADE,
+    FOREIGN KEY (id_ingredient, id_recette) REFERENCES recette_ingredient(id_ingredient, id_recette) ON DELETE CASCADE
 );
