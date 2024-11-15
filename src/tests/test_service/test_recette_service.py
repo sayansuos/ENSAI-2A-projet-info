@@ -90,13 +90,13 @@ def test_trouver_par_nom_non_existant():
 
 
 # Test for trouver_recette_par_ingredient
-def test_trouver_recette_par_ingredient_ok(mock_db_connection):
+def test_trouver_recette_par_ingredient_ok():
     # GIVEN
     ingredient = ingredient_1
     recette_mock = liste_recettes[1]
 
     # Utilisation de patch pour simuler la méthode trouver_par_id
-    with patch("dao.recette_dao.UtilisateurDao.trouver_par_ingredient", return_value=recette_mock):
+    with patch("dao.recette_dao.trouver_par_ingredient", return_value=recette_mock):
         recette = RecetteDao().trouver_par_ingredient(ingredient)
 
     # THEN
@@ -171,7 +171,7 @@ def test_noter_recette_invalid_input_value():
 
     # WHEN-THEN:
     with pytest.raises(ValueError, match="La note doit être comprise entre 0 et 5."):
-        RecetteService().ajouter_note_et_com(recette=liste_recettes[1], note=note, com="")
+        RecetteService().ajouter_note_et_com(recette=liste_recettes[1], note=note, com="bla")
 
 
 def test_commenter_recette_invalid_input_type():
