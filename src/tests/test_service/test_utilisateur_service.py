@@ -7,9 +7,9 @@ from business_object.utilisateur import Utilisateur
 
 
 liste_utilisateurs = [
-    Utilisateur(pseudo="jp", mdp="123456", mail="jp@mail.fr"),
-    Utilisateur(pseudo="lea", mdp="000000", mail="lea@mail.fr"),
-    Utilisateur(pseudo="gg", mdp="abcdef", mail="gg@mail.fr"),
+    Utilisateur(pseudo="jp", mdp="123456"),
+    Utilisateur(pseudo="lea", mdp="000000"),
+    Utilisateur(pseudo="gg", mdp="abcdef"),
 ]
 
 
@@ -17,11 +17,11 @@ def test_creer_ok():
     """ "Création de Utilisateur réussie"""
 
     # GIVEN
-    pseudo, mdp, mail = "jp", "123456", "jp@mail.oo"
+    pseudo, mdp = "jp", "123456"
     UtilisateurDao().creer = MagicMock(return_value=True)
 
     # WHEN
-    UtilisateurService().creer(pseudo, mdp, mail)
+    UtilisateurService().creer(pseudo, mdp)
 
     # THEN
     assert True
@@ -32,11 +32,11 @@ def test_creer_mauvais_pseudo():
     caractère"""
 
     # GIVEN
-    pseudo, mdp, mail = 123, "azerty", "az@gmail.fr"
+    pseudo, mdp = 123, "azerty"
 
     # WHEN-THEN:
     with pytest.raises(TypeError, match="Le pseudo doit être une chaîne de caractères."):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_mauvais_mdp():
@@ -44,26 +44,11 @@ def test_creer_mauvais_mdp():
     de caractère"""
 
     # GIVEN
-    pseudo, mdp, mail = "michel", 123, "michel@gmail.fr"
+    pseudo, mdp = "michel", 123
 
     # WHEN-THEN:
     with pytest.raises(TypeError, match="Le mot de passe doit être une chaîne de caractères."):
-        UtilisateurService().creer(pseudo, mdp, mail)
-
-
-def test_creer_mauvais_mail_str():
-    """Création de Utilisateur échoué car le mail n'est pas une chaine de
-    caractère"""
-
-    # GIVEN
-    pseudo, mdp, mail = "Michel", "azerty", ["az@gmail.fr"]
-
-    # WHEN-THEN:
-    with pytest.raises(
-        TypeError,
-        match="L'adresse mail doit être une chaîne de caractères.",
-    ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_mauvais_mdp_longueur():
@@ -71,59 +56,14 @@ def test_creer_mauvais_mdp_longueur():
     de 6 caractères"""
 
     # GIVEN
-    pseudo, mdp, mail = "Michel", "azer", "az@gmail.fr"
+    pseudo, mdp = "Michel", "azer"
 
     # WHEN-THEN:
     with pytest.raises(
         ValueError,
         match="Le mot de passe doit contenir au moins 6 caractères.",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
-
-
-def test_creer_mail_missing_arobase():
-    """Création de Utilisateur échoué car il n'y a pas d'arobase dans le mail"""
-
-    # GIVEN
-    pseudo, mdp, mail = "Michel", "azerty", "azgmail.fr"
-
-    # WHEN-THEN:
-    with pytest.raises(
-        ValueError,
-        match="Il n'y a pas de @ dans l'adresse mail renseignée."
-        "Format attendu : 'blabla@domaine.truc'",
-    ):
-        UtilisateurService().creer(pseudo, mdp, mail)
-
-
-def test_creer_mail_trop_arobase():
-    """Création de Utilisateur échoué car il y a trop d'arobase dans le mail"""
-
-    # GIVEN
-    pseudo, mdp, mail = "Michel", "azerty", "az@gm@il.fr"
-
-    # WHEN-THEN:
-    with pytest.raises(
-        ValueError,
-        match="Il ne doit y avoir qu'un seul @ dans votre adresse mail."
-        "Format attendu : 'blabla@domaine.truc'",
-    ):
-        UtilisateurService().creer(pseudo, mdp, mail)
-
-
-def test_creer_mail_pas_point():
-    """Création de Utilisateur échoué car il n'y a pas de point dans le mail"""
-
-    # GIVEN
-    pseudo, mdp, mail = "Michel", "azerty", "az@gmailfr"
-
-    # WHEN-THEN:
-    with pytest.raises(
-        ValueError,
-        match="Il doit y avoir un '.' dans votre nom de domaine."
-        "Format attendu : 'blabla@domaine.truc'",
-    ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_pseudo_inv_ap():
@@ -131,7 +71,7 @@ def test_creer_pseudo_inv_ap():
     interdit : '"""
 
     # GIVEN
-    pseudo, mdp, mail = "Mi'chel", "azerty", "az@gmail.fr"
+    pseudo, mdp = "Mi'chel", "azerty"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -139,7 +79,7 @@ def test_creer_pseudo_inv_ap():
         match="Le pseudo ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_pseudo_inv_esp():
@@ -147,7 +87,7 @@ def test_creer_pseudo_inv_esp():
     interdit : &"""
 
     # GIVEN
-    pseudo, mdp, mail = "Mi&chel", "azerty", "az@gmail.fr"
+    pseudo, mdp = "Mi&chel", "azerty"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -155,7 +95,7 @@ def test_creer_pseudo_inv_esp():
         match="Le pseudo ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_pseudo_inv_ba():
@@ -163,7 +103,7 @@ def test_creer_pseudo_inv_ba():
     interdit : |"""
 
     # GIVEN
-    pseudo, mdp, mail = "Miche|", "azerty", "az@gmail.fr"
+    pseudo, mdp = "Miche|", "azerty"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -171,7 +111,7 @@ def test_creer_pseudo_inv_ba():
         match="Le pseudo ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_pseudo_inv_tir():
@@ -179,7 +119,7 @@ def test_creer_pseudo_inv_tir():
     interdit : -"""
 
     # GIVEN
-    pseudo, mdp, mail = "Mi-chel", "azerty", "az@gmail.fr"
+    pseudo, mdp = "Mi-chel", "azerty"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -187,7 +127,7 @@ def test_creer_pseudo_inv_tir():
         match="Le pseudo ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_mdp_inv_ap():
@@ -195,7 +135,7 @@ def test_creer_mdp_inv_ap():
     interdit : '"""
 
     # GIVEN
-    pseudo, mdp, mail = "Michel", "azer'ty", "az@gmail.fr"
+    pseudo, mdp = "Michel", "azer'ty"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -203,7 +143,7 @@ def test_creer_mdp_inv_ap():
         match="Le mot de passe ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_mdp_inv_esp():
@@ -211,7 +151,7 @@ def test_creer_mdp_inv_esp():
     interdit : &"""
 
     # GIVEN
-    pseudo, mdp, mail = "Michel", "az&rty", "az@gmail.fr"
+    pseudo, mdp = "Michel", "az&rty"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -219,7 +159,7 @@ def test_creer_mdp_inv_esp():
         match="Le mot de passe ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_mdp_inv_ba():
@@ -227,7 +167,7 @@ def test_creer_mdp_inv_ba():
     interdit : |"""
 
     # GIVEN
-    pseudo, mdp, mail = "Michel", "azert|y", "az@gmail.fr"
+    pseudo, mdp = "Michel", "azert|y"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -235,7 +175,7 @@ def test_creer_mdp_inv_ba():
         match="Le mot de passe ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_creer_mdp_inv_ti():
@@ -243,7 +183,7 @@ def test_creer_mdp_inv_ti():
     interdit : -"""
 
     # GIVEN
-    pseudo, mdp, mail = "Michel", "azert-y", "az@gmail.fr"
+    pseudo, mdp = "Michel", "azert-y"
 
     # WHEN-THEN:
     with pytest.raises(
@@ -251,7 +191,7 @@ def test_creer_mdp_inv_ti():
         match="Le mot de passe ne doit pas contenir de caractères spéciaux."
         "Caractères interdits : &, |, ', -",
     ):
-        UtilisateurService().creer(pseudo, mdp, mail)
+        UtilisateurService().creer(pseudo, mdp)
 
 
 def test_pseudo_deja_utilise_oui():
@@ -280,20 +220,6 @@ def test_pseudo_deja_utilise_non():
 
     # THEN
     assert not res
-
-
-def test_mail_deja_utilise_oui():
-    """Le mail est déja utilisé dans liste_utilisateur"""
-
-    # GIVEN
-    mail = "jp@mail.fr"
-
-    # WHEN
-    UtilisateurDao().lister_tous = MagicMock(return_value=liste_utilisateurs)
-    res = UtilisateurService().mail_deja_utilise(mail)
-
-    # THEN
-    assert res
 
 
 def test_connecter_pseudo_inv():
@@ -329,21 +255,20 @@ def test_connecter_ok():
 
     # GIVEN
     pseudo, mdp = "lea", "000000"
-    utilisateur_mock = Utilisateur(pseudo=pseudo, mail="lea@mail.fr", mdp=mdp)
+    utilisateur_mock = Utilisateur(pseudo=pseudo, mdp=mdp)
 
     with patch("dao.utilisateur_dao.UtilisateurDao.se_connecter", return_value=utilisateur_mock):
         utilisateur = UtilisateurService().connecter(pseudo, mdp)
 
     # THEN
     assert utilisateur.pseudo == pseudo
-    assert utilisateur.mail == "lea@mail.fr"
 
 
 def test_supprimer_ok():
     """La suppression de l'utilisateur a été correctement effectuée"""
 
     # GIVEN
-    user = Utilisateur(pseudo="lea", mail="lea@mail.fr", mdp="000000")
+    user = Utilisateur(pseudo="lea", mdp="000000")
     UtilisateurDao().supprimer = MagicMock(return_value=True)
 
     # WHEN
@@ -373,7 +298,7 @@ def test_trouver_par_id_existant():
 
     # GIVEN
     id_user = 998
-    utilisateur_mock = Utilisateur(pseudo="test_user", mail="test@mail.com", mdp="password")
+    utilisateur_mock = Utilisateur(pseudo="test_user", mdp="password")
 
     # Utilisation de patch pour simuler la méthode trouver_par_id
     with patch("dao.utilisateur_dao.UtilisateurDao.trouver_par_id", return_value=utilisateur_mock):
