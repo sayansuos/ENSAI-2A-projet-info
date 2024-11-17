@@ -1,4 +1,4 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from service.liste_favoris_service import ListeFavorisService
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
@@ -16,17 +16,17 @@ liste_recettes = [
     Recette(
         nom_recette="Spaghetti Bolognese",
         liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
-        description_recette="Spaghetti avec de la viande"
+        description_recette="Spaghetti avec de la viande",
     ),
     Recette(
         nom_recette="Spaghetti Tomato",
         liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
-        description_recette="Spaghetti avec de la sauce tomate"
+        description_recette="Spaghetti avec de la sauce tomate",
     ),
     Recette(
         nom_recette="Pizza Margherita",
         liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
-        description_recette="Je sais pas quoi écrire, c'est une pizza"
+        description_recette="Je sais pas quoi écrire, c'est une pizza",
     ),
 ]
 
@@ -48,12 +48,14 @@ def test_ajouter_favoris():
 # Test for enlever_favoris
 def test_enlever_favoris():
     # GIVEN
-    recette = liste_recettes[1]
+    recette = liste_recettes[0]
     utilisateur.recette_favorite = [recette]
-    liste_favoris_service = ListeFavorisService()
 
-    # WHEN
-    result = liste_favoris_service.retirer_favoris(recette, utilisateur)
+    with patch("dao.liste_favoris_dao.ListeFavorisDao.est_dans_favoris", return_value=True), patch(
+        "dao.liste_favoris_dao.ListeFavorisDao.retirer_favoris", return_value=True
+    ):
+        # WHEN
+        result = ListeFavorisService().retirer_favoris(recette, utilisateur)
 
     # THEN
     assert result is True
@@ -63,12 +65,13 @@ def test_enlever_favoris():
 def test_ajouter_ingredient_course():
     # GIVEN
     recette = liste_recettes[1]
-    ingredient = ingredient_1
     utilisateur.liste_de_course = []
-    liste_favoris_service = ListeFavorisService()
 
-    # WHEN
-    result = liste_favoris_service.ajouter_liste_course(recette=recette, utilisateur=utilisateur)
+    with patch("dao.liste_favoris_dao.ListeFavorisDao.ajouter_liste_course", return_value=True):
+        # WHEN
+        result = ListeFavorisService().ajouter_liste_course(
+            recette=recette, utilisateur=utilisateur
+        )
 
     # THEN
     assert result is True
@@ -82,8 +85,11 @@ def test_enlever_ingredient_course():
     utilisateur.liste_de_course = [ingredient]
     liste_favoris_service = ListeFavorisService()
 
-    # WHEN
-    result = liste_favoris_service.retirer_liste_course(recette, ingredient, utilisateur)
+    with patch(
+        "dao.liste_favoris_dao.ListeFavorisDao.retirer_liste_course", return_value=True
+    ), patch("dao.liste_favoris_dao.ListeFavorisDao.est_dans_liste_course", return_value=True):
+        # WHEN
+        result = liste_favoris_service.retirer_liste_course(recette, ingredient, utilisateur)
 
     # THEN
     assert result is True
@@ -97,7 +103,9 @@ def test_ajouter_ingredient_favori():
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.modifier_preference_ingredient(ingredient, utilisateur, modif="F")
+    result = liste_favoris_service.modifier_preference_ingredient(
+        ingredient, utilisateur, modif="F"
+    )
 
     # THEN
     assert result is True
@@ -110,8 +118,13 @@ def test_enlever_ingredient_favori():
     utilisateur.ingredient_favori = [ingredient]
     liste_favoris_service = ListeFavorisService()
 
-    # WHEN
-    result = liste_favoris_service.retirer_preference_ingredient(ingredient, utilisateur)
+    with patch(
+        "dao.liste_favoris_dao.ListeFavorisDao.est_dans_preference_ingredient", return_value=True
+    ), patch(
+        "dao.liste_favoris_dao.ListeFavorisDao.retirer_preference_ingredient", return_value=True
+    ):
+        # WHEN
+        result = liste_favoris_service.retirer_preference_ingredient(ingredient, utilisateur)
 
     # THEN
     assert result is True
@@ -125,7 +138,9 @@ def test_ajouter_ingredient_non_desire():
     liste_favoris_service = ListeFavorisService()
 
     # WHEN
-    result = liste_favoris_service.modifier_preference_ingredient(ingredient, utilisateur, modif="ND")
+    result = liste_favoris_service.modifier_preference_ingredient(
+        ingredient, utilisateur, modif="ND"
+    )
 
     # THEN
     assert result is True
@@ -138,8 +153,13 @@ def test_enlever_ingredient_non_desire():
     utilisateur.ingredient_non_desire = [ingredient]
     liste_favoris_service = ListeFavorisService()
 
-    # WHEN
-    result = liste_favoris_service.retirer_preference_ingredient(ingredient, utilisateur)
+    with patch(
+        "dao.liste_favoris_dao.ListeFavorisDao.est_dans_preference_ingredient", return_value=True
+    ), patch(
+        "dao.liste_favoris_dao.ListeFavorisDao.retirer_preference_ingredient", return_value=True
+    ):
+        # WHEN
+        result = liste_favoris_service.retirer_preference_ingredient(ingredient, utilisateur)
 
     # THEN
     assert result is True
@@ -198,7 +218,9 @@ def test_ajouter_ingredient_favori_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="ingredient doit être une instance de Ingredient"):
-        liste_favoris_service.modifier_preference_ingredient(invalid_ingredient, utilisateur, modif="F")
+        liste_favoris_service.modifier_preference_ingredient(
+            invalid_ingredient, utilisateur, modif="F"
+        )
 
 
 # Test enlever_ingredient_favori with invalid input
@@ -220,7 +242,9 @@ def test_ajouter_ingredient_non_desire_invalid_input():
 
     # WHEN/THEN
     with pytest.raises(TypeError, match="ingredient doit être une instance de Ingredient"):
-        liste_favoris_service.modifier_preference_ingredient(invalid_ingredient, utilisateur, modif="ND")
+        liste_favoris_service.modifier_preference_ingredient(
+            invalid_ingredient, utilisateur, modif="ND"
+        )
 
 
 # Test enlever_ingredient_non_desire with invalid input
