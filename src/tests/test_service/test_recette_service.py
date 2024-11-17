@@ -59,9 +59,16 @@ def test_creer_recette_ok():
 def test_trouver_recette_par_nom_ok():
     # GIVEN
     nom_recette = "Spaghetti Bolognese"
-
-    # WHEN
-    recette = RecetteDao().trouver_par_nom(nom_recette)
+    recette_mock = (
+        Recette(
+            nom_recette="Spaghetti Bolognese",
+            liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
+            description_recette="Spaghetti avec de la viande",
+        ),
+    )
+    with patch("dao.recette_dao.RecetteDao.trouver_par_nom", return_value=recette_mock):
+        # WHEN
+        recette = RecetteService().trouver_recette_par_nom(nom_recette)
 
     # THEN
     assert recette is not None
@@ -96,7 +103,7 @@ def test_trouver_recette_par_ingredient_ok():
     recette_mock = liste_recettes[1]
 
     # Utilisation de patch pour simuler la méthode trouver_par_id
-    with patch("dao.recette_dao.trouver_par_ingredient", return_value=recette_mock):
+    with patch("dao.recette_dao.RecetteDao.trouver_par_ingredient", return_value=recette_mock):
         recette = RecetteDao().trouver_par_ingredient(ingredient)
 
     # THEN
