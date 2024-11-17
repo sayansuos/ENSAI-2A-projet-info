@@ -7,22 +7,17 @@ class RecettesVue(VueAbstraite):
     """Vue d'accueil de l'application"""
 
     def choisir_menu(self):
-        """Choix du menu suivant
-
-        Return
-        ------
-        view
-            Retourne la vue choisie par l'utilisateur dans le terminal
         """
-
-        print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
+        Vue pour la consultation de recette d'un utilisateur invité.
+        """
+        print("\n" + "-" * 50 + "\nConsultation des recettes\n" + "-" * 50 + "\n")
 
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter toutes les recettes",  # done
-                "Consulter les recettes par ingrédient",  # done
-                "Retour",  # done
+                "Consulter toutes les recettes",
+                "Consulter les recettes par ingrédient",
+                "Retour",
             ],
         ).execute()
 

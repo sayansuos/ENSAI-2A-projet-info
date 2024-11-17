@@ -3,8 +3,8 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-from service.utilisateur_service import UtilisateurService
-from service.liste_favoris_service import ListeFavorisService
+# from service.utilisateur_service import UtilisateurService
+# from service.liste_favoris_service import ListeFavorisService
 
 
 class MenuUserVue(VueAbstraite):
@@ -33,18 +33,17 @@ class MenuUserVue(VueAbstraite):
         vue
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
-
         print("\n" + "-" * 50 + "\nMenu Utilisateur\n" + "-" * 50 + "\n")
 
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter les recettes",  # done
-                "Consulter les suggestions",  # done
-                "Consulter les favoris",  # done
-                "Consulter les préférences ingrédients",  # done
-                "Consulter le panier",  # done
-                "Se déconnecter",  # done
+                "Consulter les recettes",
+                "Consulter les suggestions",
+                "Consulter les favoris",
+                "Consulter les préférences ingrédients",
+                "Consulter le panier",
+                "Se déconnecter",
             ],
         ).execute()
 

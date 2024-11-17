@@ -20,14 +20,13 @@ class MenuRecetteAf(VueAbstraite):
         self.utilisateur = utilisateur
 
     def choisir_menu(self):
-        recette_service = RecetteService()
-        ingredient_service = IngredientService()
-        ingredients = ingredient_service.lister_tous()
+        print("\n" + "-" * 50 + "\nConsultation des recettes par ingrédients\n" + "-" * 50 + "\n")
 
+        # Affichage de tous les ingrédients
+        ingredients = IngredientService().lister_tous()
         choix = "-> Page suivante"
         i = 0
-
-        while choix == "-> Page suivante":
+        while choix == "-> Page suivante":  # Pour avoir plusieurs pages avec 10 ingrédients
             i += 1
             if abs(10 * (i - 1) - len(ingredients)) > 10:
                 liste_ingredients = ingredients[10 * (i - 1) : 10 * i]
@@ -36,14 +35,17 @@ class MenuRecetteAf(VueAbstraite):
                 i = 0
 
             liste_ingredients.append("-> Page suivante")
+            # Choix de l'ingrédient
             choix = inquirer.select(
                 message="Choisissez un ingrédient : ",
                 choices=liste_ingredients,
             ).execute()
 
-        liste_recette_filtree = recette_service.trouver_recette_par_ingredient(choix)
+        # Affichage de toutes les recettes avec l'ingrédient sélectionné
+        liste_recette_filtree = RecetteService().trouver_recette_par_ingredient(choix)
         liste_recette_filtree.append("Retour")
 
+        # Choix de la recette
         choix_deux = inquirer.select(
             message="Choisissez une recette : ",
             choices=liste_recette_filtree,
@@ -54,8 +56,8 @@ class MenuRecetteAf(VueAbstraite):
 
         else:
             autre_action = "Oui"
-            while autre_action == "Oui":
-
+            while autre_action == "Oui":  # Pour réaliser plusieurs actions à la suite
+                # Sélection de l'action
                 choix_bis = inquirer.select(
                     message="Que voulez-vous faire ?",
                     choices=[
@@ -70,12 +72,15 @@ class MenuRecetteAf(VueAbstraite):
 
                 match choix_bis:
                     case "Lire la recette":
-                        print(recette_service.lire_recette(choix_deux), "\n\n")
+                        # Appel au service pour lire une recette
+                        RecetteService().lire_recette(choix_deux)
 
                     case "Voir les notes et les avis":
-                        print(recette_service.voir_note_avis(choix_deux), "\n\n")
+                        # Appel au service pour lire les notes et avis
+                        RecetteService().voir_note_avis(choix_deux)
 
                     case "Noter et laisser un commentaire":
+                        # Note à attribuer
                         note = inquirer.select(
                             message="Quelle note attribuez-vous à cette recette ?",
                             choices=[
@@ -88,35 +93,46 @@ class MenuRecetteAf(VueAbstraite):
                             ],
                         ).execute()
                         note = int(note[0])
+                        # Commentaire à attribuer
                         com = inquirer.text(
                             message="Laissez un commentaire ! (pas de ';')\n"
                         ).execute()
-                        recette_service.ajouter_note_et_com(recette=choix_deux, note=note, com=com)
-                        choix_deux = recette_service.trouver_recette_par_id(choix_deux.id_recette)
-                        print("\n\nC'est fait !!!\n\n")
+                        # Appel au service pour pour ajouter une note et un avis
+                        RecetteService().ajouter_note_et_com(recette=choix_deux, note=note, com=com)
+                        # choix_deux = recette_service.trouver_recette_par_id(choix_deux.id_recette)
+                        print("\n\nLa note et le commentaire ont bien été pris en compte !")
+                        print(
+                            "Veuillez redémarrer l'application pour voir les modifications...\n\n"
+                        )
 
                     case "Ajouter dans les favoris":
+                        # Appel au service pour ajouter la recette aux favoris
                         ListeFavorisService().ajouter_favoris(
                             recette=choix_deux, utilisateur=self.utilisateur
                         )
-                        print("\n\nC'est fait !!!\n\n")
+                        print("\n\nLa recette a bien été ajoutée aux favoris !\n\n")
 
                     case "Supprimer des favoris":
+                        # Appel au service pour retirer la recette des favoris
                         ListeFavorisService().retirer_favoris(
                             recette=choix_deux, utilisateur=self.utilisateur
                         )
-                        print("\n\nC'est fait !!!\n\n")
+                        print("\n\nLa recette a bien été retirée des favoris !\n\n")
 
                     case "Ajouter les ingrédients au panier":
+                        # Appel au service pour ajouter les ingrédients au panier
                         ListeFavorisService().ajouter_liste_course(
                             recette=choix_deux, utilisateur=self.utilisateur
                         )
-                        print("\n\nC'est fait !!!\n\n")
+                        print("\n\nLes ingrédients ont bien été ajoutés au panier !.\n\n")
 
+                # Fin (ou non) de la boucle pour réaliser une autre action
                 autre_action = inquirer.select(
                     message="Réaliser une autre action pour cette recette ?",
                     choices=["Oui", "Non"],
                 ).execute()
+
+                # Fin (ou non) de la boucle pour consulter une autre recette
                 if autre_action == "Non":
                     choix_bis_bis = inquirer.select(
                         message="Consulter une autre recette ? ",

@@ -120,11 +120,11 @@ class UtilisateurService:
         Returns:
             bool: True si l'utilisateur a bien été supprimé. False sinon.
         """
+        # Vérification des attributs
         if not isinstance(user, Utilisateur):
             raise TypeError("L'utilisateur n'est pas renseigné correctement.")
-        # Vérifier si l'utilisateur existe bien dans la base de données
-        # Proposer à l'utilisateur de confirmer son choix (Oui ou Non)
-        # Renvoie True si l'utilisateur a bien été supprimé, False sinon
+
+        # Appel à la DAO
         return UtilisateurDao().supprimer(user)
 
     @log
@@ -173,7 +173,6 @@ class UtilisateurService:
                 Informations de l'utilisateur modifiées.
                 None si la modification a échoué.
         """
-
         user.mdp = hash_password(user.mdp, user.pseudo)
         return user if UtilisateurDao().modifier(user) else None
 

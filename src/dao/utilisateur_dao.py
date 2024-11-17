@@ -141,6 +141,7 @@ class UtilisateurDao(metaclass=Singleton):
             True si la modification est un succès, False sinon.
         """
         res = None
+        print("BBBBB")
 
         try:
             with DBConnection().connection as connection:
@@ -161,12 +162,13 @@ class UtilisateurDao(metaclass=Singleton):
                     res = cursor.rowcount
         except Exception as e:
             logging.info(e)
+            print(e)
             raise
 
         return res == 1
 
     @log
-    def supprimer(self, id_utilisateur) -> bool:
+    def supprimer(self, utilisateur: Utilisateur) -> bool:
         """Suppression d'un utilisateur dans la base de données.
 
         Parameters
@@ -184,7 +186,7 @@ class UtilisateurDao(metaclass=Singleton):
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "DELETE FROM utilisateur WHERE id_utilisateur = %(id_utilisateur)s;",
-                        {"id_utilisateur": id_utilisateur},
+                        {"id_utilisateur": utilisateur.id_utilisateur},
                     )
                     res = cursor.rowcount
         except Exception as e:

@@ -13,6 +13,9 @@ from service.utilisateur_service import UtilisateurService
 class InscriptionVue(VueAbstraite):
 
     def choisir_menu(self):
+
+        print("\n" + "-" * 50 + "\Création de compte\n" + "-" * 50 + "\n")
+
         # Demande à l'utilisateur de saisir pseudo, mot de passe...
         pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()
 

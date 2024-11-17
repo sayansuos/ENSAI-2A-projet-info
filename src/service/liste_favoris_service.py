@@ -151,26 +151,22 @@ class ListeFavorisService:
 
         Args :
             utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les préférences
-
-        Returns:
-            liste_ingredients_favoris : liste des ingrédients favoris de l'utilisateur
-            liste_ingredients_non_desires : liste des ingrédients non-désirés de l'utilisateur
         """
         if not isinstance(utilisateur, Utilisateur):
             raise TypeError("utilisateur doit être une instance de Utilisateur")
 
+        # Appel à la DAO pour avoir la liste des ingrédients favoris
         fav = ListeFavorisDao().consulter_preference_ingredient_favori(utilisateur=utilisateur)
         utilisateur.ingredient_favori = fav
-        if len(fav) > 0:
-            pref_str = f"Ingrédients favoris de {utilisateur.pseudo} : \n\n"
-            for ingr in fav:
-                pref_str += f"- {ingr} \n"
-            pref_str += "\n\n"
-        else:
-            pref_str = "Il n'y aucun ingrédient favori. \n\n"
-        return pref_str
 
-        return ListeFavorisDao().consulter_preference_ingredient_favori(utilisateur=utilisateur)
+        # Affichage des ingrédients favoris
+        print("\n\n*** Favourite ingredients ***\n\n")
+        if len(fav) > 0:
+            for ingr in fav:
+                print(f" - {ingr}")
+        else:
+            print("There is no favourite ingredient registered.")
+        print("\n\n")
 
     def consulter_preference_ingredient_non_desire(
         self, utilisateur: Utilisateur
@@ -181,24 +177,24 @@ class ListeFavorisService:
         Args :
             utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les préférences
 
-        Returns:
-            liste_ingredients_non_desires : liste des ingrédients non-désirés de l'utilisateur
         """
         if not isinstance(utilisateur, Utilisateur):
             raise TypeError("utilisateur doit être une instance de Utilisateur")
 
+        # Appel à la DAO pour avoir la liste des ingrédients non-désirés
         non_desires = ListeFavorisDao().consulter_preference_ingredient_non_desire(
             utilisateur=utilisateur
         )
         utilisateur.ingredient_non_desire = non_desires
+
+        # Affichage des ingrédients non-désirés
+        print("\n\n*** Unwanted ingredients ***\n\n")
         if len(non_desires) > 0:
-            pref_str = f"Ingrédients non-désirés de {utilisateur.pseudo} : \n\n"
             for ingr in non_desires:
-                pref_str += f"- {ingr} \n"
-            pref_str += "\n\n"
+                print(f"- {ingr}")
         else:
-            pref_str = "Il n'y aucun ingrédient non-désiré. \n\n"
-        return pref_str
+            print("There is no unwanted ingredient registered.")
+        print("\n\n")
 
     def modifier_preference_ingredient(
         self, ingredient: Ingredient, utilisateur: Utilisateur, modif: str

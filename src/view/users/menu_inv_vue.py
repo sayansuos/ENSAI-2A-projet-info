@@ -1,10 +1,8 @@
 from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
-from view.session import Session
 
-
-from service.joueur_service import JoueurService
+# from view.session import Session
 
 
 class MenuInvVue(VueAbstraite):
@@ -22,21 +20,16 @@ class MenuInvVue(VueAbstraite):
     """
 
     def choisir_menu(self):
-        """Choix du menu suivant de l'invité
-
-        Return
-        ------
-        vue
-            Retourne la vue choisie par l'invité dans le terminal
         """
-
+        Vue de l'utilisateur non connecté.
+        """
         print("\n" + "-" * 50 + "\nMenu Invité\n" + "-" * 50 + "\n")
 
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter les recettes",  # done
-                "Retour",  # done
+                "Consulter les recettes",
+                "Retour",
             ],
         ).execute()
 

@@ -10,9 +10,6 @@ class RecetteService:
     Définis les méthodes de la classe Recette
     """
 
-    def __init__(self):
-        pass
-
     def trouver_recette_par_id(self, id: int) -> Optional[Recette]:
         """
         Permet de trouver une recette par identifiant
@@ -104,34 +101,27 @@ class RecetteService:
         """
         return RecetteDao().supprimer(recette)
 
-    def voir_note_avis(self, recette: Recette) -> Optional[float]:
+    def voir_note_avis(self, recette: Recette):
         """
-        Permet de voir la note d'une recette
-
-        Args:
-            recette (Recette): Recette dont on veut voir la note
-
-        Returns:
-            Optional[float]:
-                Note de la recette si la recette a été notée au moins une fois.
-                None sinon.
+        Cette méthode affiche la note et les avis d'une recette.
         """
+        # Vérification des attributs
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
 
-        note_avis_str = "\n\n" + str(recette) + "\n\n" + "Avis :"
-        if recette.avis[0] != "":
-            note_avis_str += "\n"
-            for av in recette.avis:
-                note_avis_str += f"- {av} \n"
-        else:
-            note_avis_str += " Il n'y a aucun avis pour cette recette. \n"
-        if recette.note:
-            note_avis_str += f"\nNote : {round(recette.note, 2)}/5"
-        else:
-            note_avis_str += "\nNote : Il n'y a aucune note pour cette recette."
+        # Affichage
+        print(f"\n\n*** [ {recette.nom_recette} ] ***")
+        print(f"Id : {recette.id_recette}\n")
 
-        return note_avis_str
+        # S'il n'y a aucun avis : affichage différent
+        if recette.avis[0] == "":
+            print("There is no rewiew or rating for this recipe.")
+        else:
+            print(f"Rate: {self.note}/5\n")
+            print("Rewiews:\n")
+            for a in recette.avis:
+                print(f" - {recette.avis}")
+        print("\n\n")
 
     def ajouter_note_et_com(self, recette: Recette, note: int, com: str) -> bool:
         """
@@ -145,6 +135,7 @@ class RecetteService:
         Returns:
             bool: True si la note et le commentaires ont été ajouté à la table, False sinon
         """
+        # Vérification des attributs
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
         if not isinstance(note, int):
@@ -156,28 +147,23 @@ class RecetteService:
         if ";" in com:
             raise ValueError("';' ne peut pas être utilisé dans le commentaire.")
 
+        # Appel à la DAO
         return RecetteDao().ajouter_note_et_com(recette=recette, note=note, com=com)
 
-    def lire_recette(self, recette: Recette) -> str:
+    def lire_recette(self, recette: Recette):
         """
-        Renvoie la description d'une recette
-
-        Args:
-            recette (Recette):
-                Recette dont on veut voir la description
-
-        Returns:
-            str:
-                Description de la recette
+        Cette méthode affiche la description complète d'une recette.
         """
-
+        # Vérification des attributs
         if not isinstance(recette, Recette):
-            raise TypeError("Recette doit être une instance de Recette.")
+            raise TypeError("recette doit être une instance de Recette.")
 
-        recette_str = "\n\n" + str(recette) + "\n\n" + "Ingredients :\n"
+        # Affichage
+        print(f"\n\n*** [ {recette.nom_recette} ] ***")
+        print(f"Id : {recette.id_recette}")
+        print("\nList of ingredients:\n")
         for ingr in recette.liste_ingredient:
-            ingredient, quantites = ingr
-            recette_str += f"- {ingredient.nom_ingredient} ({quantites}) \n"
-        recette_str += f"\nDescription : \n{recette.description_recette}"
-
-        return recette_str
+            ingredient, quantite = ingr
+            print(f" - {ingredient} ({quantite})")
+        print(f"\nDescription: \n\n{recette.description_recette}")
+        print("\n\n")

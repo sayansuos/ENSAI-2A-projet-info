@@ -8,7 +8,9 @@ from dotenv import load_dotenv
 
 class Utilisateur:
     """
-    Instancie un Utilisateur
+    Cette classe représente un utilisateur avec un pseudo, un mot de passe, un identifiant, une
+    liste de recettes favorites, d'ingrédients favoris, d'ingrédients non-désirés, de course, et
+    un rôle.
     """
 
     def __init__(
@@ -23,23 +25,27 @@ class Utilisateur:
         role: str = "user",
     ):
         """
-        Définis un Utilisateur
+        Cette méthode instancie un Utilisateur.
 
-        Args:
-            id_utilisateur (int): identifiant numérique unique de l'utilisateur
-            pseudo (str): pseudo unique choisi par l'utilisateur
-            mdp (str): mot de passe choisi par l'utilisateur
-            mail (str): adresse mail de l'utilisateur
-            recette_favorite (list[Recette], optional): liste des recettes favorites
-                de l'utilisateur. [] par défaut.
-            ingredient_favori (list[Ingredient], optional): liste des ingrédients
-                favoris de l'utilisateur. [] par défaut.
-            ingredient_non_desire (list[Ingredient], optional): liste des ingrédients
-                non désirés de l'utilisateur. [] par défaut.
-            liste_de_course (list[Ingredient], optional): liste de course de l'utilisateur.
-                [] par défaut.
-            admin (str, optional): Définis le rôle de l'utilisateur. "user" pour un
-                utilisateur classique. "admin" pour un administrateur. "user" par défaut.
+        Args
+        ----
+            id_utilisateur (int):
+                Identifiant de l'utilisateur
+            pseudo (str):
+                Pseudo de l'utilisateur
+            mdp (str):
+                Mot de passe de l'utilisateur
+            recette_favorite (list[Recette], optional):
+                Liste des recettes favorites de l'utilisateur, [] par défaut.
+            ingredient_favori (list[Ingredient], optional):
+                Liste des ingrédients favoris de l'utilisateur, [] par défaut.
+            ingredient_non_desire (list[Ingredient], optional):
+                Liste des ingrédients non désirés de l'utilisateur, [] par défaut.
+            liste_de_course (list[Ingredient], optional):
+                Liste de course de l'utilisateur. [] par défaut.
+            admin (str, optional):
+                Rôle de l'utilisateur. "user" ou "admin", "user" par défaut.
+
         """
         self.id_utilisateur = id_utilisateur
         self.pseudo = pseudo
@@ -51,13 +57,51 @@ class Utilisateur:
         self.role = role
 
     def __str__(self):
-        return f"[{self.id_utilisateur}] {self.pseudo} ({self.role})"
+        return f"[{self.id_utilisateur}] {self.pseudo}"
 
+    def afficher_info(self):
+        """
+        Cette méthode affiche les caractéristique d'un utilisateur.
+        """
+        print(f"\n\n*** DETAILS ABOUT [{self.id_utilisateur}] {self.pseudo} ***\n")
 
-#    @property
-#    def mail(self):
-#       """Retourne l'adresse mail de l'utilisateur."""
-#        return self.mail
+        # Affichage des recettes favorites
+        if self.recette_favorite == []:
+            print("Favourite recipes: There is no favourite recipe registered.\n")
+        else:
+            print("Favourite recipes : \n")
+            for recette in self.recette_favorite:
+                print(f" - {recette}")
+            print("\n")
+
+        # Affichage des ingrédients favoris
+        if self.ingredient_favori == []:
+            print("Favourite ingredients: There is no favourite ingredient registered.\n")
+        else:
+            print("\nFavourite ingredients:\n")
+            for ing_f in self.ingredient_favori:
+                print(f" - {ing_f}")
+            print("\n")
+
+        # Affichage des ingrédients non-désirés
+        if self.ingredient_non_desire == []:
+            print("Unwanted ingredients: There is no unwanted ingredient registered.\n")
+        else:
+            print("Unwanted ingredients:")
+            for ing_nd in self.ingredient_non_desire:
+                print(f" - {ing_nd}\n")
+            print("\n")
+
+        # Affichage de la liste de course
+        if self.liste_de_course == []:
+            print("Grocery list: The grocery list is empty.\n")
+        else:
+            print("Grocery list: \n\n")
+            for course in self.liste_de_course:
+                print(f" - {course}\n")
+            print("\n")
+        print(f"Role: {self.role}")
+        print("\n\n")
 
 
 if __name__ == "__main__":

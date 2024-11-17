@@ -10,6 +10,9 @@ class ConnexionVue(VueAbstraite):
     """Vue de Connexion (saisie de pseudo et mdp)"""
 
     def choisir_menu(self):
+
+        print("\n" + "-" * 50 + "\nConnexion\n" + "-" * 50 + "\n")
+
         # Demande à l'utilisateur de saisir pseudo et mot de passe
         pseudo = inquirer.text(message="Entrez votre pseudo : ").execute()
         mdp = inquirer.secret(message="Entrez votre mot de passe :").execute()

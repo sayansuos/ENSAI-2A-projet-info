@@ -5,30 +5,25 @@ from service.liste_favoris_service import ListeFavorisService
 
 
 class IngredientsVue(VueAbstraite):
-    """Vue d'accueil de l'application"""
+    """
+    Vue pour les préférences ingrédients d'un utilisateur connecté.
+    """
 
     def __init__(self, message, utilisateur):
         super().__init__(message)
         self.utilisateur = utilisateur
 
     def choisir_menu(self):
-        """Choix du menu suivant
+        print("\n" + "-" * 50 + "\nConsultation des préférences ingrédients\n" + "-" * 50 + "\n")
 
-        Return
-        ------
-        view
-            Retourne la vue choisie par l'utilisateur dans le terminal
-        """
-
-        print("\n" + "-" * 50 + "\nAccueil\n" + "-" * 50 + "\n")
-
+        # Choix des actions à réaliser
         choix = inquirer.select(
             message="Faites votre choix : ",
             choices=[
-                "Consulter tous les ingrédients",  # done
-                "Consulter les ingrédients favoris",  # done
-                "Consulter les ingrédients non-désirés",  # done
-                "Retour",  # done
+                "Consulter tous les ingrédients",
+                "Consulter les ingrédients favoris",
+                "Consulter les ingrédients non-désirés",
+                "Retour",
             ],
         ).execute()
 
@@ -39,18 +34,14 @@ class IngredientsVue(VueAbstraite):
                 return MenuIngredient(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les ingrédients favoris":
-                print(
-                    ListeFavorisService().consulter_preference_ingredient_favori(
-                        utilisateur=self.utilisateur
-                    )
+                ListeFavorisService().consulter_preference_ingredient_favori(
+                    utilisateur=self.utilisateur
                 )
                 return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les ingrédients non-désirés":
-                print(
-                    ListeFavorisService().consulter_preference_ingredient_non_desire(
-                        utilisateur=self.utilisateur
-                    )
+                ListeFavorisService().consulter_preference_ingredient_non_desire(
+                    utilisateur=self.utilisateur
                 )
                 return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
 
