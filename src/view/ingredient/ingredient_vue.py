@@ -6,7 +6,7 @@ from service.ingredient_service import IngredientService
 from service.liste_favoris_service import ListeFavorisService
 
 
-class MenuIngredient(VueAbstraite):
+class IngredientVue(VueAbstraite):
     """
     Vue qui affiche tous les ingrédients pour un utilisateur connecté.
     """
@@ -39,9 +39,9 @@ class MenuIngredient(VueAbstraite):
             ).execute()
 
         if choix == "Retour":
-            from view.ingredients.ingredients_vue import IngredientsVue
+            from view.ingredient.pref_ingredient_vue import PrefIngredientVue
 
-            return IngredientsVue(utilisateur=self.utilisateur)
+            return PrefIngredientVue(message=self.message, utilisateur=self.utilisateur)
 
         else:
             # Choix de l'action à réaliser
@@ -84,6 +84,7 @@ class MenuIngredient(VueAbstraite):
                     )
                     print("\n\nL'ingrédient a bien été retiré des non-désirés !\n\n")
 
-        from view.ingredients.ingredients_vue import IngredientsVue
+        inquirer.select(message="", choices=["Ok"]).execute()
+        from view.ingredient.pref_ingredient_vue import PrefIngredientVue
 
-        return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
+        return PrefIngredientVue(message=self.message, utilisateur=self.utilisateur)

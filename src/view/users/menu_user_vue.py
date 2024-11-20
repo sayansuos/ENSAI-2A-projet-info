@@ -3,9 +3,6 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
-# from service.utilisateur_service import UtilisateurService
-# from service.liste_favoris_service import ListeFavorisService
-
 
 class MenuUserVue(VueAbstraite):
     """Vue du menu de l'utilisateur
@@ -55,26 +52,26 @@ class MenuUserVue(VueAbstraite):
                 return AccueilVue()
 
             case "Consulter les recettes":
-                from view.recettes.recettes_vue_user import RecettesVue
+                from view.recette.menu_recette_user_vue import MenuRecetteUserVue
 
-                return RecettesVue(message=self.message, utilisateur=self.utilisateur)
+                return MenuRecetteUserVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les suggestions":
-                from view.recette.menu_recette_sugg import MenuRecetteSugg
+                from view.recette.recette_user_sugg_vue import RecetteUserSuggVue
 
-                return MenuRecetteSugg(message=self.message, utilisateur=self.utilisateur)
+                return RecetteUserSuggVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les favoris":
-                from view.recette.menu_recette_fav import MenuRecetteFav
+                from view.recette.recette_user_fav_vue import RecetteUserFavVue
 
-                return MenuRecetteFav(message=self.message, utilisateur=self.utilisateur)
+                return RecetteUserFavVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter le panier":
-                from view.panier.vue_panier import PanierVue
+                from view.ingredient.liste_ingredient_vue import ListeIngredientVue
 
-                return PanierVue(message=self.message, utilisateur=self.utilisateur)
+                return ListeIngredientVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les préférences ingrédients":
-                from view.ingredients.ingredients_vue import IngredientsVue
+                from view.ingredient.pref_ingredient_vue import PrefIngredientVue
 
-                return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
+                return PrefIngredientVue(message=self.message, utilisateur=self.utilisateur)

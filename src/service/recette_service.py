@@ -1,6 +1,8 @@
 from typing import List, Optional
+
 from business_object.recette import Recette
 from dao.recette_dao import RecetteDao
+
 from business_object.ingredient import Ingredient
 from view.session import Session
 
@@ -117,10 +119,10 @@ class RecetteService:
         if recette.avis[0] == "":
             print("There is no rewiew or rating for this recipe.")
         else:
-            print(f"Rate: {self.note}/5\n")
+            print(f"Rate: {recette.note}/5\n")
             print("Rewiews:\n")
             for a in recette.avis:
-                print(f" - {recette.avis}")
+                print(f" - {a}")
         print("\n\n")
 
     def ajouter_note_et_com(self, recette: Recette, note: int, com: str) -> bool:

@@ -3,7 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 
 
-class RecettesVue(VueAbstraite):
+class MenuRecetteUserVue(VueAbstraite):
     """Vue d'accueil de l'application"""
 
     def __init__(self, message, utilisateur):
@@ -33,14 +33,14 @@ class RecettesVue(VueAbstraite):
 
         match choix:
             case "Consulter toutes les recettes":
-                from view.recette.menu_recette_user_sf import MenuRecetteSf
+                from view.recette.recette_user_sf_vue import RecetteUserSfVue
 
-                return MenuRecetteSf(message=self.message, utilisateur=self.utilisateur)
+                return RecetteUserSfVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les recettes par ingrédient":
-                from view.recette.menu_recette_user_af import MenuRecetteAf
+                from view.recette.recette_user_af_vue import RecetteUserAfVue
 
-                return MenuRecetteAf(message=self.message, utilisateur=self.utilisateur)
+                return RecetteUserAfVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Retour":
                 from view.users.menu_user_vue import MenuUserVue

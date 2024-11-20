@@ -427,7 +427,6 @@ class ListeFavorisDao(metaclass=Singleton):
                         {"id_utilisateur": utilisateur.id_utilisateur},
                     )
                     res = cursor.fetchall()
-                    print(res)
         except Exception as e:
             logging.info(e)
             raise

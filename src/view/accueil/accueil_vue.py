@@ -39,7 +39,7 @@ class AccueilVue(VueAbstraite):
             case "Créer un compte":
                 from view.accueil.inscription_vue import InscriptionVue
 
-                return InscriptionVue("Création de compte joueur")
+                return InscriptionVue("Création de compte utilisateur")
 
             case "Continuer en tant qu'invité":
                 from view.users.menu_inv_vue import MenuInvVue

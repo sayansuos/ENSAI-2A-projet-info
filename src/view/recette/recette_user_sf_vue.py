@@ -1,18 +1,18 @@
 from InquirerPy import inquirer
 
+from view.session import Session
 from view.vue_abstraite import VueAbstraite
 from view.users.menu_user_vue import MenuUserVue
-from view.recettes.recettes_vue_user import RecettesVue
-
-from business_object.recette import Recette
+from view.recette.menu_recette_user_vue import MenuRecetteUserVue
 
 from service.recette_service import RecetteService
 from service.liste_favoris_service import ListeFavorisService
 
 
-class MenuRecetteFav(VueAbstraite):
-    """
-    Vue pour les recettes favorites d'un utilisateur connecté.
+class RecetteUserSfVue(VueAbstraite):
+    """Vue qui affiche :
+    - toutes les recettes dispo
+    - les options
     """
 
     def __init__(self, message, utilisateur):
@@ -20,13 +20,12 @@ class MenuRecetteFav(VueAbstraite):
         self.utilisateur = utilisateur
 
     def choisir_menu(self):
-        print("\n" + "-" * 50 + "\nConsultation des recettes favorites\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 50 + "\nConsultation de toute les recettes\n" + "-" * 50 + "\n")
 
-        # Affichage de toutes les recettes favorites
-        recettes = ListeFavorisService().consulter_favoris(utilisateur=self.utilisateur)
+        # Affichage de toutes les recettes
+        recettes = RecetteService().lister_toutes_recettes()
         choix = "-> Page suivante"
         i = 0
-
         while choix == "-> Page suivante":  # Pour avoir plusieurs pages avec 10 recettes
             i += 1
             if abs(10 * (i - 1) - len(recettes)) > 10:
@@ -42,8 +41,10 @@ class MenuRecetteFav(VueAbstraite):
                 choices=liste_recettes,
             ).execute()
 
+        i = 0
+
         if choix == "Retour":
-            return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
+            return MenuRecetteUserVue(message=self.message, utilisateur=self.utilisateur)
 
         else:
             autre_action = "Oui"
@@ -55,6 +56,7 @@ class MenuRecetteFav(VueAbstraite):
                         "Lire la recette",
                         "Voir les notes et les avis",
                         "Noter et laisser un commentaire",
+                        "Ajouter dans les favoris",
                         "Supprimer des favoris",
                         "Ajouter les ingrédients au panier",
                     ],
@@ -84,15 +86,21 @@ class MenuRecetteFav(VueAbstraite):
                         ).execute()
                         note = int(note[0])
                         # Commentaire à attribuer
-                        com = inquirer.text(
-                            message="Laissez un commentaire ! (pas de ';')\n"
-                        ).execute()
+                        com = inquirer.text(message="Laissez un avis ! (pas de ';')\n").execute()
+                        # Appel au service pour ajouter une note et un avis
                         RecetteService().ajouter_note_et_com(recette=choix, note=note, com=com)
-                        # choix = RecetteService().trouver_recette_par_id(choix.id_recette)
-                        print("\n\nLa note et le commentaire ont bien été pris en compte !")
-                        print(
-                            "Veuillez redémarrer l'application pour voir les modifications...\n\n"
+                        # Suppression dans la liste chargée et ajout de la recette avec avis et com
+                        Session().liste_recettes.remove(choix)
+                        choix = RecetteService().trouver_recette_par_id(choix.id_recette)
+                        Session().liste_recettes.append(choix)
+                        print("\n\nLa note et le commentaire ont bien été pris en compte !\n\n")
+
+                    case "Ajouter dans les favoris":
+                        # Appel au service pour ajouter la recette aux favoris
+                        ListeFavorisService().ajouter_favoris(
+                            recette=choix, utilisateur=self.utilisateur
                         )
+                        print("\n\nLa recette a bien été ajoutée aux favoris !\n\n")
 
                     case "Supprimer des favoris":
                         # Appel au service pour retirer la recette des favoris
@@ -123,4 +131,4 @@ class MenuRecetteFav(VueAbstraite):
                     if choix_bis_bis == "Non":
                         return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
-        return MenuRecetteFav(message=self.message, utilisateur=self.utilisateur)
+        return MenuRecetteUserVue(message=self.message, utilisateur=self.utilisateur)

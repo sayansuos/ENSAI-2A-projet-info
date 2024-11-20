@@ -1,16 +1,15 @@
 from InquirerPy import inquirer
 
+
+from view.session import Session
 from view.vue_abstraite import VueAbstraite
 from view.users.menu_user_vue import MenuUserVue
-from view.recettes.recettes_vue_user import RecettesVue
-
-from business_object.recette import Recette
 
 from service.recette_service import RecetteService
 from service.liste_favoris_service import ListeFavorisService
 
 
-class MenuRecetteSf(VueAbstraite):
+class RecetteUserSuggVue(VueAbstraite):
     """Vue qui affiche :
     - toutes les recettes dispo
     - les options
@@ -21,12 +20,13 @@ class MenuRecetteSf(VueAbstraite):
         self.utilisateur = utilisateur
 
     def choisir_menu(self):
-        print("\n" + "-" * 50 + "\nConsultation de toute les recettes\n" + "-" * 50 + "\n")
+        print("\n" + "-" * 50 + "\nConsultation des suggestions\n" + "-" * 50 + "\n")
 
-        # Affichage de toutes les recettes
-        recettes = RecetteService().lister_toutes_recettes()
+        # Affichage de toutes les recettes suggérées
+        recettes = ListeFavorisService().consulter_suggestion(utilisateur=self.utilisateur)
         choix = "-> Page suivante"
         i = 0
+
         while choix == "-> Page suivante":  # Pour avoir plusieurs pages avec 10 recettes
             i += 1
             if abs(10 * (i - 1) - len(recettes)) > 10:
@@ -42,8 +42,10 @@ class MenuRecetteSf(VueAbstraite):
                 choices=liste_recettes,
             ).execute()
 
+        i = 0
+
         if choix == "Retour":
-            return RecettesVue()
+            return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
         else:
             autre_action = "Oui"
@@ -85,14 +87,15 @@ class MenuRecetteSf(VueAbstraite):
                         ).execute()
                         note = int(note[0])
                         # Commentaire à attribuer
-                        com = inquirer.text(message="Laissez un avis ! (pas de ';')\n").execute()
-                        # Appel au service pour ajouter une note et un avis
-                        RecetteService().ajouter_note_et_com(recette=choix, note=note, com=com)
-                        # choix = RecetteService().trouver_recette_par_id(choix.id_recette)
+                        com = inquirer.text(
+                            message="Laissez un commentaire ! (pas de ';')\n"
+                        ).execute()
+                        RecetteService.ajouter_note_et_com(recette=choix, note=note, com=com)
+                        # Suppression dans la liste chargée et ajout de la recette avec avis et com
+                        Session().liste_recettes.remove(choix)
+                        choix = RecetteService().trouver_recette_par_id(choix.id_recette)
+                        Session().liste_recettes.append(choix)
                         print("\n\nLa note et le commentaire ont bien été pris en compte !")
-                        print(
-                            "Veuillez redémarrer l'application pour voir les modifications...\n\n"
-                        )
 
                     case "Ajouter dans les favoris":
                         # Appel au service pour ajouter la recette aux favoris
@@ -130,4 +133,4 @@ class MenuRecetteSf(VueAbstraite):
                     if choix_bis_bis == "Non":
                         return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
-        return RecettesVue(message=self.message, utilisateur=self.utilisateur)
+        return RecetteUserSuggVue(message=self.message, utilisateur=self.utilisateur)

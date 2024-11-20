@@ -63,10 +63,10 @@ class MenuAdminVue(VueAbstraite):
             case "Consulter les comptes":
                 print("\n" + "-" * 50 + "\nConsultation des comptes\n" + "-" * 50 + "\n")
 
-                # Affichage de la liste des utilisateurs
-                liste_utilisateurs = UtilisateurService().lister_tous()
                 autre_utilisateur = "Oui"  # Pour consulter plusieurs utilisateurs à la suite
                 while autre_utilisateur == "Oui":
+                    # Affichage de la liste des utilisateurs
+                    liste_utilisateurs = UtilisateurService().lister_tous()
                     utilisateur = inquirer.select(
                         message="Quel utilisateur souhaitez-vous consulter ?",
                         choices=liste_utilisateurs,
@@ -84,10 +84,10 @@ class MenuAdminVue(VueAbstraite):
             case "Supprimer un compte":
                 print("\n" + "-" * 50 + "\nSuppression d'un compte\n" + "-" * 50 + "\n")
 
-                # Affichage de la liste des utilisateurs
-                liste_utilisateurs = UtilisateurService().lister_tous()
                 autre_utilisateur = "Oui"  # Pour supprimer plusieurs utilisateurs à la suite
                 while autre_utilisateur == "Oui":
+                    # Affichage de la liste des utilisateurs
+                    liste_utilisateurs = UtilisateurService().lister_tous()
                     compte = inquirer.select(
                         message="Quel compte souhaitez-vous supprimer ?",
                         choices=liste_utilisateurs,
@@ -106,19 +106,19 @@ class MenuAdminVue(VueAbstraite):
             case "Supprimer une recette":
                 print("\n" + "-" * 50 + "\nSuppression d'une recette\n" + "-" * 50 + "\n")
 
-                # Affichage de la liste des recettes
-                liste_recette = Session().liste_recettes
                 autre_recette = "Oui"  # Pour supprimer plusieurs recettes à la suite
                 while autre_recette == "Oui":
+                    # Affichage de la liste des recettes
+                    liste_recette = Session().liste_recettes
                     recette = inquirer.select(
                         message="Quelle recette souhaitez-vous supprimer?",
                         choices=liste_recette,
                     ).execute()
 
-                    # Suppression de la recette
+                    # Suppression de la recette  dans la bdd et la liste chargée dans la session
                     RecetteService().supprimer_recette(recette)
+                    Session().liste_recettes.remove(recette)
                     print("\n\nLa recette a bien été supprimée !")
-                    print("Veuillez redémarrer l'application pour voir les modifications...\n\n")
 
                     # Fin ou non de la boucle
                     autre_recette = inquirer.select(
@@ -129,10 +129,10 @@ class MenuAdminVue(VueAbstraite):
             case "Consulter les recettes":
                 print("\n" + "-" * 50 + "\nConsultation des recettes\n" + "-" * 50 + "\n")
 
-                # Affichage de la liste des recettes
-                recettes = RecetteService().lister_toutes_recettes()
                 autre_recette = "Oui"  # Pour consulter plusieurs recettes à la suite
                 while autre_recette == "Oui":
+                    # Affichage de la liste des recettes
+                    recettes = RecetteService().lister_toutes_recettes()
                     # Pour avoir plusieurs pages avec 10 recettes
                     i = 0
                     choix = "-> Page suivante"
@@ -150,6 +150,8 @@ class MenuAdminVue(VueAbstraite):
                             message="Choisissez une recette : ",
                             choices=liste_recettes,
                         ).execute()
+
+                    i = 0
 
                     if choix == "Retour":
                         return MenuAdminVue(message=self.message, utilisateur=self.utilisateur)
@@ -289,7 +291,7 @@ class MenuAdminVue(VueAbstraite):
                     # Identifiant de la recette
                     liste_recette = RecetteService().lister_toutes_recettes()
                     id_recette = len(liste_recette) + 54000 + j
-                    # Ajout de la recette à la bdd
+                    # Ajout de la recette à la bdd et dans la liste chargée dans la session
                     recette = Recette(
                         nom_recette=nom,
                         id_recette=id_recette,
@@ -297,8 +299,8 @@ class MenuAdminVue(VueAbstraite):
                         description_recette=description,
                     )
                     RecetteService().creer_recette(recette=recette)
+                    Session().liste_recettes.append(recette)
                     print(f"\n\nLa recette {recette} a bien été créée !")
-                    print("Veuillez redémarrer l'application pour voir les modifications...\n\n")
                     # Fin (ou non) de la boucle pour la création de recette
                     autre_recette = inquirer.select(
                         message="Souhaitez-vous ajouter une autre recette ?", choices=["Oui", "Non"]

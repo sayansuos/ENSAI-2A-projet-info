@@ -7,8 +7,6 @@ from dao.recette_dao import RecetteDao
 
 from view.accueil.accueil_vue import AccueilVue
 
-# from view.users.menu_inv_vue import MenuInvVue
-
 
 if __name__ == "__main__":
     # On charge les variables d'envionnement
@@ -30,6 +28,7 @@ if __name__ == "__main__":
 
         try:
             # Affichage du menu
+
             vue_courante.afficher()
 
             # Affichage des choix possibles

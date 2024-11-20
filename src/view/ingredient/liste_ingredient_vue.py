@@ -9,7 +9,7 @@ from service.liste_favoris_service import ListeFavorisService
 from service.recette_service import RecetteService
 
 
-class PanierVue(VueAbstraite):
+class ListeIngredientVue(VueAbstraite):
     """
     Vue pour le panier d'un utilisateur connecté.
     """
@@ -71,7 +71,9 @@ class PanierVue(VueAbstraite):
                 match choix_bis:
 
                     case "Annuler":
-                        return PanierVue(message=self.message, utilisateur=self.utilisateur)
+                        return ListeIngredientVue(
+                            message=self.message, utilisateur=self.utilisateur
+                        )
 
                     case "Oui":
                         ListeFavorisService().retirer_liste_course(
@@ -84,6 +86,8 @@ class PanierVue(VueAbstraite):
                             message="Voir d'autres ingrédients du panier ?", choices=["Oui", "Non"]
                         ).execute()
                         if choix_bis_bis == "Oui":
-                            return PanierVue(message=self.message, utilisateur=self.utilisateur)
+                            return ListeIngredientVue(
+                                message=self.message, utilisateur=self.utilisateur
+                            )
 
         return MenuUserVue(message=self.message, utilisateur=self.utilisateur)

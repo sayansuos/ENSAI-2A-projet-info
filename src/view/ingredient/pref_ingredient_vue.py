@@ -4,7 +4,7 @@ from view.vue_abstraite import VueAbstraite
 from service.liste_favoris_service import ListeFavorisService
 
 
-class IngredientsVue(VueAbstraite):
+class PrefIngredientVue(VueAbstraite):
     """
     Vue pour les préférences ingrédients d'un utilisateur connecté.
     """
@@ -29,21 +29,23 @@ class IngredientsVue(VueAbstraite):
 
         match choix:
             case "Consulter tous les ingrédients":
-                from view.ingredient.menu_ingredient import MenuIngredient
+                from view.ingredient.ingredient_vue import IngredientVue
 
-                return MenuIngredient(message=self.message, utilisateur=self.utilisateur)
+                return IngredientVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les ingrédients favoris":
                 ListeFavorisService().consulter_preference_ingredient_favori(
                     utilisateur=self.utilisateur
                 )
-                return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
+                inquirer.select(message="", choices=["Ok"]).execute()
+                return PrefIngredientVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Consulter les ingrédients non-désirés":
                 ListeFavorisService().consulter_preference_ingredient_non_desire(
                     utilisateur=self.utilisateur
                 )
-                return IngredientsVue(message=self.message, utilisateur=self.utilisateur)
+                inquirer.select(message="", choices=["Ok"]).execute()
+                return PrefIngredientVue(message=self.message, utilisateur=self.utilisateur)
 
             case "Retour":
                 from view.users.menu_user_vue import MenuUserVue

@@ -3,7 +3,7 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 
 
-class RecettesVue(VueAbstraite):
+class MenuRecetteInvVue(VueAbstraite):
     """Vue d'accueil de l'application"""
 
     def choisir_menu(self):
@@ -23,14 +23,14 @@ class RecettesVue(VueAbstraite):
 
         match choix:
             case "Consulter toutes les recettes":
-                from view.recette.menu_recette_inv_sf import MenuRecetteSf
+                from view.recette.recette_inv_sf_vue import RecetteInvSfVue
 
-                return MenuRecetteSf()
+                return RecetteInvSfVue()
 
             case "Consulter les recettes par ingrédient":
-                from view.recette.menu_recette_inv_af import MenuRecetteAf
+                from view.recette.recette_inv_af_vue import RecetteInvAfVue
 
-                return MenuRecetteAf()
+                return RecetteInvAfVue()
 
             case "Retour":
                 from view.users.menu_inv_vue import MenuInvVue
