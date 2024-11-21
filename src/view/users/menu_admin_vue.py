@@ -105,12 +105,9 @@ class MenuAdminVue(VueAbstraite):
                         message="Quelle recette souhaitez-vous supprimer?",
                         choices=liste_recette,
                     ).execute()
-
-                    # Suppression de la recette  dans la bdd et la liste chargée dans la session
+                    # Appel au service pour retirer la recette
                     RecetteService().supprimer_recette(recette)
-                    Session().liste_recettes.remove(recette)
                     print("\n\nLa recette a bien été supprimée !")
-
                     # Fin ou non de la boucle
                     autre_recette = inquirer.select(
                         message="Souhaitez-vous supprimer une autre recette ?",
@@ -261,7 +258,7 @@ class MenuAdminVue(VueAbstraite):
                     # Identifiant de la recette
                     liste_recette = RecetteService().lister_toutes_recettes()
                     id_recette = len(liste_recette) + 54000 + j
-                    # Ajout de la recette à la bdd et dans la liste chargée dans la session
+                    # Appel au service pour ajouter la recette
                     recette = Recette(
                         nom_recette=nom,
                         id_recette=id_recette,
@@ -269,7 +266,6 @@ class MenuAdminVue(VueAbstraite):
                         description_recette=description,
                     )
                     RecetteService().creer_recette(recette=recette)
-                    Session().liste_recettes.append(recette)
                     print(f"\n\nLa recette {recette} a bien été créée !")
                     # Fin (ou non) de la boucle pour la création de recette
                     autre_recette = inquirer.select(

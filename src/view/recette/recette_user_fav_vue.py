@@ -102,11 +102,9 @@ class RecetteUserFavVue(VueAbstraite):
                             com = inquirer.text(
                                 message="Laissez un commentaire ! (pas de ';')\n"
                             ).execute()
+                            # Appel au service pour ajouter la note et le commentaire
                             RecetteService().ajouter_note_et_com(recette=choix, note=note, com=com)
-                            # Suppression dans la liste chargée et ajout de la recette avec avis et com
-                            Session().liste_recettes.remove(choix)
                             choix = RecetteService().trouver_recette_par_id(choix.id_recette)
-                            Session().liste_recettes.append(choix)
                             print("\n\nLa note et le commentaire ont bien été pris en compte !")
 
                         case "Supprimer des favoris":

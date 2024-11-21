@@ -1,7 +1,5 @@
 from InquirerPy import inquirer
 
-
-from view.session import Session
 from view.vue_abstraite import VueAbstraite
 from view.users.menu_user_vue import MenuUserVue
 
@@ -50,17 +48,13 @@ class RecetteUserSuggVue(VueAbstraite):
                     choices=liste_recettes,
                 ).execute()
 
-            # Pour pouvoir revenir au début de la liste s'il souhaite consulter une autre recette après
+            # Pour pouvoir revenir au début de la liste s'il souhaite consulter une autre recette
             i = 0
 
             if choix == "Retour":
                 return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
             else:
-                # Pour pouvoir modifier la liste chargée dans Session ensuite
-                for recette_raw in Session().liste_recettes:
-                    if recette_raw.id_recette == choix.id_recette:
-                        choix = recette_raw
 
                 autre_action = "Oui"
                 while autre_action == "Oui":  # Pour réaliser plusieurs actions à la suite
@@ -104,11 +98,9 @@ class RecetteUserSuggVue(VueAbstraite):
                             com = inquirer.text(
                                 message="Laissez un commentaire ! (pas de ';')\n"
                             ).execute()
+                            # Appel au service pour ajouter la note et le commentaire
                             RecetteService().ajouter_note_et_com(recette=choix, note=note, com=com)
-                            # Suppression dans la liste chargée et ajout de la recette avec avis et com
-                            Session().liste_recettes.remove(choix)
                             choix = RecetteService().trouver_recette_par_id(choix.id_recette)
-                            Session().liste_recettes.append(choix)
                             print("\n\nLa note et le commentaire ont bien été pris en compte !")
 
                         case "Ajouter dans les favoris":

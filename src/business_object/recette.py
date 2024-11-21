@@ -45,3 +45,12 @@ class Recette:
         Cette méthode affiche une recette.
         """
         return f"[{self.id_recette}] {self.nom_recette}"
+
+    def __eq__(self, other):
+        """
+        Egalité
+        """
+        if not isinstance(other, Recette):
+            return False
+        else:
+            return self.nom_recette == other.nom_recette

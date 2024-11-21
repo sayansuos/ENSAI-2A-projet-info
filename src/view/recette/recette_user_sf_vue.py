@@ -1,6 +1,5 @@
 from InquirerPy import inquirer
 
-from view.session import Session
 from view.vue_abstraite import VueAbstraite
 from view.users.menu_user_vue import MenuUserVue
 from view.recette.menu_recette_user_vue import MenuRecetteUserVue
@@ -87,13 +86,10 @@ class RecetteUserSfVue(VueAbstraite):
                         note = int(note[0])
                         # Commentaire à attribuer
                         com = inquirer.text(message="Laissez un avis ! (pas de ';')\n").execute()
-                        # Appel au service pour ajouter une note et un avis
+                        # Appel au service pour ajouter la note et le commentaire
                         RecetteService().ajouter_note_et_com(recette=choix, note=note, com=com)
-                        # Suppression dans la liste chargée et ajout de la recette avec avis et com
-                        Session().liste_recettes.remove(choix)
                         choix = RecetteService().trouver_recette_par_id(choix.id_recette)
-                        Session().liste_recettes.append(choix)
-                        print("\n\nLa note et le commentaire ont bien été pris en compte !\n\n")
+                        print("\n\nLa note et le commentaire ont bien été pris en compte !")
 
                     case "Ajouter dans les favoris":
                         # Appel au service pour ajouter la recette aux favoris

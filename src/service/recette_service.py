@@ -1,9 +1,10 @@
 from typing import List, Optional
 
+from business_object.ingredient import Ingredient
 from business_object.recette import Recette
+
 from dao.recette_dao import RecetteDao
 
-from business_object.ingredient import Ingredient
 from view.session import Session
 
 
@@ -101,6 +102,8 @@ class RecetteService:
         # Vérification des attributs
         if not isinstance(recette, Recette):
             raise TypeError("reccette doit être une instance de Recette")
+        # Ajout de la recette dans la liste chargée
+        Session().liste_recettes.append(recette)
         # Appel à la DAO
         return recette if RecetteDao().creer(recette) is True else None
 
@@ -122,6 +125,8 @@ class RecetteService:
         # Vérification des attributs
         if not isinstance(recette, Recette):
             raise TypeError("reccette doit être une instance de Recette")
+        # Suppression de la recette dans la liste chargée
+        Session().liste_recettes.remove(recette)
         # Appel à la DAO
         return RecetteDao().supprimer(recette)
 
@@ -179,8 +184,14 @@ class RecetteService:
         if ";" in com:
             raise ValueError("';' ne peut pas être utilisé dans le commentaire.")
 
+        # Suppression dans la liste chargée
+        Session().liste_recettes.remove(recette)
         # Appel à la DAO
-        return RecetteDao().ajouter_note_et_com(recette=recette, note=note, com=com)
+        modified = RecetteDao().ajouter_note_et_com(recette=recette, note=note, com=com)
+        update = self.trouver_recette_par_id(recette.id_recette)
+        # Ajout de la recette modifiée dans la liste chargée
+        Session().liste_recettes.append(update)
+        return modified
 
     def lire_recette(self, recette: Recette):
         """
