@@ -1,14 +1,24 @@
-# ENSAI-2A-projet-info-template
+# ENSAI 2A : IT Project
 
-Template du projet informatique de 2e année de l'ENSAI.
+## :arrow_forward: Presentation
 
-Cette application très simple comporte quelques éléments qui peuvent aider pour le projet info 2A :
+My Kitchen is a cooking recipe application. It's an interactive application that allows individuals to consult thousands of recipes from all over the world. By creating an account, loyal users can benefit from additional services such as the selection of favorite recipes, the creation of a shopping list or even suggestions tailored to their preferences. Likewise, only My Kitchen account holders will be able to rate recipes and leave comments for all to see.
 
-- Programmation en couche (DAO, service, view, business_object)
-- Connexion à une base de données
-- Interface dans le terminal (couche view) avec inquirerPy
-- Appel d'un Webservice
-- Création d'un Webservice
+All this is achieved via an online ordering interface. All the recipes listed in this application come from TheMealDB API. A database specific to the application will also be developed to ensure the smooth running of our application, but also to enable the addition of new recipes and their associated notations.
+
+The application's main functions are :
+- Display the list of all recipes
+- Display a recipe, i.e. its title, ingredients, instructions, rating and comments
+- Create a "Favourites" area for a logged-in user, enabling them to add, delete and view their favourite recipes
+- Create a "Notes and commentary" area, enabling all users to consult notes and commentaries for each recipe. Only account holders will be able to rate and comment.
+
+The application's advanced functions are :
+- Display the list of recipes containing aspecified ingredient
+- Create a "Shopping list" for a logged-in user, enabling them to add all the ingredients of a recipe to their shopping list, consult it and delete purchased items.
+- Create a "My ingredients" area for a logged-in user, enabling them to enter their preferences, i.e. add favourite and/or unwanted ingredients, view them and delete them.
+- Create a "My suggestions" area for a logged-in user, which will suggest recipes that are not in the Favourite recipes but contain at least one favourite ingredient and no unwanted ingredients.
+
+---
 
 ## :arrow_forward: Logiciels requis
 
@@ -44,7 +54,7 @@ Ce dépôt contient un fichier `.vscode/settings.xml` qui définit des paramètr
   - `editor.formatOnSave` : à chaque sauvegarde de fichier, le code est automatiquement mis en forme
 - **Flake8** est un Linter
   - il vérifie que le code est propre et affiche un message si ce n'est pas le cas
-- **Path** : indique les dossiers dans lesquels sont les modules python 
+- **Path** : indique les dossiers dans lesquels sont les modules python
   - `"PYTHONPATH": "${workspaceFolder}/src"` : src est le dossier racine des imports
 
 
@@ -86,7 +96,7 @@ Vous allez maintenant définir des variables d'environnement pour déclarer la b
 
 À la racine du projet le fichier :
 
-- [ ] Créez un fichier nommé `.env` 
+- [ ] Créez un fichier nommé `.env`
 - [ ] Collez-y et complétez les éléments ci-dessous
 
 ```default
@@ -104,7 +114,7 @@ POSTGRES_SCHEMA=projet
 
 ## :arrow_forward: Lancer les tests unitaires
 
-- [ ] Dans Git Bash : `pytest -v` 
+- [ ] Dans Git Bash : `pytest -v`
   - ou `python -m pytest -v` si *pytest* n'a pas été ajouté au *PATH*
 
 ### TU DAO
@@ -134,41 +144,7 @@ Cette application propose une interface graphique très basique pour naviguer en
   - cela appelle le programme `src/utils/reset_database.py`
   - qui lui même va exécuter les scripts SQL du dossier `data`
 
----
 
-## :arrow_forward: Lancer le webservice
-
-Cette application permet également de créer un webservice.
-
-- [ ] `python src/app.py`
-- Exemples de endpoints (à tester par exemple avec *Insomnia* ou éventuellement un navigateur):
-  - `GET http://localhost/docs` (swagger)
-  - `GET http://localhost/hello/you`
-  - `GET http://localhost/joueur`
-  - `GET http://localhost/joueur/3`
-  - ```
-    POST http://localhost/joueur/
-    JSON body :
-      {
-        "pseudo": "patapouf",
-        "mdp": "9999",
-        "age": "95",
-        "mail": "patapouf@mail.fr",
-        "fan_pokemon": true
-      }
-    ```
-  - ```
-    PUT http://localhost/joueur/3
-    JSON body :
-      {
-         "pseudo": "maurice_new",
-         "mdp": null,
-         "age": 20,
-         "mail": "maurice@ensai.fr",
-         "fan_pokemon": true
-      }
-    ```
-  - `DELETE http://localhost/joueur/5`
 
 ---
 
