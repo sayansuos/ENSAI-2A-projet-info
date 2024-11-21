@@ -116,7 +116,7 @@ class RecetteService:
         print(f"Id : {recette.id_recette}\n")
 
         # S'il n'y a aucun avis : affichage différent
-        if recette.avis[0] == "":
+        if recette.avis[0] == "" and recette.note is None:
             print("There is no rewiew or rating for this recipe.")
         else:
             print(f"Rate: {recette.note}/5\n")

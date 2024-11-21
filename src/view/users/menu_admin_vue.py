@@ -11,17 +11,8 @@ from service.ingredient_service import IngredientService
 
 
 class MenuAdminVue(VueAbstraite):
-    """Vue du menu de l'administrateur
-
-    Attributes
-    ----------
-    message=''
-        str
-
-    Returns
-    ------
-    view
-        retourne la prochaine vue, celle qui est choisie par l'administrateur
+    """
+    Vue du menu de l'administrateur
     """
 
     def __init__(self, message, utilisateur):
@@ -45,7 +36,7 @@ class MenuAdminVue(VueAbstraite):
                 "Consulter les comptes",
                 "Consulter les recettes",
                 "Supprimer un compte",
-                "Modifier un compte",
+                "Modifier mon compte",
                 "Ajouter une recette",
                 "Supprimer une recette",
                 "Se déconnecter",
@@ -197,56 +188,35 @@ class MenuAdminVue(VueAbstraite):
                                             choices=["Oui", "Non"],
                                         ).execute()
 
-            case "Modifier un compte":
-                print("\n" + "-" * 50 + "\nModification d'un compte\n" + "-" * 50 + "\n")
+            case "Modifier mon compte":
+                print("\n" + "-" * 50 + "\nModification du compte\n" + "-" * 50 + "\n")
 
-                # Affichage de la liste des utilisateurs
-                liste_utilisateurs = UtilisateurService().lister_tous()
-                autre_utilisateur = "Oui"  # Pour modifier plusieurs utilisateurs à la suite
-
-                # Choix de l'utilisateur
-                while autre_utilisateur == "Oui":
-                    user = inquirer.select(
-                        message="Quel compte souhaitez-vous modifier?",
-                        choices=liste_utilisateurs,
+                user = self.utilisateur
+                autre_changement = "Oui"  # Pour faire plusieurs modifications
+                # Choix des modifications
+                while autre_changement == "Oui":
+                    modif = inquirer.select(
+                        message="Quelle modification souhaitez-vous appliquer ?",
+                        choices=[
+                            "Pseudo",
+                        ],
                     ).execute()
-                    autre_changement = "Oui"  # Pour faire plusieurs modifications
-
-                    # Choix des modifications
-                    while autre_changement == "Oui":
-                        modif = inquirer.select(
-                            message="Quelle modification souhaitez-vous appliquer ?",
-                            choices=[
-                                "Pseudo",
-                                "Rôle",
-                            ],
+                    if modif == "Pseudo":
+                        pseudo = inquirer.text(
+                            message="Veuillez saisir le nouveau pseudo : "
                         ).execute()
-                        if modif == "Pseudo":
-                            pseudo = inquirer.text(
-                                message="Veuillez saisir le nouveau pseudo : "
-                            ).execute()
-                            user.pseudo = pseudo
-                        if modif == "Rôle":
-                            role = inquirer.select(
-                                message="Veuillez sélectionner le nouveau rôle :",
-                                choices=["admin", "user"],
-                            ).execute()
-                            user.role = role
-                        autre_changement = inquirer.select(
-                            message="Souhaitez-vous effectuer une autre modification ?",
-                            choices=["Oui", "Non"],
-                        ).execute()
-
-                    # Modification de l'utilisateur
-                    user.afficher_info()
-                    UtilisateurService().modifier(user=user)
-                    print(f"\n\nLe compte id{user.id_utilisateur} a bien été modifié !\n\n")
-
-                    # Fin (ou non) de la boucle pour modifier un utilisateur
-                    autre_utilisateur = inquirer.select(
-                        message="Souhaitez-vous modifier un autre compte ?",
+                        user.pseudo = pseudo
+                    autre_changement = inquirer.select(
+                        message="Souhaitez-vous effectuer une autre modification ?",
                         choices=["Oui", "Non"],
                     ).execute()
+
+                # Modification de l'utilisateur
+                user.mdp = inquirer.secret(message="Entrez votre mot de passe :").execute()
+                UtilisateurService().modifier(user=user)
+                user.mdp = None
+                print(f"\n\nLe compte {user.pseudo} a bien été modifié !\n\n")
+                inquirer.select(message="", choices=["Ok"]).execute()
 
             case "Ajouter une recette":
                 print("\n" + "-" * 50 + "\nAjout d'une nouvelle recette\n" + "-" * 50 + "\n")

@@ -11,9 +11,9 @@ from service.liste_favoris_service import ListeFavorisService
 
 
 class RecetteUserAfVue(VueAbstraite):
-    """Vue qui affiche :
-    - toutes les recettes dispo selon l'ingredient choisi
-    - les options
+    """
+    Vue qui affiche toutes les recettes par ingrédient sélectionné pour l'utilisateur connecté et
+    les actions associées.
     """
 
     def __init__(self, message, utilisateur):
@@ -42,6 +42,7 @@ class RecetteUserAfVue(VueAbstraite):
                 choices=liste_ingredients,
             ).execute()
 
+        # Pour pouvoir revenir au début de la liste s'il souhaite consulter une autre recette après
         i = 0
 
         # Affichage de toutes les recettes avec l'ingrédient sélectionné

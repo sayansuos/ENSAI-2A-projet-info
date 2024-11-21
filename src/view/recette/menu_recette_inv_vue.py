@@ -4,11 +4,13 @@ from view.vue_abstraite import VueAbstraite
 
 
 class MenuRecetteInvVue(VueAbstraite):
-    """Vue d'accueil de l'application"""
+    """
+    Vue pour la consultation des recettes d'un utilisateur invité.
+    """
 
     def choisir_menu(self):
         """
-        Vue pour la consultation de recette d'un utilisateur invité.
+        Vue pour la consultation des recettes d'un utilisateur invité.
         """
         print("\n" + "-" * 50 + "\nConsultation des recettes\n" + "-" * 50 + "\n")
 

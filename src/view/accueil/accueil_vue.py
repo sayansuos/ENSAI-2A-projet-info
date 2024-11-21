@@ -4,14 +4,17 @@ from view.vue_abstraite import VueAbstraite
 
 
 class AccueilVue(VueAbstraite):
-    """Vue d'accueil de l'application"""
+    """
+    Vue d'accueil de l'application
+    """
 
     def choisir_menu(self):
-        """Choix du menu suivant
+        """
+        Choix du menu suivant
 
         Return
         ------
-        view
+        View
             Retourne la vue choisie par l'utilisateur dans le terminal
         """
 

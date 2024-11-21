@@ -7,9 +7,19 @@ from service.utilisateur_service import UtilisateurService
 
 
 class ConnexionVue(VueAbstraite):
-    """Vue de Connexion (saisie de pseudo et mdp)"""
+    """
+    Vue de Connexion (saisie de pseudo et mdp)
+    """
 
     def choisir_menu(self):
+        """
+        Choix du menu suivant
+
+        Return
+        ------
+        View
+            Retourne la vue choisie par l'utilisateur dans le terminal
+        """
 
         print("\n" + "-" * 50 + "\nConnexion\n" + "-" * 50 + "\n")
 

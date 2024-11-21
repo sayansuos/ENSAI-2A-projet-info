@@ -141,7 +141,6 @@ class UtilisateurDao(metaclass=Singleton):
             True si la modification est un succès, False sinon.
         """
         res = None
-        print("BBBBB")
 
         try:
             with DBConnection().connection as connection:
@@ -162,7 +161,6 @@ class UtilisateurDao(metaclass=Singleton):
                     res = cursor.rowcount
         except Exception as e:
             logging.info(e)
-            print(e)
             raise
 
         return res == 1

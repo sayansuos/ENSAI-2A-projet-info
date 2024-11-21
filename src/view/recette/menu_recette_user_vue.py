@@ -4,21 +4,15 @@ from view.vue_abstraite import VueAbstraite
 
 
 class MenuRecetteUserVue(VueAbstraite):
-    """Vue d'accueil de l'application"""
+    """
+    Vue pour la consultation des recettes d'un utilisateur connecté.
+    """
 
     def __init__(self, message, utilisateur):
         super().__init__(message)
         self.utilisateur = utilisateur
 
     def choisir_menu(self):
-        """Choix du menu suivant
-
-        Return
-        ------
-        view
-            Retourne la vue choisie par l'utilisateur dans le terminal
-        """
-
         print("\n" + "-" * 50 + "\nConsultation des recettes\n" + "-" * 50 + "\n")
 
         # Choix du filtre pour la consultation de recettes

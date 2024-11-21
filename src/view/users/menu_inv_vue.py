@@ -2,21 +2,10 @@ from InquirerPy import inquirer
 
 from view.vue_abstraite import VueAbstraite
 
-# from view.session import Session
-
 
 class MenuInvVue(VueAbstraite):
-    """Vue du menu de l'invité
-
-    Attributes
-    ----------
-    message=''
-        str
-
-    Returns
-    ------
-    view
-        retourne la prochaine vue, celle qui est choisie par l'invité
+    """
+    Vue du menu de l'invité
     """
 
     def choisir_menu(self):

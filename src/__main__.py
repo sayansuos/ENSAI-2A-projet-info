@@ -28,7 +28,6 @@ if __name__ == "__main__":
 
         try:
             # Affichage du menu
-
             vue_courante.afficher()
 
             # Affichage des choix possibles

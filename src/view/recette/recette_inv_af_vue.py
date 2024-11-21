@@ -10,7 +10,8 @@ from service.recette_service import RecetteService
 
 class RecetteInvAfVue(VueAbstraite):
     """
-    Vue pour la consultation de toutes les recettes par ingrédient d'un utilisateur non connecté.
+    Vue qui affiche toutes les recettes par ingrédient sélectionné d'un utilisateur invité et les
+    actions associées.
     """
 
     def choisir_menu(self):
@@ -40,6 +41,7 @@ class RecetteInvAfVue(VueAbstraite):
                 choices=liste_ingredients,
             ).execute()
 
+        # Pour pouvoir revenir au début de la liste s'il souhaite consulter une autre recette après
         i = 0
 
         # Affichage des recettes avec l'ingrédient sélectionné

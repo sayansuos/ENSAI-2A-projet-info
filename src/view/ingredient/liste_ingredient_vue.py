@@ -3,7 +3,6 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.users.menu_user_vue import MenuUserVue
 
-# from service.utilisateur_service import UtilisateurService
 from service.ingredient_service import IngredientService
 from service.liste_favoris_service import ListeFavorisService
 from service.recette_service import RecetteService

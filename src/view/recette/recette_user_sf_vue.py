@@ -10,9 +10,8 @@ from service.liste_favoris_service import ListeFavorisService
 
 
 class RecetteUserSfVue(VueAbstraite):
-    """Vue qui affiche :
-    - toutes les recettes dispo
-    - les options
+    """
+    Vue qui affiche toutes les recettes pour l'utilisateur connecté et les actions associées.
     """
 
     def __init__(self, message, utilisateur):
@@ -41,6 +40,7 @@ class RecetteUserSfVue(VueAbstraite):
                 choices=liste_recettes,
             ).execute()
 
+        # Pour pouvoir revenir au début de la liste s'il souhaite consulter une autre recette après
         i = 0
 
         if choix == "Retour":

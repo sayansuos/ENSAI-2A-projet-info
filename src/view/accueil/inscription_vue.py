@@ -1,10 +1,5 @@
-# import regex
-
 from InquirerPy import inquirer
-from InquirerPy.validator import PasswordValidator, EmptyInputValidator
-
-from prompt_toolkit.validation import ValidationError, Validator
-
+from InquirerPy.validator import PasswordValidator
 
 from view.vue_abstraite import VueAbstraite
 from service.utilisateur_service import UtilisateurService
@@ -13,7 +8,14 @@ from service.utilisateur_service import UtilisateurService
 class InscriptionVue(VueAbstraite):
 
     def choisir_menu(self):
+        """
+        Choix du menu suivant
 
+        Return
+        ------
+        View
+            Retourne la vue choisie par l'utilisateur dans le terminal
+        """
         print("\n" + "-" * 50 + "\nCréation de compte\n" + "-" * 50 + "\n")
 
         # Demande à l'utilisateur de saisir pseudo, mot de passe...

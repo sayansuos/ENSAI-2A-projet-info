@@ -3,19 +3,12 @@ from InquirerPy import inquirer
 from view.vue_abstraite import VueAbstraite
 from view.session import Session
 
+from service.utilisateur_service import UtilisateurService
+
 
 class MenuUserVue(VueAbstraite):
-    """Vue du menu de l'utilisateur
-
-    Attributes
-    ----------
-    message=''
-        str
-
-    Returns
-    ------
-    view
-        retourne la prochaine vue, celle qui est choisie par l'utilisateur
+    """
+    Vue du menu de l'utilisateur
     """
 
     def __init__(self, message, utilisateur):
@@ -40,6 +33,7 @@ class MenuUserVue(VueAbstraite):
                 "Consulter les favoris",
                 "Consulter les préférences ingrédients",
                 "Consulter le panier",
+                "Modifier mon compte",
                 "Se déconnecter",
             ],
         ).execute()
@@ -75,3 +69,35 @@ class MenuUserVue(VueAbstraite):
                 from view.ingredient.pref_ingredient_vue import PrefIngredientVue
 
                 return PrefIngredientVue(message=self.message, utilisateur=self.utilisateur)
+
+            case "Modifier mon compte":
+                print("\n" + "-" * 50 + "\nModification du compte\n" + "-" * 50 + "\n")
+
+                user = self.utilisateur
+                autre_changement = "Oui"  # Pour faire plusieurs modifications
+                # Choix des modifications
+                while autre_changement == "Oui":
+                    modif = inquirer.select(
+                        message="Quelle modification souhaitez-vous appliquer ?",
+                        choices=[
+                            "Pseudo",
+                        ],
+                    ).execute()
+                    if modif == "Pseudo":
+                        pseudo = inquirer.text(
+                            message="Veuillez saisir le nouveau pseudo : "
+                        ).execute()
+                        user.pseudo = pseudo
+                    autre_changement = inquirer.select(
+                        message="Souhaitez-vous effectuer une autre modification ?",
+                        choices=["Oui", "Non"],
+                    ).execute()
+
+                # Modification de l'utilisateur
+                user.mdp = inquirer.secret(message="Entrez votre mot de passe :").execute()
+                UtilisateurService().modifier(user=user)
+                user.mdp = None
+                print(f"\n\nLe compte {user.pseudo} a bien été modifié !\n\n")
+                inquirer.select(message="", choices=["Ok"]).execute()
+
+                return MenuUserVue(message=self.message, utilisateur=self.utilisateur)

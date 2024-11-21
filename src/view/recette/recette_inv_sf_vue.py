@@ -9,7 +9,7 @@ from service.recette_service import RecetteService
 
 class RecetteInvSfVue(VueAbstraite):
     """
-    Vue pour la consultation de toutes les recettes d'un utilisateur non connecté.
+    Vue qui affiche toutes les recettes pour un utilisateur invité et les actions associées.
     """
 
     def choisir_menu(self):
@@ -34,6 +34,7 @@ class RecetteInvSfVue(VueAbstraite):
                 choices=liste_recettes,
             ).execute()
 
+        # Pour pouvoir revenir au début de la liste s'il souhaite consulter une autre recette après
         i = 0
 
         if choix == "Retour":
