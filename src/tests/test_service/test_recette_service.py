@@ -17,16 +17,19 @@ liste_recettes = [
         nom_recette="Spaghetti Bolognese",
         liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
         description_recette="Spaghetti avec de la viande",
+        id_recette=1,
     ),
     Recette(
         nom_recette="Spaghetti Tomato",
         liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
         description_recette="Spaghetti avec de la sauce tomate",
+        id_recette=2,
     ),
     Recette(
         nom_recette="Pizza Margherita",
         liste_ingredient=[[ingredient_3, "200"], [ingredient_2, "50"], [ingredient_4, "50"]],
         description_recette="Je sais pas quoi écrire, c'est une pizza",
+        id_recette=3,
     ),
 ]
 
@@ -44,6 +47,7 @@ def test_creer_recette_ok():
         nom_recette=nom_recette,
         liste_ingredient=[[ingredient_1, "100"], [ingredient_2, "100"]],
         description_recette="Spaghetti avec de la bolognaise",
+        id_recette=1,
     )
 
     RecetteDao().creer = MagicMock(return_value=True)
@@ -64,6 +68,7 @@ def test_trouver_recette_par_nom_ok():
             nom_recette="Spaghetti Bolognese",
             liste_ingredient=[[ingredient_1, "100"], [ingredient_5, "100"]],
             description_recette="Spaghetti avec de la viande",
+            id_recette=1,
         ),
     )
     with patch("dao.recette_dao.RecetteDao.trouver_par_nom", return_value=recette_mock):
