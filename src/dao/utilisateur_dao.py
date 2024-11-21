@@ -145,6 +145,7 @@ class UtilisateurDao(metaclass=Singleton):
         Parameters
         ----------
         utilisateur : Utilisateur
+            Utilisateur que l'on souhaite modifier
 
         Returns
         -------
@@ -153,6 +154,7 @@ class UtilisateurDao(metaclass=Singleton):
         """
         res = None
 
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -178,18 +180,21 @@ class UtilisateurDao(metaclass=Singleton):
 
     @log
     def supprimer(self, utilisateur: Utilisateur) -> bool:
-        """Suppression d'un utilisateur dans la base de données.
+        """
+        Cette méthode permet de supprimer un utilisateur de la base de données.
 
         Parameters
         ----------
-        id_utilisateur : int
-            ID de l'utilisateur à supprimer de la base de données.
+        utilisateur : Utilisateur
+            Utilisateur que l'on souhaite supprimer
 
         Returns
         -------
         bool
             True si l'utilisateur a bien été supprimé, False sinon.
+
         """
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -206,21 +211,23 @@ class UtilisateurDao(metaclass=Singleton):
 
     @log
     def se_connecter(self, pseudo, mdp) -> Utilisateur:
-        """Se connecter grâce à son pseudo et son mot de passe.
+        """
+        Cette méthode permet à l'utilisateur de se connecter grâce à son pseudo et son mot de passe.
 
         Parameters
         ----------
         pseudo : str
-            Pseudo de l'utilisateur que l'on souhaite trouver.
+            Pseudo de l'utilisateur
         mdp : str
-            Mot de passe de l'utilisateur.
+            Mot de passe de l'utilisateur
 
         Returns
         -------
-        Utilisateur
+        Utilisateur :
             Renvoie l'utilisateur que l'on cherche, ou None si la connexion échoue.
+
         """
-        res = None
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -236,7 +243,7 @@ class UtilisateurDao(metaclass=Singleton):
             raise
 
         utilisateur = None
-
+        # Construction de l'utilisateur
         if res:
             utilisateur = Utilisateur(
                 id_utilisateur=res["id_utilisateur"],

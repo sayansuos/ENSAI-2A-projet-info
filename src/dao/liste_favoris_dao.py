@@ -16,23 +16,30 @@ from business_object.utilisateur import Utilisateur
 class ListeFavorisDao(metaclass=Singleton):
     """
     Classe contenant les méthodes pour accéder accéder aux tables d'associations entre utilisateurs
-    & recette et/ou ingrédient.
+    et recette et/ou ingrédient.
     """
 
     @log
     def est_dans_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
-        Vérifie si les ingrédients d'une recette sont dans la liste des favoris.
+        Cette méthode vérifie si une recette appartient aux favoris d'un utilisateur.
 
-        Args :
-            recette (Recette) : recette dont on souhaite vérifier les ingrédients
-            utilisateur (Utilisateur) : utilisateur à qui appartient la liste de course
+        Parameters
+        ----------
+        recette : Recette
+            Recette à tester
+        utilisateur : Utilisateur
+            Utilisateur à tester
 
-        Returns:
-            bool: True si les ingrédients sont dans la liste de course, False sinon
+        Returns
+        -------
+        bool :
+            True si la recette est dans les favoris de l'utilisateur, False sinon
+
         """
         res = None
 
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -48,7 +55,6 @@ class ListeFavorisDao(metaclass=Singleton):
             raise
 
         est_dans_favoris = False
-
         for row in res:
             if recette.id_recette == row["id_recette"]:
                 est_dans_favoris = True
@@ -58,16 +64,21 @@ class ListeFavorisDao(metaclass=Singleton):
     @log
     def consulter_favoris(self, utilisateur: Utilisateur) -> list[Recette]:
         """
-        Renvoie la liste des recettes favorites de l'utilisateur.
+        Cette méthode renvoie la liste des recettes favorites de l'utilisateur.
 
-        Args :
-            utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les favoris
+        Parameters
+        ----------
+        utilisateur : Utilisateur
+            Utilisateur à tester
 
-        Returns:
-            liste_favoris : liste des recettes favorites
+        Returns
+        -------
+        list[Recette] :
+            Liste des recettes favorites de l'utilisateur
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -81,10 +92,11 @@ class ListeFavorisDao(metaclass=Singleton):
 
         except Exception as e:
             logging.info(e)
-            print(e)
             raise
 
+        # Initialisation de la liste
         liste_favoris = []
+        # Construction des recette et ajout à la liste
         if res:
             for recette in res:
                 id_recette = recette["id_recette"]
@@ -95,17 +107,23 @@ class ListeFavorisDao(metaclass=Singleton):
     @log
     def ajouter_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
-        Ajoute une recette à la table "recette_favorite" de l'utilisateur
+        Cette méthode ajoute une recette aux favoris d'un utilisateur.
 
-        Args :
-            recette (Recette) : recette à ajouter à la table
-            utilisateur (Utilisateur) : utilisateur à qui on ajoute la recette favorite
+        Parameters
+        ----------
+        recette : Recette
+            Recette à ajouter aux favoris
+        utilisateur : Utilisateur
+            Utilisateur à modifier
 
-        Returns:
-            bool: True si la recette a été ajoutée à la table, False sinon
+        Returns
+        -------
+        bool :
+            True si la recette a été rajoutée aux favoris de l'utilisateur, False sinon
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -122,9 +140,9 @@ class ListeFavorisDao(metaclass=Singleton):
 
         except Exception as e:
             logging.info(e)
+            raise
 
         added = False
-
         if res:
             added = True
 
@@ -133,17 +151,23 @@ class ListeFavorisDao(metaclass=Singleton):
     @log
     def retirer_favoris(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
-        Retire une recette à la table "recette_favorite" de l'utilisateur
+        Cette méthode retire une recette des favoris d'un utilisateur.
 
-        Args :
-            recette (Recette) : Recette à retirer de la table
-            utilisateur (Utilisateur) : utilisateur à qui on retire la recette favorite
+        Parameters
+        ----------
+        recette : Recette
+            Recette à retirer des favoris
+        utilisateur : Utilisateur
+            Utilisateur à modifier
 
-        Returns:
-            bool: True si la recette a été supprimée de la table, False sinon
+        Returns
+        -------
+        bool :
+            True si la recette a été retirée favoris de l'utilisateur, False sinon
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -165,16 +189,21 @@ class ListeFavorisDao(metaclass=Singleton):
 
     def consulter_liste_course(self, utilisateur: Utilisateur) -> list[Ingredient]:
         """
-        Renvoie les ingrédients de la liste de course de l'utilisateur.
+        Cette méthode renvoie les ingrédients de la liste de course de l'utilisateur.
 
-        Args :
-            utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les favoris
+        Parameters
+        ----------
+        utilisateur : Utilisateur
+            Utilisateur à consulter
 
-        Returns:
-            liste_course : liste des ingrédients de la liste de course
+        Returns
+        -------
+        list[Ingredient, Recette] :
+            Liste des ingrédients de la liste de courses et la recette associée
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -189,7 +218,9 @@ class ListeFavorisDao(metaclass=Singleton):
             logging.info(e)
             raise
 
+        # Initialisation de la liste
         liste_course = []
+        # Construction de l'objet et ajout à la liste
         if res:
             for row in res:
                 id_ingredient = row["id_ingredient"]
@@ -208,23 +239,31 @@ class ListeFavorisDao(metaclass=Singleton):
         self, recette: Recette, ingredient: Ingredient, utilisateur: Utilisateur
     ) -> bool:
         """
-        Vérifie si les ingrédients d'une recette sont dans la liste de course.
+        Cette méthode vérifie si un ingrédient appartient à la liste de course d'un utilisateur.
 
-        Args :
-            recette (Recette) : recette dont on souhaite vérifier les ingrédients
-            utilisateur (Utilisateur) : utilisateur à qui appartient la liste de course
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingrédient à ajouter à la liste de course
+        recette : Recette
+            Recette associée à l'ingrédient
+        utilisateur : Utilisateur
+            Utilisateur à test
 
-        Returns:
-            bool: True si les ingrédients sont dans la liste de course, False sinon
+        Returns
+        -------
+        bool :
+            True si l'ingrédient est dans la liste de course, False sinon
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
                         "SELECT *                                  "
-                        "  FROM liste_course                   "
+                        "  FROM liste_course                       "
                         " WHERE id_utilisateur=%(id_utilisateur)s; ",
                         {"id_utilisateur": utilisateur.id_utilisateur},
                     )
@@ -234,7 +273,6 @@ class ListeFavorisDao(metaclass=Singleton):
             raise
 
         est_dans_liste_course = False
-
         for row in res:
             if recette.id_recette == row["id_recette"]:
                 if ingredient.id_ingredient == row["id_ingredient"]:
@@ -245,17 +283,23 @@ class ListeFavorisDao(metaclass=Singleton):
     @log
     def ajouter_liste_course(self, recette: Recette, utilisateur: Utilisateur) -> bool:
         """
-        Ajoute les ingrédient d'une recette à la table "liste_course" de l'utilisateur
+        Cette méthode ajoute les ingrédients d'une recette à la liste de course d'un utilisateur.
 
-        Args :
-            recette (Recette) : recette dont les ingrédients sont  à ajouter à la table
-            utilisateur (Utilisateur) : utilisateur à qui on modifie la liste de course
+        Parameters
+        ----------
+        recette : Recette
+            Recette dont on doit ajouter les ingrédients
+        utilisateur : Utilisateur
+            Utilisateur à modifier
 
-        Returns:
-            bool: True si les ingrédients ont été ajouté à la table, False sinon
+        Returns
+        -------
+        bool :
+            True si les ingrédients ont été rajouté, False sinon
+
         """
         res = None
-
+        # Connexion à la base de donnée et commandes SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -295,17 +339,25 @@ class ListeFavorisDao(metaclass=Singleton):
         self, recette: Recette, ingredient: Ingredient, utilisateur: Utilisateur
     ) -> bool:
         """
-        Enlève tous les ingrédients de la recette à la liste "liste_de_course" de l'utilisateur
+        Cette méthode retire un ingrédient de la liste de course de l'utilisateur.
 
-        Args :
-            recette (Recette) : Recette à retirer de la table
-            utilisateur (Utilisateur) : utilisateur à qui on modifie la liste de course
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingrédient à retirer de la liste de course
+        recette : Recette
+            Recette associée à l'ingrédient
+        utilisateur : Utilisateur
+            Utilisateur à modifier
 
-        Returns:
-            bool: True si les ingrédients ont été retiré à la liste, False sinon
+        Returns
+        -------
+        bool :
+            True si l'ingrédient a été retiré de la liste de course, False sinon
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -330,16 +382,21 @@ class ListeFavorisDao(metaclass=Singleton):
     @log
     def consulter_preference_ingredient_favori(self, utilisateur: Utilisateur) -> list[Ingredient]:
         """
-        Renvoie les préférences pour les ingrédients de l'utilisateur.
+        Cette méthode permet de consulter les ingrédients favoris de l'utilisateur.
 
-        Args :
-            utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les préférences
+        Parameters
+        ----------
+        utilisateur : Utilisateur
+            Utilisateur à tester
 
-        Returns:
-            liste_ingredients_favoris : liste des ingrédients favoris de l'utilisateur
+        Returns
+        -------
+        list[Ingredient] :
+            Liste des ingrédients favoris de l'utilisateur
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -353,8 +410,9 @@ class ListeFavorisDao(metaclass=Singleton):
         except Exception as e:
             logging.info(e)
             raise
-
+        # Initialisation de la liste
         liste_ingredients_favoris = []
+        # Construction des ingrédients et ajout à la liste
         if res:
             for row in res:
                 if row["favori"] is True:
@@ -367,16 +425,21 @@ class ListeFavorisDao(metaclass=Singleton):
         self, utilisateur: Utilisateur
     ) -> list[Ingredient]:
         """
-        Renvoie les préférences pour les ingrédients de l'utilisateur.
+        Cette méthode permet de consulter les ingrédients non-désirés de l'utilisateur.
 
-        Args :
-            utilisateur (Utilisateur) : utilisateur dont on souhaite consulter les préférences
+        Parameters
+        ----------
+        utilisateur : Utilisateur
+            Utilisateur à tester
 
-        Returns:
-            liste_ingredients_favoris : liste des ingrédients favoris de l'utilisateur
+        Returns
+        -------
+        list[Ingredient] :
+            Liste des ingrédients non-désirés de l'utilisateur
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -390,8 +453,9 @@ class ListeFavorisDao(metaclass=Singleton):
         except Exception as e:
             logging.info(e)
             raise
-
+        # Initialisation de la liste
         liste_ingredients_non_desires = []
+        # Construction des objets et ajout à la liste
         if res:
             for row in res:
                 if row["non_desire"] is True:
@@ -405,17 +469,23 @@ class ListeFavorisDao(metaclass=Singleton):
         self, ingredient: Ingredient, utilisateur: Utilisateur
     ) -> bool:
         """
-        Vérifie si un ingrédient est dans la liste des préférences
+        Cette méthode vérifie si un ingrédient est dans les préférences d'un utilisateur.
 
-        Args :
-            ingredient (Ingredient) : ingredient qu'on souhaite vérifier dans les préférences
-            utilisateur (Utilisateur) : utilisateur à qui appartient la liste de course
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingrédient à tester
+        utilisateur : Utilisateur
+            Utilisateur à tester
 
-        Returns:
-            bool: True si l'ingrédient est dans la liste des préférences, False sinon
+        Returns
+        -------
+        bool :
+            True si l'ingrédient est dans les préférences de l'utilisateur, False sinon
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -431,7 +501,6 @@ class ListeFavorisDao(metaclass=Singleton):
             raise
 
         est_dans_preference_ingredient = False
-
         for row in res:
             if ingredient.id_ingredient == row["id_ingredient"]:
                 est_dans_preference_ingredient = True
@@ -443,17 +512,24 @@ class ListeFavorisDao(metaclass=Singleton):
         self, ingredient: Ingredient, utilisateur: Utilisateur, modif: str
     ) -> bool:
         """
-        Ajoute un ingrédient à la liste des préférences
+        Cette méthode permet de modifier la préférence concernant un ingrédient de l'utilisateur.
 
-        Args :
-            ingredient (Ingredient) : ingredient qu'on souhaite ajouter aux préférences
-            utilisateur (Utilisateur) : utilisateur à qui on modifie la liste de course
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingrédient à modifier
+        utilisateur : Utilisateur
+            Utilisateur à modifier
 
-        Returns:
-            bool: True si l'ingrédients a bien été ajouté à la table, False sinon
+        Returns
+        -------
+        bool :
+            True si la préférence ingrédient de l'utilisateur a été modifiée, False sinon
+
         """
         res = None
 
+        # Détermination de la préférence
         if modif == "F":
             raw_non_desire = False
             raw_favori = True
@@ -464,6 +540,7 @@ class ListeFavorisDao(metaclass=Singleton):
             raw_non_desire = False
             raw_favori = False
 
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -483,7 +560,6 @@ class ListeFavorisDao(metaclass=Singleton):
             logging.info(e)
 
         added = False
-
         if res:
             added = True
 
@@ -494,17 +570,23 @@ class ListeFavorisDao(metaclass=Singleton):
         self, ingredient: Ingredient, utilisateur: Utilisateur
     ) -> bool:
         """
-        Retire un ingrédient à la liste des préférences
+        Cette méthode permet de retirer un ingrédient des préférences.
 
-        Args :
-            ingredient (Ingredient) : ingredient qu'on souhaite retirer des préférences
-            utilisateur (Utilisateur) : utilisateur à qui on modifie la liste de course
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingrédient à retirer
+        utilisateur : Utilisateur
+            Utilisateur à modifier
 
-        Returns:
-            bool: True si l'ingrédients a bien été retiré à la table, False sinon
+        Returns
+        -------
+        Bool :
+            True si la préférence ingrédient a été retirée, False sinon
+
         """
         res = None
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
