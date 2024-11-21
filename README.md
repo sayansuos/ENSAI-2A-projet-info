@@ -35,53 +35,50 @@ The application's advanced functions are :
 - [ ] Create  folder `P:/Cours2A/UE3-Projet-info` and position yourself inside
   - `mkdir -p /p/Cours2A/UE3-Projet-info && cd $_`
 - [ ] Clone the repository
-  - `git clone https://github.com/ludo2ne/ENSAI-2A-projet-info-template.git`
+  - `git clone https://github.com/ludo2ne/ENSAI-2A-projet-info.git`
 
 ---
 
-## :arrow_forward: Ouvrez le dépôt avec VSCode
+## :arrow_forward: Open the depository with VSCode
 
-- [ ] Ouvrez **Visual Studio Code**
+- [ ] Open **Visual Studio Code**
 - [ ] File > Open Folder
-- [ ] Cliquez une seule fois sur *ENSAI-2A-projet-info-template* et cliquez sur `Sélectionner un dossier`
-  - :warning: Si le dossier parent dans l'explorer VSCode (à gauche) n'est pas *ENSAI-2A-projet-info-template*, l'application ne fonctionnera pas
+- [ ] Click once on *ENSAI-2A-projet-info* and click on `Sélectionner un dossier`
+  - :warning: If the parent folder in the VSCode explorer (on the left) is not *ENSAI-2A-projet-info*, the application will not work.
 
-### Paramètres VScode
+### VScode parameters
 
-Ce dépôt contient un fichier `.vscode/settings.xml` qui définit des paramètres pour ce projet. Par exemple :
+This repository contains a file `.vscode/settings.json` which defines parameters for this project. For example :
 
-- **Black formatter** permet de mettre en forme automatiquement un fichier python
-  - `editor.formatOnSave` : à chaque sauvegarde de fichier, le code est automatiquement mis en forme
-- **Flake8** est un Linter
-  - il vérifie que le code est propre et affiche un message si ce n'est pas le cas
-- **Path** : indique les dossiers dans lesquels sont les modules python
-  - `"PYTHONPATH": "${workspaceFolder}/src"` : src est le dossier racine des imports
+- **Black formatter** automatically formats a python file
+  - `editor.formatOnSave` : each time a file is saved, the code is automatically formatted
+- **Flake8** is a Linter
+  - it checks that the code is clean and displays a message if it is not
+- **Path** : indicates the folders in which the python modules are located
+  - `"PYTHONPATH": "${workspaceFolder}/src"` : src is the root folder for imports
 
 
 ### Fichiers de configuration
 
-Ce dépôt contient de nombreux fichiers de configuration pour paramétrer les différents outils utilisés.
-
-Normalement dans le cadre de votre projet, vous n'aurez pas besoin de modifier ces fichiers, exceptés `.env` et `requirements.txt`. Vous trouverez des explications plus détaillées par la suite.
 
 | Fichier                      | Description                                                         |
 |------------------------------|---------------------------------------------------------------------|
-| `.env`                       | Définir les variables d'environnement                               |
-| `.vscode/settings.json`      | Configuration spécifique à Visual Studio Code                       |
-| `.github/workflows/ci.yml`   | Définition des workflows GitHub Actions                             |
-| `logging_config.yml`         | Configuration du système de journalisation (logging)                |
-| `.gitignore`                 | Liste des fichiers et répertoires à ignorer lors des opérations Git |
-| `.coveragerc`                | Configuration de l'outil de couverture de code (coverage)           |
-| `requirements.txt`           | Liste des dépendances Python requises pour le projet                |
+| `.env`                       | Defining environment variables                                      |
+| `.vscode/settings.json`      | Configuration specific to Visual Studio Code                        |
+| `.github/workflows/ci.yml`   | Definition of GitHub Actions workflows                              |
+| `logging_config.yml`         | Configuring the logging system                                      |
+| `.gitignore`                 | List of files and directories to ignore during Git operations       |
+| `.coveragerc`                | Configuring the code coverage tool                                  |
+| `requirements.txt`           | List of Python dependencies required for the project                |
 
 ---
 
-## :arrow_forward: Installez les packages nécessaires
+## :arrow_forward: Install necessary packages
 
-Dans VSCode :
+In VSCode :
 
-- [ ] Ouvrez un terminal *Git Bash*
-- [ ] Exécutez les commandes suivantes
+- [ ] Open a *Git Bash* terminal
+- [ ] Run the following commands
 
 ```bash
 pip install -r requirements.txt
@@ -90,17 +87,15 @@ pip list
 
 ---
 
-## :arrow_forward: Variables d'environnement
+## :arrow_forward: Environment variables
 
-Vous allez maintenant définir des variables d'environnement pour déclarer la base de données et le webservice auxquels vous allez connecter votre application python.
+At the root of the project :
 
-À la racine du projet le fichier :
-
-- [ ] Créez un fichier nommé `.env`
-- [ ] Collez-y et complétez les éléments ci-dessous
+- [ ] Create a file named `.env`
+- [ ] Paste and complete the folowing code :
 
 ```default
-WEBSERVICE_HOST=https://pokeapi.co/api/v2
+WEBSERVICE_HOST=http://themealdb.com/api/json/v1/1
 
 POSTGRES_HOST=sgbd-eleves.domensai.ecole
 POSTGRES_PORT=5432
