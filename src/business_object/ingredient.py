@@ -14,6 +14,10 @@ class Ingredient:
         """
         Constructeur
         """
+        if not isinstance(nom_ingredient, str):
+            raise TypeError("nom_ingredient doit être une instance de str")
+        if not isinstance(id_ingredient, int):
+            raise TypeError("id_ingredient doit être une instance de int")
         self.id_ingredient: int = id_ingredient
         self.nom_ingredient: str = nom_ingredient
 

@@ -36,7 +36,7 @@ class IngredientService:
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance de Ingredient.")
         # Appel à la DAO
-        return ingredient if IngredientDao.creer(ingredient) is True else None
+        return ingredient if IngredientDao().creer(ingredient) is True else None
 
     def trouver_ingredient_par_id(self, id: int) -> Optional[Ingredient]:
         """

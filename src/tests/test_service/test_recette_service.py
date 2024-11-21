@@ -1,10 +1,14 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-from service.recette_service import RecetteService
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
+
+from service.recette_service import RecetteService
+
 from dao.recette_dao import RecetteDao
+
+from view.session import Session
 
 
 ingredient_1 = Ingredient(nom_ingredient="Pasta", id_ingredient=1)
@@ -32,6 +36,7 @@ liste_recettes = [
         id_recette=3,
     ),
 ]
+Session().load_recipes(liste_recettes)
 
 
 def test_creer_recette_ok():
