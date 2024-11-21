@@ -1,7 +1,4 @@
 from business_object.utilisateur import Utilisateur
-from service.recette_service import RecetteService
-from business_object.recette import Recette
-from business_object.ingredient import Ingredient
 from dao.utilisateur_dao import UtilisateurDao
 import re
 
