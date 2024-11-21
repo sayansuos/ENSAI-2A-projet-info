@@ -20,21 +20,21 @@ The application's advanced functions are :
 
 ---
 
-## :arrow_forward: Logiciels requis
+## :arrow_forward: Required software
 
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Python 3.10](https://www.python.org/)
 - [Git](https://git-scm.com/)
-- Une base de données [PostgreSQL](https://www.postgresql.org/)
+- A Database [PostgreSQL](https://www.postgresql.org/)
 
 ---
 
-## :arrow_forward: Clonez le dépôt
+## :arrow_forward: Clone the repository
 
-- [ ] Ouvrez **Git Bash**
-- [ ] Créez un dossier `P:/Cours2A/UE3-Projet-info` et positionnez-vous dedans
+- [ ] Open **Git Bash**
+- [ ] Create  folder `P:/Cours2A/UE3-Projet-info` and position yourself inside
   - `mkdir -p /p/Cours2A/UE3-Projet-info && cd $_`
-- [ ] Clonez ce dépôt
+- [ ] Clone the repository
   - `git clone https://github.com/ludo2ne/ENSAI-2A-projet-info-template.git`
 
 ---
