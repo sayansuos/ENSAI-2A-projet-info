@@ -14,108 +14,134 @@ class RecetteService:
 
     def trouver_recette_par_id(self, id: int) -> Optional[Recette]:
         """
-        Permet de trouver une recette par identifiant
+        Cette méthode permet de trouver une recette grace à son identifiant.
 
-        Args:
-            id (int):
-                Identifiant de la recette recherchée
+        Parameters
+        ----------
+        id_recette : int
+            Identifiant de la recette que l'on souhaite trouver
 
-        Returns:
-            Optional[Recette]:
-                Retourne la recette correspondant à l'identifiant.
-                Retourne None sinon
+        Returns
+        -------
+        Recette :
+            Recette que l'on souhaite trouver
         """
+        # Vérification des attributs
+        if not isinstance(id, int):
+            raise TypeError("id doit être une instance de int")
+        # Appel à la DAO
         return RecetteDao().trouver_par_id(id)
 
     def trouver_recette_par_nom(self, nom: str) -> Optional[Recette]:
         """
-        Permet de trouver une recette en indiquant le nom de celle-ci
+        Cette méthode permet de trouver un ingrédient grace à son nom.
 
-        Args:
-            nom (str):
-                Nom de la recette recherchée
+        Parameters
+        ----------
+        nom_recette : str
+            Nom de l'ingrédient que l'on souhaite trouver
 
-        Returns:
-            Optional[Recette]:
-                Renvoie la recette si le nom correspond à une recette existante.
-                Renvoie None sinon
+        Returns
+        -------
+        Ingredient :
+            Ingrédient que l'on souhaite trouver
         """
+        # Vérification des attributs
         if not isinstance(nom, str):
             raise TypeError("nom doit être une instance de str")
-
+        # Appel à la DAO
         return RecetteDao().trouver_par_nom(nom)
 
     def trouver_recette_par_ingredient(self, ingredient: Ingredient) -> List[Recette]:
         """
-        Permet de trouver une liste de recette contenant l'ingrédient entré
-        en paramètre
+        Cette méthode permet de trouver les recettes qui contiennent un ingrédient spécifié.
 
-        Args:
-            ingredient (Ingredient):
-                Ingrédient recherché
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingrédient contenu dans les recettes souhaitées.
 
-        Returns:
-            list[Recette]:
-                Renvoie la liste des recettes contenant cet ingrédient
+        Returns
+        -------
+        list[Recette] :
+            Liste des recettes qui contiennent l'ingrédient souhaité.
         """
-
+        # Vérification des attributs
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance de Ingredient")
+        # Appel à la DAO
         return RecetteDao().trouver_par_ingredient(ingredient)
 
     def lister_toutes_recettes(self) -> List[Recette]:
         """
-        Renvoie une liste de toutes les recettes existantes.
+        Cette méthode permet de lister toutes les recettes de la base de données.
 
-        Returns:
-            list[Recette]:
-                Liste de toutes les recettes existantes
+        Returns
+        -------
+        list[Recette] :
+            Liste des recettes de la base de données.
         """
+        # Appel à la liste chargée en session
         return Session().liste_recettes
 
     def creer_recette(self, recette: Recette) -> Optional[Recette]:
         """
-        Permet d'ajouter une recette dans la base de données.
+        Cette méthode permet de créer une recette dans la base de données.
 
-        Args:
-            recette (Recette):
-                Informations de la recette à ajouter
+        Parameters
+        ----------
+        recette : Recette
+            Recette que l'on souhaite créer
 
-        Returns:
-            Optional[Recette]:
-                Retourne la recette si elle a été correctement ajoutée à la base de données
-                None sinon
+        Returns
+        -------
+        Bool :
+            True si la création est un succès, False sinon
         """
+        # Vérification des attributs
+        if not isinstance(recette, Recette):
+            raise TypeError("reccette doit être une instance de Recette")
+        # Appel à la DAO
         return recette if RecetteDao().creer(recette) is True else None
 
     def supprimer_recette(self, recette: Recette) -> bool:
         """
-        Permet de supprimer une recette de la base de données
+        Cette méthode permet de supprimer une recette de la base de données.
 
-        Args:
-            recette (Recette):
-                Recette à supprimer
+        Parameters
+        ----------
+        recette : Recette
+            Recette à supprimer
 
-        Returns:
-            bool:
-                True si la recette a été correctement supprimée.
-                False sinon.
+        Returns
+        -------
+        Bool :
+            True si la recette a été supprimée, False sinon
+
         """
+        # Vérification des attributs
+        if not isinstance(recette, Recette):
+            raise TypeError("reccette doit être une instance de Recette")
+        # Appel à la DAO
         return RecetteDao().supprimer(recette)
 
     def voir_note_avis(self, recette: Recette):
         """
-        Cette méthode affiche la note et les avis d'une recette.
+        Cette méthode affiche les notes et avis d'une recette.
+
+        Parameters
+        ----------
+        recette : Recette
+            Recette dont on doit afficher la note et les avis
+
         """
         # Vérification des attributs
         if not isinstance(recette, Recette):
             raise TypeError("recette doit être une instance de Recette.")
 
-        # Affichage
+        # Affichage selon si il y a des avis ou non
         print(f"\n\n*** [ {recette.nom_recette} ] ***")
         print(f"Id : {recette.id_recette}\n")
-
-        # S'il n'y a aucun avis : affichage différent
         if recette.avis[0] == "" and recette.note is None:
             print("There is no rewiew or rating for this recipe.")
         else:
@@ -127,15 +153,19 @@ class RecetteService:
 
     def ajouter_note_et_com(self, recette: Recette, note: int, com: str) -> bool:
         """
-        Ajoute une note et un commentaire à une recette.
+        Cette méthode permet d'ajoouter une note et un commentaire à une recette de la base de
+        données.
 
-        Args :
-            recette (Recette) : recette dont les ingrédients sont  à ajouter à la table
-            note (int) : Note attribuée à la recette
-            com (str) : Commentaire attribué à la recette
+        Parameters
+        ----------
+        recette : Recette
+            Recette à noter et commenter
 
-        Returns:
-            bool: True si la note et le commentaires ont été ajouté à la table, False sinon
+        Returns
+        -------
+        Bool :
+            True si la modification a été faite, False sinon
+
         """
         # Vérification des attributs
         if not isinstance(recette, Recette):
@@ -154,7 +184,13 @@ class RecetteService:
 
     def lire_recette(self, recette: Recette):
         """
-        Cette méthode affiche la description complète d'une recette.
+        Cette méthode affiche la recette et ses attributs.
+
+        Parameters
+        ----------
+        recette : Recette
+            Recette dont on doit afficher les attributs.
+
         """
         # Vérification des attributs
         if not isinstance(recette, Recette):

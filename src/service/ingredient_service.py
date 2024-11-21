@@ -6,7 +6,7 @@ from typing import List, Optional
 
 class IngredientService:
     """
-    Définis les méthodes de la classe Ingredient
+    Cette classe contient les méthodes de service pour les ingrédients.
     """
 
     def lister_tous(self) -> List[Ingredient]:
@@ -21,56 +21,60 @@ class IngredientService:
 
     def creer(self, ingredient: Ingredient) -> Optional[Ingredient]:
         """
-        Permet d'ajouter un ingrédient dans la base de données
+        Cette méthode permet de créer un ingrédient dans la base de données.
 
-        Args:
-            ingredient (Ingredient): Ingrédient à ajouter dans la base de données
+        Parameters
+        ----------
+        ingredient : Ingredient
+            Ingrédient que l'on souhaite créer
 
-        Returns:
-            Optional[Ingredient]:
-                Retourne un ingrédient si celui-ci a été correctement ajouté à la base de données.
-                None sinon
+        Returns
+        -------
+        Bool :
+            True si la création est un succès, False sinon
         """
-
+        # Vérification des attribus
         if not isinstance(ingredient, Ingredient):
             raise TypeError("ingredient doit être une instance de Ingredient.")
-
+        # Appel à la DAO
         return ingredient if IngredientDao.creer(ingredient) is True else None
 
     def trouver_ingredient_par_id(self, id: int) -> Optional[Ingredient]:
         """
-        Permet de trouver un ingrédient grâce à son identifiant
+        Cette méthode permet de trouver un ingrédient grace à son identifiant.
 
-        Args:
-            id (int): Identifiant de l'ingrédient recherché
+        Parameters
+        ----------
+        id_ingredient : int
+            Identifiant de l'ingrédient que l'on souhaite trouver
 
-        Returns:
-            Optional[Ingredient]:
-                Retourne un ingrédient si l'identifiant correspond à quelque chose dans la base
-                de données.
-                None sinon
+        Returns
+        -------
+        Ingredient :
+            Ingrédient que l'on souhaite trouver
         """
-
+        # Vérification des attributs
         if not isinstance(id, int):
             raise TypeError("id doit être un entier naturel.")
-
+        # Appel à la DAO
         return IngredientDao().trouver_par_id(id)
 
     def trouver_par_nom(self, nom: str) -> Ingredient:
         """
-        Permet de trouver un ingrédient grâce à son nom.
+        Cette méthode permet de trouver un ingrédient grace à son nom.
 
-        Args:
-            nom (str): Nom de l'ingrédient recherché
+        Parameters
+        ----------
+        nom_ingredient : str
+            Nom de l'ingrédient que l'on souhaite trouver
 
-        Returns:
-            Optional[Ingredient]:
-                Retourne un ingrédient si l'identifiant correspond à quelque chose dans la base
-                de données.
-                None sinon
+        Returns
+        -------
+        ingredient : Ingredient
+            Ingredient que l'on souhaite trouver
         """
-
+        # Vérification des attributs
         if not isinstance(nom, str):
             raise TypeError("nom doit être une instance de str.")
-
+        # Appel à la DAO
         return IngredientDao().trouver_par_nom(nom)

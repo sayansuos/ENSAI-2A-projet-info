@@ -32,93 +32,87 @@ class UtilisateurService:
     @log
     def creer(self, pseudo: str, mdp: str) -> Utilisateur:
         """
-        Créer un utilisateur selon les paramètres renseignés.
+        Cette méthode permet de créer un utilisateur dans la base de données.
 
-        Args:
-            pseudo (str): Pseudo voulu pour l'utilisateur
-            mdp (str): Mot de passe voulu pour l'utilisateur
+        Parameters
+        ----------
+        pseudo : str
+            Pseudo de l'utilisateur
+        mdp : str
+            Mot de passe de l'utilisateur
 
-        Raises:
-            TypeError: pseudo doit être une str
-            TypeError: mdp doit être une str
-            TypeError: mail doit être une str
-            ValueError: mdp doit contenir plus de 6 caractères
-            ValueError: Il faut un "@" dans mail
-            ValueError: Il ne doit y avoir qu'un seul "@" dans mail
-            ValueError: Il doit y avoir un point après le "@" dans mail
-
-        Returns:
-            Utilisateur: Retourne l'utilisateur crée
+        Returns
+        -------
+        Utilisateur :
+            Nouvel utilisateur créé
         """
+        # Vérification des attributs
         if not isinstance(pseudo, str):
             raise TypeError("Le pseudo doit être une chaîne de caractères.")
-
         if not isinstance(mdp, str):
             raise TypeError("Le mot de passe doit être une chaîne de caractères.")
-
         if len(mdp) < 6:
             raise ValueError("Le mot de passe doit contenir au moins 6 caractères.")
-
         if re.search(r"[&\'| -]", pseudo):
             raise ValueError(
                 "Le pseudo ne doit pas contenir de caractères spéciaux."
                 " Caractères interdits : &, |, ', -"
             )
-
         if re.search(r"[&\'| -]", mdp):
             raise ValueError(
                 "Le mot de passe ne doit pas contenir de caractères spéciaux."
                 " Caractères interdits : &, |, ', -"
             )
-
         if self.pseudo_deja_utilise(pseudo):
             raise ValueError("Le pseudo est déjà utilisé")
-
-        # Pour finir la fonction :
-        # - Définir des méthodes de sécurité (échappement des caractères spéciaux)
-        #   (commencé un peu mais à voir si c'est suffisant)
-        # - Définir un id non attribué (prendre le dernier id de la table
-        #   Utilisateur et ajouter 1)
-        # - Hacher le mot de passe (et utiliser l'id, le pseudo ou le mail comme sel)
-
-        # Ligne à modifier quand on aura écrit la classe UtilisateurDAO
-        # return UtilisateurDAO.creer(Utilisateur(pseudo=pseudo, mdp=mdp, mail=mail))
-
+        # Obtention du mdp haché
         mdp = hash_password(mdp, sel=pseudo)
         utilisateur = Utilisateur(pseudo=pseudo, mdp=mdp)
+        # Appel à la DAO
         UtilisateurDao().creer(utilisateur)
         return utilisateur
 
     @log
     def connecter(self, pseudo: str, mdp: str) -> Utilisateur:
         """
-        Permet de se connecter à un utilisateur.
+        Cette méthode permet à l'utilisateur de se connecter grâce à son pseudo et son mot de passe.
 
-        Args:
-            pseudo (str): Pseudo de l'utilisateur qui veut se connecter
-            mdp (str): Mot de passe de l'utilisateur qui veut se connecter
+        Parameters
+        ----------
+        pseudo : str
+            Pseudo de l'utilisateur
+        mdp : str
+            Mot de passe de l'utilisateur
 
-        Returns:
-            Utilisateur: Renvoie l'utilisateur correspondant aux paramètres entrés.
+        Returns
+        -------
+        Utilisateur :
+            Renvoie l'utilisateur que l'on cherche, ou None si la connexion échoue.
+
         """
+        # Vérification des attributs
         if not isinstance(pseudo, str):
             raise TypeError("Le pseudo doit être une chaîne de caractères alphanumériques.")
         if not isinstance(mdp, str):
             raise TypeError("Le mot de passe doit être une chaîne de caractères alphanumériques.")
-
-        # Il faudrait aussi faire attention aux caractères spéciaux
+        # Appel à la DAO
         return UtilisateurDao().se_connecter(pseudo, hash_password(mdp, pseudo))
 
     @log
     def supprimer(self, user: Utilisateur) -> bool:
         """
-        Permet de supprimer un utilisateur existant.
+        Cette méthode permet de supprimer un utilisateur de la base de données.
 
-        Args:
-            user (Utilisateur): Utilisateur dont on veut supprimer le compte
+        Parameters
+        ----------
+        utilisateur : Utilisateur
+            Utilisateur que l'on souhaite supprimer
 
-        Returns:
-            bool: True si l'utilisateur a bien été supprimé. False sinon.
+        Returns
+        -------
+        bool
+            True si l'utilisateur a bien été supprimé, False sinon.
+
         """
         # Vérification des attributs
         if not isinstance(user, Utilisateur):
@@ -130,13 +124,20 @@ class UtilisateurService:
     @log
     def lister_tous(self, inclure_mdp=False) -> List[Utilisateur]:
         """
-        Renvoie la liste de tous les utilisateurs dans la base de données
-        Si inclure_mdp=True, les mots de passe seront inclus
-        Par défaut, tous les mdp des joueurs sont à None
+        Cette méthode permet de lister tous les utilisateurs de la base de données.
 
-        Returns:
-            List[Utilisateur]: Liste des utilisateurs
+        Parameters
+        ----------
+        inclure_mdp : Bool
+            True si le mot de passe est inclu, False sinon
+            False par défaut
+
+        Returns
+        -------
+        list[Utilisateur] :
+            Liste de tous les utilisateurs de la base de données
         """
+        # Appel à la DAO
         utilisateurs = UtilisateurDao().lister_tous()
         if not inclure_mdp:
             for u in utilisateurs:
@@ -146,103 +147,41 @@ class UtilisateurService:
     @log
     def trouver_par_id(self, id_user: int) -> Optional[Utilisateur]:
         """
-        Permet de trouver un utilisateur avec son identifiant
+        Cette méthode permet de trouver un utilisateur grâce à son identifiant.
 
-        Args:
-            id_user (int): Identifiant de l'utilisateur recherché
+        Parameters
+        ----------
+        id_user : int
+            Identifiant de l'utilisateur
 
-        Returns:
-            Optional[Utilisateur]: Utilisateur correspondant à l'identifiant recherché.
-                                    None si la recherche ne correspond à rien
+        Returns
+        -------
+        Utilisateur :
+            Utilisateur que l'on souhaite trouver.
+
         """
+        # Vérification des attributs
+        if not isinstance(id_user, int):
+            raise TypeError("id_user doit être une instance de str")
+        # Appel à la DAO
         return UtilisateurDao().trouver_par_id(id_user)
 
     @log
     def modifier(self, user: Utilisateur) -> Optional[Utilisateur]:
         """
-        Permet de modifier les informations d'un utilisateur
+        Cette méthode permet de modifier un utilisateur dans la base de données.
 
-        Args:
-            user (Utilisateur):
-                Utilisateur dont on veut modifier les données
-            new_user (Utilisateur):
-                Nouvelles informations de l'utilisateur concerné
+        Parameters
+        ----------
+        utilisateur : Utilisateur
+            Utilisateur que l'on souhaite modifier
 
-        Returns:
-            Optional[Utilisateur]:
-                Informations de l'utilisateur modifiées.
-                None si la modification a échoué.
+        Returns
+        -------
+        bool
+            True si la modification est un succès, False sinon.
         """
+        # Hachage du mot de passe
         user.mdp = hash_password(user.mdp, user.pseudo)
+        # Appel à la DAO
         return user if UtilisateurDao().modifier(user) else None
-
-    def voir_suggestions(self) -> list[Recette]:
-        """
-        Renvoie une liste de recettes suggérées à l'utilisateur grâce à
-        la liste de ses ingrédients favoris et non désirés.
-
-        Returns:
-            List[Recette]: Liste des recettes suggérées à l'utilisateur.
-        """
-
-        ingredients_favoris = super._ingredients_favoris
-        nb_favoris = 0
-
-        ingredients_non_desires = super._ingredients_non_desires
-        nb_non_desires = 0
-
-        recettes_suggerees = []
-        toutes_les_recettes = RecetteService.lister_toutes_recettes()
-
-        for recette in toutes_les_recettes:
-            ingredients = recette.liste_ingredient
-            for ingredient in ingredients:
-                if ingredient in ingredients_favoris:
-                    nb_favoris += 1
-                if ingredient in ingredients_non_desires:
-                    nb_non_desires += 1
-            if nb_favoris - nb_non_desires > 0:
-                recettes_suggerees.append(recette)
-
-        # Amélioration : trier la liste selon le résultat du dernier calcul
-        return recettes_suggerees
-
-    def voir_favoris(self) -> list[Recette]:
-        """
-        Renvoie la liste "recette_favorite" de l'utilisateur
-
-        Returns:
-            list[Recette]: Liste des recettes favorites de l'utilisateur
-        """
-
-        return super._recette_favorite
-
-    def voir_liste_course(self) -> list[Recette]:
-        """
-        Renvoie la liste "liste_de_course" de l'utilisateur
-
-        Returns:
-            list[Recette]: Liste de course de l'utilisateur
-        """
-
-        return super._liste_course
-
-    def voir_ingredients_favoris(self) -> list[Ingredient]:
-        """
-        Renvoie la liste "ingredient_favori" de l'utilisateur
-
-        Returns:
-            list[Ingredient]: Liste des ingrédients favoris de l'utilisateur
-        """
-
-        return super._ingredients_favoris
-
-    def voir_ingredients_non_desires(self) -> list[Ingredient]:
-        """
-        Renvoie la liste "ingredient_non_desire" de l'utilisateur
-
-        Returns:
-            list[Ingredient]: Liste des ingrédients non désirés de l'utilisateur
-        """
-
-        return super._ingredients_non_desires

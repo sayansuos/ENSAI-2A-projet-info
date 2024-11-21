@@ -77,7 +77,7 @@ class RecetteDao(metaclass=Singleton):
     @log
     def trouver_par_id(self, id_recette) -> Recette:
         """
-        TCette méthode permet de trouver une recette grace à son identifiant.
+        Cette méthode permet de trouver une recette grace à son identifiant.
 
         Parameters
         ----------
