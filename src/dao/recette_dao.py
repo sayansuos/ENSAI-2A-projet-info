@@ -1,5 +1,4 @@
 import logging
-from dotenv import load_dotenv
 
 from utils.singleton import Singleton
 from utils.log_decorator import log
@@ -13,28 +12,29 @@ from business_object.recette import Recette
 
 class RecetteDao(metaclass=Singleton):
     """
-    Classe contenant les méthodes pour accéder aux recettes de la base de données.
+    Cette classe contient les méthodes quo permettent d'accéder aux recettes de la base de données.
     """
 
     @log
     def creer(self, recette) -> bool:
         """
-        Création d'une recette dans la base de données
+        Cette méthode permet de créer une recette dans la base de données.
 
         Parameters
         ----------
         recette : Recette
+            Recette que l'on souhaite créer
 
         Returns
         -------
-        created : bool
-            True si la création est un succès
-            False sinon
+        Bool :
+            True si la création est un succès, False sinon
         """
 
         res = None
 
         try:
+            # Connexion à la base de données et commande SQL (table recette)
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
@@ -51,14 +51,8 @@ class RecetteDao(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
 
+                    # Commande SQL (table recette_ingredient)
                     for raw_ingredient in recette.liste_ingredient:
-                        # nom_ingredient = raw_ingredient[0]
-                        # quantite_ingredient = raw_ingredient[1]
-                        # id_ingredient = (
-                        #    IngredientDao()
-                        #    .trouver_par_nom(nom_ingredient=nom_ingredient, cursor=cursor)
-                        #    .id_ingredient
-                        # )
                         cursor.execute(
                             "INSERT INTO projet.recette_ingredient VALUES        "
                             "(%(id_ingredient)s, %(id_recette)s, %(quantite)s);  ",
@@ -73,6 +67,7 @@ class RecetteDao(metaclass=Singleton):
             logging.info(e)
 
         created = False
+        # Retourne l'identifiant de la recette
         if res:
             recette.id_recette = res["id_recette"]
             created = True
@@ -82,18 +77,19 @@ class RecetteDao(metaclass=Singleton):
     @log
     def trouver_par_id(self, id_recette) -> Recette:
         """
-        Trouver une recette grace à son identifant
+        TCette méthode permet de trouver une recette grace à son identifiant.
 
         Parameters
         ----------
         id_recette : int
-            numéro id de la recette que l'on souhaite trouver
+            Identifiant de la recette que l'on souhaite trouver
 
         Returns
         -------
-        recette : Recette
-            renvoie la recette que l'on cherche par id
+        Recette :
+            Recette que l'on souhaite trouver
         """
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -110,6 +106,7 @@ class RecetteDao(metaclass=Singleton):
             raise
 
         recette = None
+        # Construction de la recette
         if res:
             id_recette = res[0]["id_recette"]
             nom_recette = res[0]["nom_recette"]
@@ -129,24 +126,24 @@ class RecetteDao(metaclass=Singleton):
                 note=note,
                 avis=avis,
             )
-
         return recette
 
     @log
     def trouver_par_nom(self, nom_recette) -> Recette:
         """
-        Trouver une recette grace à son nom
+        Cette méthode permet de trouver un ingrédient grace à son nom.
 
         Parameters
         ----------
-        nom_recette : int
-            nom de la recette que l'on souhaite trouver
+        nom_recette : str
+            Nom de l'ingrédient que l'on souhaite trouver
 
         Returns
         -------
-        recette : Recette
-            renvoie la recette que l'on cherche par id
+        Ingredient :
+            Ingrédient que l'on souhaite trouver
         """
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -163,6 +160,7 @@ class RecetteDao(metaclass=Singleton):
             raise
 
         recette = None
+        # Construction de la recette
         if res:
             id_recette = res[0]["id_recette"]
             nom_recette = res[0]["nom_recette"]
@@ -188,18 +186,19 @@ class RecetteDao(metaclass=Singleton):
     @log
     def trouver_par_ingredient(self, ingredient: Ingredient):
         """
-        Donne une liste de recette contenant un ingredient
+        Cette méthode permet de trouver les recettes qui contiennent un ingrédient spécifié.
 
         Parameters
         ----------
         ingredient : Ingredient
-            Ingredient par lequel on veut filtrer
+            Ingrédient contenu dans les recettes souhaitées.
 
         Returns
         -------
-        liste_recettes : list[Recette]
-            Renvoie une liste de recette filtrée par l'ingrédient voulu
+        list[Recette] :
+            Liste des recettes qui contiennent l'ingrédient souhaité.
         """
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -215,7 +214,10 @@ class RecetteDao(metaclass=Singleton):
             logging.info(e)
             raise
 
+        # Initialisation de la lite
         liste_recette = []
+
+        # Construction des recettes et ajout à la liste
         if res:
             for recette in res:
                 id_recette = recette["id_recette"]
@@ -226,18 +228,14 @@ class RecetteDao(metaclass=Singleton):
     @log
     def lister_tous(self) -> list[Recette]:
         """
-        Lister toutes les recettes.
-
-        Parameters
-        ----------
-        None
+        Cette méthode permet de lister toutes les recettes de la base de données.
 
         Returns
         -------
-        liste_recette : list[Recette]
-            renvoie la liste de toutes les recettes dans la base de données
+        list[Recette] :
+            Liste des recettes de la base de données.
         """
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -249,18 +247,19 @@ class RecetteDao(metaclass=Singleton):
                     res = cursor.fetchall()
         except Exception as e:
             logging.info(e)
+            print(e)
             raise
 
+        # Initialisation de la liste
         liste_recette = []
 
+        # Construction des recettes et ajout à la liste
         if res:
             liste_id = []
             for row in res:
                 if row["id_recette"] not in liste_id:
                     liste_id.append(row["id_recette"])
-
             for id in liste_id:
-
                 recette = self.trouver_par_id(id)
                 liste_recette.append(recette)
 
@@ -269,22 +268,23 @@ class RecetteDao(metaclass=Singleton):
     @log
     def supprimer(self, recette) -> bool:
         """
-        Suppression d'une recette dans la base de données.
+        Cette méthode permet de supprimer une recette de la base de données.
 
         Parameters
         ----------
         recette : Recette
-            recette à supprimer de la base de données
+            Recette à supprimer
 
         Returns
         -------
-            True si la recette a bien été supprimée
-        """
+        Bool :
+            True si la recette a été supprimée, False sinon
 
+        """
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-                    # Supprimer une recette
                     cursor.execute(
                         "DELETE FROM recette                    "
                         " WHERE id_recette=%(id_recette)s       ",
@@ -300,31 +300,38 @@ class RecetteDao(metaclass=Singleton):
     @log
     def ajouter_note_et_com(self, recette: Recette, note: int, com: str) -> bool:
         """
-        Ajoute une note et un commentaire à une recette.
+        Cette méthode permet d'ajoouter une note et un commentaire à une recette de la base de
+        données.
 
-        Args :
-            recette (Recette) : recette dont les ingrédients sont  à ajouter à la table
-            note (int) : Note attribuée à la recette
-            com (str) : Commentaire attribué à la recette
+        Parameters
+        ----------
+        recette : Recette
+            Recette à noter et commenter
 
-        Returns:
-            bool: True si la note et le commentaires ont été ajouté à la table, False sinon
+        Returns
+        -------
+        Bool :
+            True si la modification a été faite, False sinon
+
         """
         res = None
-
         avis = ""
 
+        # Décomposition de la liste des avis en un seul str séparé par des ';'
+        # Ajout du nouvel avis
         for msg in recette.avis:
             avis += f"{msg} ;"
         avis += com
+
+        # Nécessaire pour le bon calcul de la note
         raw_note = recette.note
         nb_note = len(recette.avis)
-
         if recette.note is None:
             raw_note = 0
             nb_note = 0
             avis = com
 
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -342,14 +349,9 @@ class RecetteDao(metaclass=Singleton):
                     res = cursor.fetchone()
         except Exception as e:
             logging.info(e)
+            raise
 
         added = False
-
         if res:
             added = True
-
         return added
-
-
-if __name__ == "__main__":
-    load_dotenv()

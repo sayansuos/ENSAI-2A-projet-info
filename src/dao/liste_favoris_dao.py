@@ -281,7 +281,6 @@ class ListeFavorisDao(metaclass=Singleton):
                         )
                         res = cursor.fetchone()
         except Exception as e:
-            print(e)
             logging.info(e)
 
         added = False

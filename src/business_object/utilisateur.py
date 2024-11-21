@@ -8,9 +8,26 @@ from dotenv import load_dotenv
 
 class Utilisateur:
     """
-    Cette classe représente un utilisateur avec un pseudo, un mot de passe, un identifiant, une
-    liste de recettes favorites, d'ingrédients favoris, d'ingrédients non-désirés, de course, et
-    un rôle.
+    Cette classe représente un utilisateur connecté.
+
+    Attributes
+    ----------
+    pseudo : str
+        Pseudo de l'utilisateur
+    mdp : str
+        Mot de passe de l'utilisateur
+    id_utilisateur : int
+        Identifiant de l'utilisateur, None par défaut
+    recette_favorite : list[Recette]
+        Liste des recettes favorites de l'utilisateur, vide par défaut
+    ingrédient_favori : list[Ingredient]
+        Liste des ingrédients favoris de l'utilisateur, vide par défaut
+    ingrédient_non_désiré : list[Ingredient]
+        Liste des ingrédients non désirés de l'utilisateur, vide par défaut
+    liste_de_course : list[Ingredient]
+        Liste des ingrédients de la liste de course, vide par défaut
+    role : str
+        Rôle de l'utilisateur, 'user' par défaut
     """
 
     def __init__(
@@ -25,27 +42,7 @@ class Utilisateur:
         role: str = "user",
     ):
         """
-        Cette méthode instancie un Utilisateur.
-
-        Args
-        ----
-            id_utilisateur (int):
-                Identifiant de l'utilisateur
-            pseudo (str):
-                Pseudo de l'utilisateur
-            mdp (str):
-                Mot de passe de l'utilisateur
-            recette_favorite (list[Recette], optional):
-                Liste des recettes favorites de l'utilisateur, [] par défaut.
-            ingredient_favori (list[Ingredient], optional):
-                Liste des ingrédients favoris de l'utilisateur, [] par défaut.
-            ingredient_non_desire (list[Ingredient], optional):
-                Liste des ingrédients non désirés de l'utilisateur, [] par défaut.
-            liste_de_course (list[Ingredient], optional):
-                Liste de course de l'utilisateur. [] par défaut.
-            admin (str, optional):
-                Rôle de l'utilisateur. "user" ou "admin", "user" par défaut.
-
+        Constructeur
         """
         self.id_utilisateur = id_utilisateur
         self.pseudo = pseudo
@@ -57,11 +54,14 @@ class Utilisateur:
         self.role = role
 
     def __str__(self):
+        """
+        Cette méthode affiche un utilisateur.
+        """
         return f"[{self.id_utilisateur}] {self.pseudo}"
 
     def afficher_info(self):
         """
-        Cette méthode affiche les caractéristique d'un utilisateur.
+        Cette méthode affiche les caractéristiques d'un utilisateur.
         """
         print(f"\n\n*** DETAILS ABOUT [{self.id_utilisateur}] {self.pseudo} ***\n")
 

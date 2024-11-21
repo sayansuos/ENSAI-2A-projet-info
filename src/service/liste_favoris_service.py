@@ -108,9 +108,7 @@ class ListeFavorisService:
             raise TypeError("utilisateur doit être une instance de Utilisateur")
 
         added = False
-
         added = ListeFavorisDao().ajouter_liste_course(recette=recette, utilisateur=utilisateur)
-
         return added
 
     def retirer_liste_course(

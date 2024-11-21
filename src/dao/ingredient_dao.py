@@ -1,5 +1,4 @@
 import logging
-from dotenv import load_dotenv
 
 from utils.singleton import Singleton
 from utils.log_decorator import log
@@ -11,27 +10,27 @@ from business_object.ingredient import Ingredient
 
 class IngredientDao(metaclass=Singleton):
     """
-    Classe contenant les méthodes pour accéder aux ingrédients de la base de données.
+    Cette classe contient les méthodes pour accéder aux ingrédients de la base de données.
     """
 
     @log
     def creer(self, ingredient) -> bool:
         """
-        Création d'un ingrédient dans la base de données.
+        Cette méthode permet de créer un ingrédient dans la base de données.
 
         Parameters
         ----------
         ingredient : Ingredient
+            Ingrédient que l'on souhaite créer
 
         Returns
         -------
-        created : bool
-            True si la création est un succès
-            False sinon
+        Bool :
+            True si la création est un succès, False sinon
         """
-
         res = None
 
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -46,7 +45,10 @@ class IngredientDao(metaclass=Singleton):
                     )
                     res = cursor.fetchone()
         except Exception as e:
-            print(e)
+            logging.info(e)
+            raise
+
+        # Retourne l'identifiant de l'ingrédient
         created = False
         if res:
             ingredient.id_ingredient = res["id_ingredient"]
@@ -57,24 +59,26 @@ class IngredientDao(metaclass=Singleton):
     @log
     def trouver_par_id(self, id_ingredient) -> Ingredient:
         """
-        Trouver un ingrédient grace à son identifiant.
+        Cette méthode permet de trouver un ingrédient grace à son identifiant.
 
         Parameters
         ----------
         id_ingredient : int
-            numéro id de l'ingrédient que l'on souhaite trouver
+            Identifiant de l'ingrédient que l'on souhaite trouver
 
         Returns
         -------
-        ingredient : Ingredient
-            renvoie l'ingrédient que l'on cherche par id
+        Ingredient :
+            Ingrédient que l'on souhaite trouver
         """
+
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(
                         " SELECT *                                   "
-                        "   FROM projet.ingredient                          "
+                        "   FROM projet.ingredient                   "
                         "  WHERE id_ingredient = %(id_ingredient)s;  ",
                         {"id_ingredient": id_ingredient},
                     )
@@ -84,6 +88,7 @@ class IngredientDao(metaclass=Singleton):
             raise
 
         ingredient = None
+        # Construction de l'ingrédient
         if res:
             ingredient = Ingredient(
                 nom_ingredient=res["nom_ingredient"],
@@ -95,25 +100,27 @@ class IngredientDao(metaclass=Singleton):
     @log
     def trouver_par_nom(self, nom_ingredient, cursor=None) -> Ingredient:
         """
-        Trouver un ingrédient grace à son nom.
+        Cette méthode permet de trouver un ingrédient grace à son nom.
 
         Parameters
         ----------
         nom_ingredient : str
-            nom de l'ingrédient que l'on souhaite trouver
+            Nom de l'ingrédient que l'on souhaite trouver
 
         Returns
         -------
         ingredient : Ingredient
-            renvoie l'ingrédient que l'on cherche par id
+            Ingredient que l'on souhaite trouver
         """
+        # Si la connexion n'a pas déjà été faite (cf. recette_dao)
+        # Connexion à la base de données et commande SQL
         if cursor is None:
             try:
                 with DBConnection().connection as connection:
                     with connection.cursor() as cursor:
                         cursor.execute(
-                            " SELECT *                                   "
-                            "   FROM projet.ingredient                          "
+                            " SELECT *                                     "
+                            "   FROM projet.ingredient                     "
                             "  WHERE nom_ingredient = %(nom_ingredient)s;  ",
                             {"nom_ingredient": nom_ingredient},
                         )
@@ -121,7 +128,8 @@ class IngredientDao(metaclass=Singleton):
             except Exception as e:
                 logging.info(e)
                 raise
-
+        # Si la connexion a déjà été faite (cf. recette_dao)
+        # Commande SQL
         else:
             cursor.execute(
                 " SELECT *                                    "
@@ -132,6 +140,7 @@ class IngredientDao(metaclass=Singleton):
             res = cursor.fetchone()
 
         ingredient = None
+        # Construction de l'ingrédient
         if res:
             ingredient = Ingredient(
                 nom_ingredient=res["nom_ingredient"],
@@ -143,18 +152,14 @@ class IngredientDao(metaclass=Singleton):
     @log
     def lister_tous(self) -> list[Ingredient]:
         """
-        Lister tous les ingrédients
-
-        Parameters
-        ----------
-        None
+        Cette méthode permet de lister tous les ingrédients.
 
         Returns
         -------
         liste_ingredients : list[Ingredient]
-            renvoie la liste de tous les ingrédients dans la base de données
+            Liste de tous les ingrédients de la base de données
         """
-
+        # Connexion à la base de données et commande SQL
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
@@ -167,8 +172,10 @@ class IngredientDao(metaclass=Singleton):
             logging.info(e)
             raise
 
+        # Initialisation de la liste
         liste_ingredients = []
 
+        # Construction des ingrédients et ajout à la liste
         if res:
             for row in res:
                 ingredient = Ingredient(
@@ -176,8 +183,3 @@ class IngredientDao(metaclass=Singleton):
                 )
                 liste_ingredients.append(ingredient)
         return liste_ingredients
-
-
-if __name__ == "__main__":
-    load_dotenv()
-    print(IngredientDao().trouver_par_id(id_ingredient=1))

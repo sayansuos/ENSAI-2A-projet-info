@@ -3,8 +3,22 @@ from business_object.ingredient import Ingredient
 
 class Recette:
     """
-    Cette classe représente une recette avec un nom, un identifiant, une liste d'ingrédient,
-    une description, une note et une liste d'avis.
+    Cette classe représente une recette.
+
+    Attributes
+    ----------
+    nom_recette : str
+        Nom de la recette
+    liste_ingredient : list[list[Ingredient, str]]
+        Liste de couples constitués par les ingrédients de la recette et la quantitée associée
+    description_recette : str
+        Description de la recette
+    id_recette : int
+        Identifiant de la recette
+    note : float
+        Note associée à la recette
+    avis : list[str]
+        Liste des avis associés à la recette
     """
 
     def __init__(
@@ -17,23 +31,7 @@ class Recette:
         avis: list[str] = [],
     ):
         """
-        Cette méthode instancie une Recette.
-
-        Args
-        ----
-            id_recette (int):
-                Identifiant de la recette
-            nom_recette (str):
-                Nom de la recette
-            liste_ingredient (list[Ingredient, str]):
-                Liste des ingrédients de la recette et des quantités associées
-            description_recette (str):
-                Description de la recette
-            note (float):
-                Note de la recette
-            avis (list[str]):
-                Liste des avis de la recette
-
+        Constructeur
         """
         self.id_recette: int = id_recette
         self.nom_recette: str = nom_recette
@@ -44,6 +42,6 @@ class Recette:
 
     def __str__(self):
         """
-        Affichage d'une recette
+        Cette méthode affiche une recette.
         """
         return f"[{self.id_recette}] {self.nom_recette}"

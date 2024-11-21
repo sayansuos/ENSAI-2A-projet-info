@@ -1,25 +1,27 @@
 import os
-from dotenv import load_dotenv
 import requests
-
 from typing import List
 
 
 class IngredientClient:
-    """Make call to the ingredient endpoint"""
+    """
+    Cette classe permet d'appeler les données de l'endpoint des ingrédients.
+    """
 
     def __init__(self) -> None:
+        """
+        Constructeur
+        """
         self.__host = os.environ["WEBSERVICE_HOST"]
 
     def get_all_ingredients(self) -> List[str]:
         """
-        Returns list of all ingredients
+        Cette méthode retourne la liste de tous les ingrédients.
         """
         # Appel du Web service
         req = requests.get(f"{self.__host}/list.php?i=list")
 
-        # Création d'une liste puis parcours du json pour ajouter tous
-        # les ingrédients à la liste
+        # Création d'une liste puis parcours du json pour ajouter les ingrédients
         all_ingredients = []
         if req.status_code == 200:
             raw_types = req.json()["meals"]

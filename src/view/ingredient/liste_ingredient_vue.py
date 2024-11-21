@@ -25,6 +25,7 @@ class ListeIngredientVue(VueAbstraite):
 
         if len(ingredients) < 1:  # Si pas d'ingrédient
             print("The grocery list is empty.")
+            inquirer.select(message="", choices=["ok"]).execute()
 
         else:
             choix = "-> Page suivante"

@@ -8,12 +8,14 @@ from utils.singleton import Singleton
 
 class DBConnection(metaclass=Singleton):
     """
-    Classe de connexion à la base de données
-    Elle permet de n'ouvrir qu'une seule et unique connexion
+    Cette classe permet de se connecter à la base de données.
+    Elle permet de n'ouvrir qu'une seule et unique connexion.
     """
 
     def __init__(self):
-        """Ouverture de la connexion"""
+        """
+        Ouverture de la connexion
+        """
         dotenv.load_dotenv()
 
         self.__connection = psycopg2.connect(

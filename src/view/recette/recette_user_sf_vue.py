@@ -109,7 +109,7 @@ class RecetteUserSfVue(VueAbstraite):
                         )
                         print("\n\nLa recette a bien été retirée des favoris !\n\n")
 
-                    case "Ajouter les ingredients au panier":
+                    case "Ajouter les ingrédients au panier":
                         # Appel au service pour ajouter les ingrédients au panier
                         ListeFavorisService().ajouter_liste_course(
                             recette=choix, utilisateur=self.utilisateur

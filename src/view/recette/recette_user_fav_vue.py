@@ -56,6 +56,11 @@ class RecetteUserFavVue(VueAbstraite):
                 return MenuUserVue(message=self.message, utilisateur=self.utilisateur)
 
             else:
+                # Pour pouvoir modifier la liste chargée dans Session ensuite
+                for recette_raw in Session().liste_recettes:
+                    if recette_raw.id_recette == choix.id_recette:
+                        choix = recette_raw
+
                 autre_action = "Oui"
                 while autre_action == "Oui":  # Pour réaliser plusieurs actions à la suite
                     # Sélection de l'action
