@@ -78,7 +78,6 @@ class UtilisateurDao(metaclass=Singleton):
         try:
             with DBConnection().connection as connection:
                 with connection.cursor() as cursor:
-
                     cursor.execute(
                         "SELECT * FROM utilisateur WHERE id_utilisateur = %(id_utilisateur)s;",
                         {"id_utilisateur": id_utilisateur},

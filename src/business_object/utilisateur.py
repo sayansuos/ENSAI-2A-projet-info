@@ -1,8 +1,6 @@
 from business_object.recette import Recette
 from business_object.ingredient import Ingredient
 
-from utils.singleton import Singleton
-
 from dotenv import load_dotenv
 
 
@@ -64,42 +62,6 @@ class Utilisateur:
         Cette méthode affiche les caractéristiques d'un utilisateur.
         """
         print(f"\n\n*** DETAILS ABOUT [{self.id_utilisateur}] {self.pseudo} ***\n")
-
-        # Affichage des recettes favorites
-        if self.recette_favorite == []:
-            print("Favourite recipes: There is no favourite recipe registered.\n")
-        else:
-            print("Favourite recipes : \n")
-            for recette in self.recette_favorite:
-                print(f" - {recette}")
-            print("\n")
-
-        # Affichage des ingrédients favoris
-        if self.ingredient_favori == []:
-            print("Favourite ingredients: There is no favourite ingredient registered.\n")
-        else:
-            print("\nFavourite ingredients:\n")
-            for ing_f in self.ingredient_favori:
-                print(f" - {ing_f}")
-            print("\n")
-
-        # Affichage des ingrédients non-désirés
-        if self.ingredient_non_desire == []:
-            print("Unwanted ingredients: There is no unwanted ingredient registered.\n")
-        else:
-            print("Unwanted ingredients:")
-            for ing_nd in self.ingredient_non_desire:
-                print(f" - {ing_nd}\n")
-            print("\n")
-
-        # Affichage de la liste de course
-        if self.liste_de_course == []:
-            print("Grocery list: The grocery list is empty.\n")
-        else:
-            print("Grocery list: \n\n")
-            for course in self.liste_de_course:
-                print(f" - {course}\n")
-            print("\n")
         print(f"Role: {self.role}")
         print("\n\n")
 
