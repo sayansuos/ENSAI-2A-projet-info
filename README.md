@@ -43,7 +43,7 @@ The application's advanced functions are :
 
 - [ ] Open **Visual Studio Code**
 - [ ] File > Open Folder
-- [ ] Click once on *ENSAI-2A-projet-info* and click on `Sélectionner un dossier`
+- [ ] Click once on *code_equipe_10* and click on `Sélectionner un dossier`
   - :warning: If the parent folder in the VSCode explorer (on the left) is not *ENSAI-2A-projet-info*, the application will not work.
 
 ### VScode parameters
