@@ -35,7 +35,7 @@ The application's advanced functions are :
 - [ ] Create  folder `P:/Cours2A/UE3-Projet-info` and position yourself inside
   - `mkdir -p /p/Cours2A/UE3-Projet-info && cd $_`
 - [ ] Clone the repository
-  - `git clone https://github.com/ludo2ne/ENSAI-2A-projet-info.git`
+  - `git clone https://github.com/sayansuos/ENSAI-2A-projet-info.git`
 
 ---
 
