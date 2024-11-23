@@ -18,13 +18,15 @@ classDiagram
         +connecter(str, str): Utilisateur
 
         +lister_tous(): list[Utilisateur]
+        +trouver_par_id(int): Optional[Utilisateur]
+        +modifier(Utilisateur): Optional[Utilisateur]
     }
 
 
     class ListeFavorisService {
         +consulter_favoris(Utilisateur): list[Recette]
         +ajouter_favoris(Recette, Utilisateur): bool
-        +enlever_favoris(Recette, Utilisateur): bool
+        +retirer_favoris(Recette, Utilisateur): bool
 
         +consulter_liste_course(Utilisateur): list[Recette]
         +ajouter_liste_course(Recette, Utilisateur): bool
@@ -32,8 +34,8 @@ classDiagram
 
         +consulter_preference_ingredient_favori(Utilisateur): list[Recette]
         +consulter_preference_ingredient_non_desire(Utilisateur): list[Recette]
-        +modifier_preference_ingredient(Ingredient, Utilisateur, str):
-        +retirer_preference_ingredient(Ingredient, Utilisateur):
+        +modifier_preference_ingredient(Ingredient, Utilisateur, str): bool
+        +retirer_preference_ingredient(Ingredient, Utilisateur): bool
 
         +consulter_suggestions(utilisateur): list[Recette]
     }
@@ -57,7 +59,7 @@ classDiagram
         +supprimer_recette(Recette): bool
         +voir_note_avis(Recette)
         +ajouter_note_et_com(Recette, int, str): bool
-        +lire_recette
+        +lire_recette(Recette)
     }
 
 
