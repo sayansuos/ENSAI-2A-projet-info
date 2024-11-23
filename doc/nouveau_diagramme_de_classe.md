@@ -17,15 +17,7 @@ classDiagram
         +supprimer(Utilisateur): bool
         +connecter(str, str): Utilisateur
 
-        +voir_suggestions(): list[Recette]
-
-        +voir_favoris(): list[Recette]
-
-        +voir_liste_course(): list[Ingredient]
-
-        +voir_ingredients_favoris(): list[Ingredient]
-
-        +voir_ingredients_non_desires(): list[Ingredient]
+        +lister_tous(): list[Utilisateur]
     }
 
 
