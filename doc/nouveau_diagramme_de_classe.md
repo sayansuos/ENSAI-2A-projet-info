@@ -74,12 +74,19 @@ classDiagram
         +nom_ingredient: str
     }
 
+    class IngredientService {
+        +trouver_ingredient_par_id(int): Ingredient
+        +trouver_par_nom(str): Ingredient
+        +lister_tous(): list[Ingredient]
+        +creer(Ingredient): Ingredient
+    }
+
 
     Utilisateur <.. UtilisateurService: utilise
     Utilisateur <.. ListeFavorisService: utilise
 
     Recette <.. RecetteService: utilise
-
+    Ingredient <.. IngredientService: utilise
 
     Recette <.. Utilisateur: utilise
     Ingredient <.. Utilisateur: utilise
