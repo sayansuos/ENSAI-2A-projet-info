@@ -1,0 +1,94 @@
+@startuml
+skinparam linetype ortho
+top to bottom direction
+
+folder src {
+
+folder business_object {
+file "ingredient.py" 
+file "recette.py" 
+file "utilisateur.py"
+}
+
+folder client {
+
+file "ingredient_client.py" as ingredient_client
+file "recette_client.py" as recette_client
+
+}
+
+
+folder dao {
+
+file "db_connection.py" as db_connection
+file "ingredient_dao.py" as ingredient_dao
+file "recette_dao.py" as recette_dao
+file "utilisateur_dao.py" as utilisateur_dao
+file "liste_favoris_dao.py" as liste_favoris_dao
+
+}
+
+folder service {
+
+file "ingredient_service.py" as ingredient_service
+file "recette_service.py" as recette_service
+file "utilisateur_service.py" as utilisateur_service
+file "liste_favoris_service.py" as liste_favoris_service
+
+}
+
+folder test {
+
+folder test_service {
+
+file "test_ingredient_service.py" as test_ingredient_service
+file "test_recette_service.py" as test_recette_service
+file "test_utilisateur_service.py" as test_utilisateur_service
+file "test_liste_favoris_service.py" 
+
+}
+
+}
+
+folder utils {
+
+file "fill_database.py"
+file "log_decorator.py" #lightgrey
+file "log_init.py" #lightgrey
+file "reset_database.py"
+file "securite.py" #lightgrey
+file "singleton.py"#lightgrey
+
+}
+
+folder view {
+
+
+folder accueil {
+}
+
+folder ingredient {
+}
+folder recette {
+}
+folder users {
+}
+
+file "session.py" #lightgrey
+file "vue_abstraitre.py"
+
+}
+
+file "main.py"
+
+}
+}
+
+client --> dao
+business_object -left-> dao
+dao -down-> service
+service -up-> test
+service --> view
+utils -down-> dao
+view --> main.py
+@enduml

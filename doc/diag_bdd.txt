@@ -1,0 +1,65 @@
+@startuml
+
+skinparam linetype ortho
+skinparam nodesep 130
+skinparam ranksep 100
+
+' Définition des tables (entités)
+class ingredient {
++int id_ingredient : PK
++string nom_ingredient
+}
+
+class recette {
++int id_recette : PK
++string nom_recette
++string description_recette
++float note
+}
+
+class utilisateur {
++int id_utilisateur : PK
++string pseudo
++string mdp
++string role_utilisateur
+}
+
+class recette_ingredient #lightgrey{
++int id_ingredient : PK, FK
++int id_recette : PK, FK
++string quantite
+}
+
+class preference_ingredient #lightgrey{
++int id_ingredient : PK, FK
++int id_utilisateur : PK, FK
++bool favori
++bool non_desire
+}
+
+class recette_favorite #lightgrey{
++int id_ingredient : PK, FK
++int id_recette : PK, FK
+}
+
+class liste_course #lightgrey{
++int id_ingredient : PK, FK
++int id_recette : PK, FK
++int id_recette : PK, FKid_recette
+}
+
+' Relations entre les entités
+
+utilisateur "1" -- "0..*" liste_course : a
+ingredient "1" -- "0..*" liste_course : appartient à
+
+utilisateur "1" -up- "0..*" recette_favorite : a
+recette "1" -left- "0..*" recette_favorite : appartient à
+
+utilisateur "1" -- "0..*" preference_ingredient : a un espace
+ingredient "1" -- "0..*" preference_ingredient : appartient à
+
+recette "1" -right- "0..*" recette_ingredient : contient
+ingredient "1" -- "0..*" recette_ingredient : appartient à
+
+@enduml
